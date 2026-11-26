@@ -1,0 +1,121 @@
+/* ============================================
+   ContactPage — `/contact`, ported 1:1 from `mockup/contact.html`
+   --------------------------------------------
+   One hero-padded two-column block: the intro column (badge → headline
+   → lede → the two contact cards → the serif pull-quote) beside the
+   grey form panel, everything staggered in on load by `useHeroIntro`
+   (the mockup's `data-hero` elements, marked with the same attribute
+   here).
+
+   The panel hosts the shared `UnifiedLeadForm` — the same component the
+   global enquiry modal renders, so both surfaces are identical down to
+   the field styling.
+
+   Every contact value comes from `siteConfig` (the single source of
+   business truth), never hardcoded here.
+   ============================================ */
+
+import React from 'react';
+import UnifiedLeadForm from '../../components/common/UnifiedLeadForm/UnifiedLeadForm';
+import { siteConfig, telHref, mailHref } from '../../data/siteConfig';
+import { useHeroIntro } from '../../animations';
+import layout from '../../styles/layout.module.css';
+import styles from './ContactPage.module.css';
+
+// The mockup's icons8 glyphs, self-hosted since Prompt 12. Refresh with
+// `npm run generate:images`.
+const ICON_PHONE = '/images/icons/phone-d5192e.png';
+const ICON_MAIL = '/images/icons/new-post-d5192e.png';
+
+const ContactPage = () => {
+  const heroRef = useHeroIntro();
+
+  return (
+    <div className={styles.page}>
+      <section className={`${layout.container} ${styles.inner}`}>
+        <div className={styles.grid} ref={heroRef}>
+          {/* ========== Intro column ========== */}
+          <div className={styles.intro}>
+            <div className={styles.badge} data-hero>
+              <span className={styles.dot} aria-hidden="true" /> We usually
+              reply within a day
+            </div>
+
+            {/* Closes on the word, not on a mark — see the home hero's
+                "impact". */}
+            <h1 className={`display ${styles.head}`} data-hero>
+              Let&rsquo;s build{' '}
+              <em className={`grad-text ${styles.accent}`}>
+                what comes next
+              </em>
+            </h1>
+
+            <p className={`lede ${styles.lede}`} data-hero>
+              Whether you are strengthening HR systems, analysing performance,
+              protecting a brand, developing leaders, or setting up something
+              new — it starts with one conversation.
+            </p>
+
+            <div className={styles.cards} data-hero>
+              <a href={telHref} className={styles.card}>
+                <i aria-hidden="true">
+                  {/* Above the fold on /contact — eager, not lazy. */}
+                  <img
+                    src={ICON_PHONE}
+                    alt=""
+                    width="100"
+                    height="100"
+                    decoding="async"
+                  />
+                </i>
+                <span>
+                  <span className={styles.cardKey}>Call us</span>
+                  <span className={`${styles.cardValue} ${styles.valuePhone}`}>
+                    {siteConfig.phoneDisplay}
+                  </span>
+                </span>
+              </a>
+
+              <a href={mailHref} className={styles.card}>
+                <i aria-hidden="true">
+                  <img
+                    src={ICON_MAIL}
+                    alt=""
+                    width="100"
+                    height="100"
+                    decoding="async"
+                  />
+                </i>
+                <span className={styles.cardText}>
+                  <span className={styles.cardKey}>Email us</span>
+                  <span className={`${styles.cardValue} ${styles.valueMail}`}>
+                    {siteConfig.email}
+                  </span>
+                </span>
+              </a>
+            </div>
+
+            <div className={styles.quote} data-hero>
+              <p className={`serif ${styles.quoteText}`}>
+                &ldquo;Your partner in business leadership.&rdquo;
+              </p>
+            </div>
+          </div>
+
+          {/* ========== Form panel ========== */}
+          <div className={styles.formPanel} data-hero>
+            <h2 className={styles.formHead}>Send us an enquiry</h2>
+            <p className={styles.formSub}>
+              One unified form for every requirement — we&rsquo;ll route it to
+              the right expertise.
+            </p>
+
+            <UnifiedLeadForm source="contact-page" formId="contact-page" />
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default ContactPage;

@@ -1,0 +1,244 @@
+/* ============================================
+   Dulcey Primitives — shared design-system classes
+   --------------------------------------------
+   Verbatim ports of the global classes in `mockup/styles.css`
+   (buttons + display typography). They are global on purpose: the
+   mockup defines them once and every page reuses them, so the shell
+   (Header / MobileMenu / Footer) and the page modules all share ONE
+   button implementation instead of re-declaring the gradient pill.
+
+   Component-specific styling still lives in `*.module.css`.
+   ============================================ */
+
+/* ========== Buttons ========== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  border-radius: 999px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+.btn--primary {
+  background: var(--grad);
+  color: #fff;
+  padding: 16px 32px;
+}
+
+.btn--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px rgba(213, 25, 46, 0.38);
+  color: #fff;
+}
+
+.btn--outline {
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  padding: 15px 30px;
+  background: transparent;
+}
+
+.btn--outline:hover {
+  background: var(--ink);
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+
+  .btn--primary:hover {
+    transform: none;
+  }
+}
+
+/* ========== Display typography ========== */
+.eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  /* The mockup leaves this inherited; our reset gives <p> 1.625, which
+     would add ~5px of height under every eyebrow. */
+  line-height: normal;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.serif {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* The ramp runs *down* the line, not across it, and that is the whole point.
+   Every one of these fills sits on an inline <em> inside a display headline,
+   so it fragments: one box per line it wraps to. A CSS gradient's ramp is as
+   long as the box it paints, so with any horizontal component each line gets
+   its own ramp length — and neither `box-decoration-break` value survives it:
+
+     · `slice` paints one ramp across the unfragmented box and cuts it up, so
+       each line shows only its share. /contact's "what comes next" breaks
+       after "what", which took the first 30% (still ~#E8293E) while "comes
+       next" took the rest down to #A80E1E — one bright line above one dark.
+     · `clone` gives each line the whole ramp, but over its own width. On
+       /expertise "people, processes & performance" broke into a 179px line
+       and a 613px one, so the ramp ran 3x faster on the short one: "people,"
+       darkened to #AD1021 across a single word, then "processes" directly
+       beneath it snapped back to #E6283D.
+
+   A vertical ramp removes the variable. Its length is the inline box height —
+   the same for every fragment of a given headline, at every viewport and on
+   every device — so all lines paint an identical ramp no matter how the copy
+   wraps. It is also the one axis that renders the same under both
+   `box-decoration-break` values, so nothing here depends on that property
+   being supported; `clone` stays only to keep any future padding or border on
+   an accent consistent, and keeps the -webkit- prefix for Safari and Chrome
+   before 130. `--grad` (buttons, cards) stays diagonal — those never
+   fragment. */
+.grad-text {
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.display {
+  margin: 26px 0 0;
+  font-size: clamp(36px, 8.4vw, 104px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.display--md {
+  font-size: clamp(34px, 7vw, 88px);
+  line-height: 1.05;
+}
+
+.display--sm {
+  font-size: clamp(32px, 6.4vw, 80px);
+  line-height: 1.06;
+}
+
+.lede {
+  margin: 30px 0 0;
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.7;
+  color: var(--grey-2);
+  max-width: 660px;
+  text-wrap: pretty;
+}
+
+.section-head {
+  margin: 16px 0 0;
+  font-size: clamp(30px, 4.4vw, 52px);
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+/* ========== Body copy ========== */
+.body-lg {
+  font-size: clamp(17px, 1.8vw, 20px);
+  line-height: 1.75;
+  color: var(--grey-1);
+  text-wrap: pretty;
+}
+
+.body-md {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--grey-3);
+  text-wrap: pretty;
+}
+
+/* ========== The company name inside running copy ==========
+   Wherever "Dulcey Lead Services" appears as the subject of a sentence
+   (the Home hero lede, the About hero closing) it should read as the brand,
+   not as another grey word in the paragraph — so it carries a weight step
+   and a small size step above the copy around it.
+
+   Both steps are RELATIVE (`em` / inherited color), which is what makes this
+   correct on every device without a single media query: each host paragraph
+   already sizes itself with `clamp()`, so the brand tracks it from the 360px
+   phone up to the 104px-headline desktop, and keeps its host's color so the
+   primitive stays safe on a light or a dark background.
+
+   `line-height` is pinned so the taller inline box always stays inside the
+   parent's strut — otherwise the one line holding the brand name would grow
+   a couple of px and break the paragraph's rhythm. */
+.brand {
+  font-weight: 800;
+  font-size: 1.06em;
+  line-height: 1;
+}
+
+/* ========== "More about …" link with the circled arrow ========== */
+.link-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  margin-top: 4px;
+  /* Stated explicitly, at the same 0.25s the Header gives its nav links.
+     Without it this inherits the legacy `a{transition:color 150ms}` from
+     `global.css` — a duration nothing else on these pages uses. */
+  transition: color 0.25s ease;
+}
+
+.link-more:hover {
+  color: var(--red);
+}
+
+.link-more i {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-style: normal;
+}
+
+/* ========== Decorative primitives ========== */
+
+/* Short gradient bar under a section aside — wiped in by `useLineReveal`. */
+.rule {
+  margin-top: 28px;
+  height: 3px;
+  width: 88px;
+  background: linear-gradient(90deg, #e8293e, #a80e1e);
+  border-radius: 3px;
+  transform-origin: left center;
+}
+
+/* Soft radial light. Position / size / gradient come from the section that
+   places it, exactly as the mockup set them per instance. */
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}

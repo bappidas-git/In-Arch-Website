@@ -1,0 +1,8 @@
+# Dulcey Lead Services — https://www.dulceyleadservices.com
+# Everything public is crawlable; only the admin panel is off-limits.
+
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Sitemap: https://www.dulceyleadservices.com/sitemap.xml

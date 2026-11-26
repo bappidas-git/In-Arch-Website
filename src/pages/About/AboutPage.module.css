@@ -1,0 +1,14 @@
+/* ============================================
+   AboutPage — page shell only.
+   --------------------------------------------
+   The mockup styles nothing at page level, so its sections inherit the
+   browser's defaults from <body>. Our global reset sets a 1.5
+   line-height and a fluid base font-size instead, so the page restores
+   the mockup's inherited values here — every element that sets its own
+   size or line-height is unaffected.
+   ============================================ */
+
+.page {
+  font-size: 16px;
+  line-height: normal;
+}

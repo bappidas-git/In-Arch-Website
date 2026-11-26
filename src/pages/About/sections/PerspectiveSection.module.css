@@ -1,0 +1,70 @@
+/* ============================================
+   About / A distinctive perspective — the per-instance
+   values the mockup set inline on this section
+   (`mockup/about.html`); the split, rule and body
+   typography come from the shared layout module +
+   `dulcey.css`.
+   ============================================ */
+
+/* The aside is measured as a container so the headline below can size
+   itself against *its own column* rather than the viewport. The split is
+   a flex row (`layout.split`), so this column is ~40% of the content width
+   on desktop but the full width once the row wraps to stacked — a plain
+   `vw` clamp cannot tell those two states apart. */
+.aside {
+  container-type: inline-size;
+}
+
+/* `clamp(28px, 4vw, 46px)` is mockup-verbatim (`mockup/about.html` sets it
+   inline) and stays the ceiling — the type is never larger than the mockup's.
+   The `8.6cqi` term only ever shrinks it, and only as far as this column
+   demands: "Breadth across sectors." sets at 11.3× its font-size, so at
+   8.6cqi it always lands inside the column with ~3% to spare. That is what
+   keeps the two clauses on two lines at every width instead of letting the
+   longer one re-wrap — 46px would need a 520px column and gets 469px at
+   1512px wide, 424px at 1150px wide.
+
+   The unprefixed `clamp()` above is the fallback: a browser without
+   container-query units drops the `min()` declaration and renders the
+   mockup size with a natural wrap. */
+.head {
+  font-size: clamp(28px, 4vw, 46px);
+  font-size: min(clamp(28px, 4vw, 46px), 8.6cqi);
+  line-height: 1.08;
+}
+
+/* One step down from the shared `.body-lg` scale. */
+.lead {
+  font-size: clamp(16px, 1.8vw, 19px);
+}
+
+/* ========== Qualifier tiles ========== */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.tile {
+  background: var(--bg-grey);
+  border-radius: 18px;
+  padding: 24px;
+}
+
+/* Scoped through `.tile` so it outranks the layout module's
+   `.splitMain p { margin: 0 }`, exactly as the mockup's inline style did. */
+.tile .tileTitle {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  /* The mockup leaves this inherited; our reset gives <p> 1.625. */
+  line-height: normal;
+}
+
+.tile .tileDesc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--grey-3);
+}

@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <!-- =========================================
+         Scroll Restoration — claim it before anything else
+         -----------------------------------------
+         This is a lazy-route SPA: on a reload the document is a stub when
+         the browser applies its saved scroll offset, then the route chunk
+         mounts and grows it back. With the default "auto" mode the browser
+         re-applies the pre-reload offset AFTER that growth, landing the
+         visitor mid-page — on the short /contact route that is inside the
+         footer. ScrollManager (src/App.jsx) owns route scrolling instead.
+
+         Deliberately inline, first thing in <head>, for two reasons:
+         1. it beats the browser's own restore, which the main bundle does not,
+         2. gsap/ScrollTrigger caches history.scrollRestoration at import time
+            and writes its cached copy back on every refresh() — so whatever
+            is set here is what GSAP keeps re-asserting. Setting it later
+            (from a React effect) gets silently reverted to "auto".
+         src/animations/gsapSetup.js calls ScrollTrigger.clearScrollMemory
+         ('manual') so GSAP's cached copy agrees with this one and keeps
+         re-asserting it rather than fighting it.
+         ========================================= -->
+    <script>
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    </script>
+
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" sizes="any" />
+    <link
+      rel="icon"
+      href="%PUBLIC_URL%/favicon.png"
+      type="image/png"
+      sizes="32x32"
+    />
+
+    <!-- =========================================
+         Viewport & Mobile Optimization
+         ========================================= -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"
+    />
+    <meta
+      name="theme-color"
+      content="#0B0B0C"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      name="theme-color"
+      content="#0B0B0C"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Dulcey Lead Services" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-TileColor" content="#0B0B0C" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <!-- =========================================
+         SEO Meta Tags — home page (static fallback)
+         --------------------------------------------
+         SEOHead rewrites these per route at runtime; the values here must
+         match seoConfig.pages.home in src/config/seo.js so a crawler that
+         never runs JS sees exactly what a browser does.
+         ========================================= -->
+    <meta
+      name="description"
+      content="Dulcey Lead Services works with businesses, institutions and entrepreneurs to navigate complexity, strengthen organizational capability and grow sustainably."
+    />
+    <meta
+      name="keywords"
+      content="Dulcey Lead Services, Beyond Business Support, business solutions, people &amp; organization, corporate services, leadership &amp; capability building"
+    />
+    <meta name="author" content="Dulcey Lead Services" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+
+    <!-- =========================================
+         Open Graph / Facebook
+         ========================================= -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.dulceyleadservices.com/" />
+    <meta
+      property="og:title"
+      content="Dulcey Lead Services — Beyond Business Support"
+    />
+    <meta
+      property="og:description"
+      content="Dulcey Lead Services works with businesses, institutions and entrepreneurs to navigate complexity, strengthen organizational capability and grow sustainably."
+    />
+    <meta property="og:image" content="https://www.dulceyleadservices.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Dulcey Lead Services — Beyond Business Support"
+    />
+    <meta property="og:site_name" content="Dulcey Lead Services" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- =========================================
+         Twitter Card
+         ========================================= -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://www.dulceyleadservices.com/" />
+    <meta
+      name="twitter:title"
+      content="Dulcey Lead Services — Beyond Business Support"
+    />
+    <meta
+      name="twitter:description"
+      content="Dulcey Lead Services works with businesses, institutions and entrepreneurs to navigate complexity, strengthen organizational capability and grow sustainably."
+    />
+    <meta name="twitter:image" content="https://www.dulceyleadservices.com/og-image.png" />
+
+    <!-- =========================================
+         Canonical URL
+         ========================================= -->
+    <link rel="canonical" href="https://www.dulceyleadservices.com/" />
+
+    <!-- =========================================
+         PWA Manifest & Icons
+         ========================================= -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="%PUBLIC_URL%/apple-touch-icon.png"
+    />
+
+    <!-- =========================================
+         Preconnect & DNS Prefetch
+         ========================================= -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <!-- api.iconify.design is intentionally NOT preconnected: Iconify is only
+         imported by the lazy-loaded /admin bundle, so a public visitor would
+         pay for a handshake they never use. -->
+
+    <!-- =========================================
+         Preload Critical Resources
+         ========================================= -->
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap"
+      as="style"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <!-- Round full stop + open ampersand. `text=.%26` subsets Inter to two
+         glyphs (~2.2 KB) and Google emits `unicode-range: U+26, U+2e` on every
+         @font-face, so this replaces Archivo's square period and its closed
+         rotated-8 ampersand site-wide and nothing else. It is what puts 'Inter'
+         at the head of the sans stacks in variables.css. The `%26` must stay
+         percent-encoded — a bare `&` would terminate the `text` param. -->
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&text=.%26&display=swap"
+      as="style"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&text=.%26&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <!-- Splash mark preload. The initial loader draws this on every route's
+         first paint, and it sits in <body> markup the parser only reaches
+         after all of <head>, so preloading here starts the fetch earlier.
+         Same-origin and immutably cached (see public/.htaccess), so it costs
+         one request on a first visit and nothing afterwards. Keep in sync with
+         the <img> in the initial loader below and `logoMark` in
+         src/data/siteConfig.js. -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/png"
+      href="%PUBLIC_URL%/images/logo/dls-mark-860.png"
+      fetchpriority="high"
+    />
+
+    <!-- =========================================
+         LCP image preload — home route only
+         --------------------------------------------
+         The home hero backdrop is the largest above-the-fold asset and lives
+         inside a React-rendered section, so without a preload it is not
+         discovered until the main bundle has parsed and mounted. That makes
+         this preload load-bearing rather than an optimisation.
+
+         This is a SPA: index.html is served for every route, so a static
+         <link rel="preload"> here would also download the home hero on
+         /about, /expertise, /industries and /contact — where it is never
+         used, costing those routes bandwidth and LCP. The guard keeps the
+         preload for the route that needs it and skips it everywhere else.
+         Runs synchronously in <head>, so discovery still happens long
+         before the bundle executes.
+
+         The hero ships one width, so this preloads the WebP directly. `type`
+         is what keeps that honest: a browser that cannot decode image/webp
+         skips the preload rather than wasting it.
+
+         Keep the href in sync with `HERO_BG` in
+         src/pages/Home/sections/HeroSection.jsx.
+         ========================================= -->
+    <script>
+      (function () {
+        if (window.location.pathname !== "/") return;
+        var link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.type = "image/webp";
+        link.href = "/images/hero-home-v6-2880.webp";
+        link.setAttribute("fetchpriority", "high");
+        document.head.appendChild(link);
+      })();
+    </script>
+
+    <!-- =========================================
+         Page Title
+         ========================================= -->
+    <title>Dulcey Lead Services — Beyond Business Support</title>
+
+    <!-- =========================================
+         Structured Data / JSON-LD for SEO
+         ========================================= -->
+
+    <!-- These static schemas serve as fallbacks; the SEOHead component injects dynamic versions at runtime (matching element ids) from src/config/seo.js -->
+
+    <!-- Schema: Organization — mirrors generateOrganizationSchema() -->
+    <script type="application/ld+json" id="schema-organization">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Dulcey Lead Services",
+        "legalName": "Dulcey Lead Services",
+        "url": "https://www.dulceyleadservices.com",
+        "logo": "https://www.dulceyleadservices.com/images/logo/dulcey-wordmark-1351.png",
+        "description": "A professional business support and consulting organization — helping businesses, institutions, entrepreneurs, and professionals build for sustainable growth.",
+        "slogan": "Beyond Business Support",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91-70990-02522",
+          "contactType": "customer service",
+          "email": "dulceyleadservices@gmail.com"
+        },
+        "knowsAbout": [
+          "HR & People Management",
+          "Administration & Business Operations",
+          "Business Analytics & Intelligence",
+          "Pharmaceutical Business & Healthcare",
+          "Corporate, Legal & Intellectual Property",
+          "Leadership & Organizational Development",
+          "Soft Skills & Professional Development",
+          "Academic & Institutional Engagement",
+          "Business Management & Coaching",
+          "Corporate Branding & Graphics"
+        ]
+      }
+    </script>
+
+    <!-- Schema: WebSite — mirrors generateWebSiteSchema() -->
+    <script type="application/ld+json" id="schema-website">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Dulcey Lead Services",
+        "url": "https://www.dulceyleadservices.com",
+        "inLanguage": "en",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Dulcey Lead Services",
+          "url": "https://www.dulceyleadservices.com"
+        }
+      }
+    </script>
+
+    <!-- Schema: WebPage (home) — SEOHead re-injects this per route -->
+    <script type="application/ld+json" id="schema-webpage">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Dulcey Lead Services — Beyond Business Support",
+        "description": "Dulcey Lead Services works with businesses, institutions and entrepreneurs to navigate complexity, strengthen organizational capability and grow sustainably.",
+        "url": "https://www.dulceyleadservices.com/",
+        "inLanguage": "en",
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Dulcey Lead Services",
+          "url": "https://www.dulceyleadservices.com"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Dulcey Lead Services",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.dulceyleadservices.com/images/logo/dulcey-wordmark-1351.png"
+          }
+        }
+      }
+    </script>
+
+    <!-- Schema: BreadcrumbList (home only) — SEOHead appends the current page -->
+    <script type="application/ld+json" id="schema-breadcrumb">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.dulceyleadservices.com/"
+          }
+        ]
+      }
+    </script>
+
+    <!-- Schema: ItemList of Service — mirrors src/data/expertiseData.js.
+         Regenerate whenever an expertise title or description changes so
+         the static and runtime layers stay identical. -->
+    <script type="application/ld+json" id="schema-services">
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Areas of Experience",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@type": "Service",
+              "name": "HR & People Management",
+              "description": "People are at the centre of every successful organization. We bring practical experience in helping organizations establish structured, professional, and effective people practices that support performance, accountability, and organizational growth.",
+              "serviceType": "HR & People Management",
+              "url": "https://www.dulceyleadservices.com/expertise#e01",
+              "provider": {
+                "@type": "Organization",
+                "name": "Dulcey Lead Services",
+                "url": "https://www.dulceyleadservices.com"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@type": "Service",
+              "name": "Administration & Business Operations",
+              "description": "Behind every well-run organization is a disciplined operating structure. We bring experience in helping businesses create greater clarity, coordination, and control across their administrative and operational functions.",
+              "serviceType": "Administration & Business Operations",
+              "url": "https://www.dulceyleadservices.com/expertise#e02",
+              "provider": {
+                "@type": "Organization",
+                "name": "Dulcey Lead Services",
+                "url": "https://www.dulceyleadservices.com"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "Service",
+              "name": "Business Analytics & Intelligence",
+              "description": "Data is valuable only when it leads to better understanding and better decisions. We look beyond surface-level reporting to identify patterns, inconsistencies, performance deviations, process gaps, and areas that may require management attention.",
+              "serviceType": "Business Analytics & Intelligence",
+              "url": "https://www.dulceyleadservices.com/expertise#e03",
+              "provider": {
+                "@type": "Organization",
+                "name": "Dulcey Lead Services",
+                "url": "https://www.dulceyleadservices.com"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "item": {
+              "@type": "Service",
+              "name": "Pharmaceutical Business & Healthcare",
+              "description": "Pharmaceutical and healthcare business is a specialized area of our experience. We understand the interconnected nature of people, field operations, sales and marketing, product knowledge, business analytics, performance management, administration, and operational discipline.",
+              "serviceType": "Pharmaceutical Business & Healthcare",
+              "url": "https://www.dulceyleadservices.com/expertise#e04",
+              "provider": {
+                "@type": "Organization",
+                "name": "Dulcey Lead Services",
+                "url": "https://www.dulceyleadservices.com"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "item": {
+              "@type": "Service",
+              "name": "Corporate, Legal & Intellectual Property",
+              "description": "A successful business is built on more than vision — it is built on a strong legal foundation. We help businesses establish the right corporate structure, safeguard intellectual property, and implement legally sound documentation that protects both the organisation and its people.",
+              "serviceType": "Corporate, Legal & Intellectual Property",
+              "url": "https://www.dulceyleadservices.com/expertise#e05",
+              "provider": {
+                "@type": "Organization",
+                "name": "Dulcey Lead Services",
+                "url": "https://www.dulceyleadservices.com"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "item": {
+              "@type": "Service",
+              "name": "Leadership & Organizational Development",
+              "description": "Leadership capability is a strategic organizational asset. We design customized leadership and organizational development programs for businesses and institutions seeking to strengthen managerial effectiveness, accountability, and performance.",
+              "serviceType": "Leadership & Organizational Development",
+              "url": "https://www.dulceyleadservices.com/expertise#e06",
+              "provider": {
+                "@type": "Organization",
+                "name": "Dulcey Lead Services",
+                "url": "https://www.dulceyleadservices.com"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "item": {
+              "@type": "Service",
+              "name": "Soft Skills & Professional Development",
+              "description": "Professional excellence is shaped not only by technical knowledge, but by the ability to communicate, collaborate, lead, and adapt.",
+              "serviceType": "Soft Skills & Professional Development",
+              "url": "https://www.dulceyleadservices.com/expertise#e07",
+              "provider": {
+                "@type": "Organization",
+                "name": "Dulcey Lead Services",
+                "url": "https://www.dulceyleadservices.com"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "item": {
+              "@type": "Service",
+              "name": "Academic & Institutional Engagement",
+              "description": "The transition from education to professional life requires more than academic knowledge. It requires perspective, confidence, communication, and an understanding of how organizations actually work.",
+              "serviceType": "Academic & Institutional Engagement",
+              "url": "https://www.dulceyleadservices.com/expertise#e08",
+              "provider": {
+                "@type": "Organization",
+                "name": "Dulcey Lead Services",
+                "url": "https://www.dulceyleadservices.com"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "item": {
+              "@type": "Service",
+              "name": "Business Management & Coaching",
+              "description": "Every business journey presents different questions. How should the business be structured? Where are the gaps? What needs attention? What should happen next?",
+              "serviceType": "Business Management & Coaching",
+              "url": "https://www.dulceyleadservices.com/expertise#e09",
+              "provider": {
+                "@type": "Organization",
+                "name": "Dulcey Lead Services",
+                "url": "https://www.dulceyleadservices.com"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "item": {
+              "@type": "Service",
+              "name": "Corporate Branding & Graphics",
+              "description": "Your business identity is expressed through every interaction. We help businesses communicate their identity, ideas, capabilities, and vision with greater clarity, consistency, and professionalism.",
+              "serviceType": "Corporate Branding & Graphics",
+              "url": "https://www.dulceyleadservices.com/expertise#e10",
+              "provider": {
+                "@type": "Organization",
+                "name": "Dulcey Lead Services",
+                "url": "https://www.dulceyleadservices.com"
+              }
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- =========================================
+         Critical CSS (Above the Fold)
+         ========================================= -->
+    <style>
+      /* Critical CSS - Inline for fastest first paint */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        /* 'Inter' here is the two-glyph U+26,U+2e subset loaded above — round
+           full stop and open ampersand over Archivo. See the preload comment
+           in <head>. */
+        font-family: "Inter", "Archivo", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        overflow-x: hidden;
+        background-color: #ffffff;
+        color: #0b0b0c;
+        line-height: 1.5;
+      }
+
+      ::selection {
+        background: #d5192e;
+        color: #fff;
+      }
+
+      /* Root element setup */
+      #root {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        isolation: isolate;
+      }
+
+      /* Skip link for accessibility */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #0b0b0c;
+        color: #ffffff;
+        padding: 8px 16px;
+        z-index: 10000;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 0 0 4px 0;
+        transition: top 0.2s ease;
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
+
+      /* ============================================
+         Initial Loader — Branded Splash Screen
+         Shown until React mounts, then fades out
+         ============================================ */
+      .initial-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0b0b0c;
+        transition:
+          opacity 0.4s ease,
+          visibility 0.4s ease;
+      }
+
+      .initial-loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      /* Wrapper */
+      .loader-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        padding: 24px;
+        max-width: 280px;
+        width: 100%;
+      }
+
+      /* Brand Block */
+      .loader-brand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .loader-logo-img {
+        /* The "DLS" mark is 860x460 (1.87:1), not the square "D" this splash
+           used to draw — `aspect-ratio` reserves the right box before the PNG
+           decodes so the wrapper never reflows on any device. `max-width`
+           keeps it inside .loader-wrapper's 232px content box on the
+           narrowest phones. Widened from the 180px the square "D" used: at
+           1.87:1 the same width would draw a 96px-tall block where a 180px
+           one stood, so the brand read as an afterthought above the 232px
+           progress bar. */
+        width: 200px;
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 860 / 460;
+        object-fit: contain;
+        animation: loaderFadeIn 0.6s ease both;
+      }
+
+      .loader-tagline {
+        margin: 0;
+        font-family: "Inter", "Archivo", system-ui, sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.72);
+        letter-spacing: 0.04em;
+        text-align: center;
+        animation: loaderFadeIn 0.6s 0.2s ease both;
+      }
+
+      /* Progress Bar Track */
+      .loader-bar-track {
+        width: 100%;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 3px;
+        overflow: hidden;
+        animation: loaderFadeIn 0.4s 0.3s ease both;
+      }
+
+      .loader-bar-fill {
+        height: 100%;
+        width: 0%;
+        border-radius: 3px;
+        background: linear-gradient(90deg, #e8293e, #f0293e, #a80e1e);
+        background-size: 200% 100%;
+        animation:
+          loaderProgress 2s 0.4s ease-in-out forwards,
+          loaderShimmer 1.5s 0.4s ease-in-out infinite;
+      }
+
+      /* Loading Status Text */
+      .loader-status {
+        margin: 0;
+        font-family: "Inter", "Archivo", system-ui, sans-serif;
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.5);
+        letter-spacing: 0.02em;
+        animation: loaderFadeIn 0.4s 0.4s ease both;
+      }
+
+      /* Animated dots "Loading..." */
+      .loader-dots::after {
+        content: "";
+        animation: loaderDots 1.4s steps(4, end) infinite;
+      }
+
+      /* ============================================
+         Loader Keyframes
+         ============================================ */
+      @keyframes loaderFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes loaderProgress {
+        0% {
+          width: 0%;
+        }
+        30% {
+          width: 40%;
+        }
+        60% {
+          width: 70%;
+        }
+        100% {
+          width: 92%;
+        }
+      }
+
+      @keyframes loaderShimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      @keyframes loaderDots {
+        0% {
+          content: "";
+        }
+        25% {
+          content: ".";
+        }
+        50% {
+          content: "..";
+        }
+        75% {
+          content: "...";
+        }
+        100% {
+          content: "";
+        }
+      }
+
+      /* Safe area for notched devices (iPhone X+) */
+      @supports (padding-bottom: env(safe-area-inset-bottom)) {
+        body {
+          padding-left: env(safe-area-inset-left);
+          padding-right: env(safe-area-inset-right);
+          padding-bottom: env(safe-area-inset-bottom);
+        }
+      }
+
+      /* ============================================
+         Reduced Motion — Respect user preference
+         ============================================ */
+      @media (prefers-reduced-motion: reduce) {
+        .loader-logo-img,
+        .loader-tagline,
+        .loader-bar-track,
+        .loader-status {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+        .loader-bar-fill {
+          animation: loaderProgress 2s ease-in-out forwards;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
+      /* ============================================
+         Dark mode support (if user's OS is dark)
+         ============================================ */
+      @media (prefers-color-scheme: dark) {
+        .initial-loader {
+          background: #0b0b0c;
+        }
+        .loader-tagline {
+          color: rgba(255, 255, 255, 0.6);
+        }
+        .loader-bar-track {
+          background: rgba(255, 255, 255, 0.1);
+        }
+        .loader-status {
+          color: rgba(255, 255, 255, 0.4);
+        }
+      }
+
+      /* High contrast mode support */
+      @media (prefers-contrast: high) {
+        body {
+          background-color: #000;
+          color: #fff;
+        }
+      }
+
+      /* Print styles */
+      @media print {
+        .initial-loader {
+          display: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Noscript fallback -->
+    <noscript>
+      <div
+        style="
+          padding: 20px;
+          text-align: center;
+          background: #0b0b0c;
+          color: #ffffff;
+          font-family: Inter, Archivo, system-ui, sans-serif;
+        "
+      >
+        <h1 style="color: #f0293e; margin-bottom: 10px">JavaScript Required</h1>
+        <p>You need to enable JavaScript to run this app.</p>
+        <p style="margin-top: 10px">
+          Please enable JavaScript in your browser settings and refresh the
+          page.
+        </p>
+      </div>
+    </noscript>
+
+    <!-- Initial Loader — Professional Branded Splash Screen -->
+    <div
+      class="initial-loader"
+      id="initial-loader"
+      role="progressbar"
+      aria-label="Loading Dulcey Lead Services"
+    >
+      <div class="loader-wrapper">
+        <!-- Logo + Brand -->
+        <div class="loader-brand">
+          <!-- The self-hosted "DLS" mark — the same artwork as the favicon
+               and the PWA icon set. Drawn 180px wide from an 860px master, so
+               it stays sharp to 3× with no CDN resize on the first-paint
+               path. Mirrors `logoMark` / MARK_SIZE in src/data/siteConfig.js;
+               preloaded in <head>. -->
+          <img
+            src="%PUBLIC_URL%/images/logo/dls-mark-860.png"
+            alt="Dulcey Lead Services"
+            class="loader-logo-img"
+            width="860"
+            height="460"
+            decoding="async"
+            fetchpriority="high"
+          />
+          <p class="loader-tagline">Beyond Business Support</p>
+        </div>
+
+        <!-- Animated Progress Bar -->
+        <div class="loader-bar-track">
+          <div class="loader-bar-fill"></div>
+        </div>
+
+        <!-- Loading text -->
+        <p class="loader-status">Loading<span class="loader-dots"></span></p>
+      </div>
+    </div>
+
+    <!-- React Root -->
+    <div id="root"></div>
+
+    <!-- Hide initial loader when React is ready -->
+    <script>
+      (function () {
+        // Performance mark for load timing
+        if (window.performance && window.performance.mark) {
+          window.performance.mark("loader-start");
+        }
+
+        // Hide loader on window load
+        window.addEventListener("load", function () {
+          // Give React time to mount
+          setTimeout(function () {
+            var loader = document.getElementById("initial-loader");
+            if (loader) {
+              loader.classList.add("hidden");
+
+              // Remove from DOM after transition
+              setTimeout(function () {
+                if (loader && loader.parentNode) {
+                  loader.style.display = "none";
+                }
+
+                // Performance mark for load complete
+                if (window.performance && window.performance.mark) {
+                  window.performance.mark("loader-end");
+                  window.performance.measure(
+                    "app-load-time",
+                    "loader-start",
+                    "loader-end",
+                  );
+                }
+              }, 400);
+            }
+          }, 200);
+        });
+
+        // Fallback: Hide loader after max timeout
+        setTimeout(function () {
+          var loader = document.getElementById("initial-loader");
+          if (loader && !loader.classList.contains("hidden")) {
+            loader.classList.add("hidden");
+            setTimeout(function () {
+              loader.style.display = "none";
+            }, 400);
+          }
+        }, 5000);
+      })();
+    </script>
+
+    <!-- Register touch events for mobile performance -->
+    <script>
+      document.addEventListener("touchstart", function () {}, {
+        passive: true,
+      });
+    </script>
+  </body>
+</html>
