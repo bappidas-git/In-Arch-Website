@@ -81,7 +81,7 @@ The page's rhythm, top to bottom: dark hero → light statement (both from promp
 
 ### Section 5 — What we do (`tone="light"`)
 
-- Eyebrow "03 — What we do"; `h2` `.ia-t-display-lg`: "From concept to *completion.*"; `Lede`: "Seven services, offered on their own or together."
+- Eyebrow "03 — What we do"; `h2` `.ia-t-display-lg`: "From concept to *completion.*"; `Lede`: "Seven services, each set out in full on the Expertise page." (a pointer, not a claim — the PDF does not say how the services are packaged)
 - The seven services from `src/data/services.js` as a ledger: one row each — number (`.ia-t-label`, accent), title (`.ia-t-display-sm`; `.ia-t-display-md` from 1024), tagline (`.ia-t-small`, `--ia-fg-2`), arrow. Each row is one link to `/expertise#e0N`, at least 72 px tall, with hairlines between rows.
 - **Desktop enhancement only:** on a fine pointer, hovering or focusing a row shows that service's Icons8 icon at 160 px in a fixed slot in columns 10–12 (cross-fade 240 ms). The row is complete without it; nothing appears on touch.
 - After the ledger, a single line that points to the dedicated page: "Interiors have a page of their own." + `TextLink` "Interior Design" → `/interior-design`.
@@ -159,7 +159,7 @@ node scripts/qa/public-check.js
 - **Swipe row (phones and tablet).** Swipes natively with snap; the previous / next buttons move exactly one tile and disable at the ends; the counter updates and is announced politely; the row is reachable and operable by keyboard; vertical page scrolling is never trapped inside it.
 - **Service ledger.** Seven rows from the data module; each lands on the right item of `/expertise` (still the old page until prompt 09 — the hash must not error); the hover preview appears only with a fine pointer and never shifts layout.
 - **Trust block and closing.** `/about#principal` resolves; the closing button sends `source: "home-closing"`; while it is ≥ 60 % visible the dock's button is secondary; WhatsApp and call links are well-formed.
-- **Performance.** At 390 px, "Fast 4G", 4× CPU: total JavaScript requested for `/` has not grown by more than 12 KB gzip since prompt 06; every below-the-fold image is lazy and has dimensions; CLS for the full scroll ≤ 0.02; scrolling stays at 60 fps.
+- **Performance.** At 390 px, "Fast 4G", 4× CPU: total JavaScript requested for `/` has not grown by more than 12 KB gzip since prompt 06; every below-the-fold image is lazy and has dimensions; CLS for the full scroll ≤ 0.05; scrolling stays at 60 fps.
 - **Cleanliness.** `grep -ri "dulcey\|beyond business\|pharma" src/pages/Home` returns nothing; `src/pages/Home` contains only the eight new sections and the page file.
 - **Admin parity.** `node scripts/qa/parity.js --suite admin` against the baseline build: zero differences.
 - **Breakpoints.** Check 360, 390, 768, 1024, 1280, 1440 and 1920 px wide, plus one landscape phone (844 × 390): no horizontal scroll, nothing clipped or overlapping, every tap target ≥ 44 × 44 px, no text below 12 px, and the dock never hides a focused control.

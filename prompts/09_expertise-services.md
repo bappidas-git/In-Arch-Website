@@ -73,7 +73,7 @@ Rhythm: **sand** typographic hero → **light** service ledger → **dark** reas
 
 ### Section 1 — Hero (`tone="sand"`)
 
-- Eyebrow: "Expertise"; `h1` `.ia-t-display-xl`: "Seven services. *One considered process.*"; `Lede`: "Architecture, interiors, visualisation and site consultancy — taken on separately or together, as the project requires."
+- Eyebrow: "Expertise"; `h1` `.ia-t-display-xl`: "Seven services. *One considered process.*"; `Lede`: "Architectural design, residential planning, interior design, 3D visualisation and project consultancy in Patna, Bihar." (the list in the PDF's own meta description — it makes no claim about how the services are packaged)
 - A row of in-page links in `.ia-t-label` under a hairline: "Services" → `#services`, "Process" → `#process`, "Questions" → `#faq`.
 - Visual, right-hand side from 1024 px (columns 8–12), below the copy on phones: if `expertise-atmosphere` exists, a 3:2 `Frame` with `reveal`; otherwise an in-house line drawing — an abstract plan made of 1 px lines in `--ia-line-strong` with one terracotta line — whose lines appear by `scaleX` / `scaleY` from their ends (never `stroke-dashoffset`). Either way it is decorative (`alt=""` / `aria-hidden`).
 - The hero is short: about 70 svh on desktop, content-height on phones.

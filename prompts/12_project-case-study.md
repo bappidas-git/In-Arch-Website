@@ -157,7 +157,7 @@ node scripts/qa/public-check.js
 - **Routing and SEO.** `/portfolio/prayer-units` loaded directly: correct title, description, `og:image` (absolute), breadcrumb with three items, `schema-project` valid JSON. Navigate to another project, then to `/portfolio`, then to `/`: tags and schemas update each time and `schema-project` disappears outside project pages. `/portfolio/does-not-exist`: not-found content, `noindex`, no canonical.
 - **Next-project chain.** Follow it seven times: every project once, then back to the first; each step uses the curtain and lands at the top.
 - **Lead context.** From two different projects the modal shows "From: Portfolio — {title}"; stored `source` values differ accordingly; `node scripts/qa/lead-flow.js` still passes.
-- **Performance.** On `/portfolio/walnut-and-marble-living-hall` at 390 px, "Fast 4G", 4× CPU: LCP element is the cover, LCP ≤ 2.5 s, CLS ≤ 0.02; the project chunk is under 25 KB gzip.
+- **Performance.** On `/portfolio/walnut-and-marble-living-hall` at 390 px, "Fast 4G", 4× CPU: LCP element is the cover, LCP ≤ 2.5 s, CLS ≤ 0.05 over a full scroll; the project chunk is under 25 KB gzip.
 - **Unit test.** `useProject` returns the project, its index and its successor, wraps from last to first, and returns `null` for an unknown slug.
 - **Admin parity.** `node scripts/qa/parity.js --suite admin` against the baseline build: zero differences.
 - **Breakpoints.** Check 360, 390, 768, 1024, 1280, 1440 and 1920 px wide, plus one landscape phone (844 × 390): no horizontal scroll, nothing clipped or overlapping, every tap target ≥ 44 × 44 px, no text below 12 px, and the dock never hides a focused control.

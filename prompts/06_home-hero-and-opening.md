@@ -106,7 +106,7 @@ The rest of the old Home page (the belief band, the expertise index, the sector 
 **Content**
 
 - Eyebrow: "01 — The practice"
-- Statement as an `h2`, `.ia-t-display-md` (26 px at 360 → 44 px): "Architecture is more than the creation of buildings. It is about understanding people, their aspirations and *the way they interact with their surroundings.*" (the PDF's own sentence; the last clause is the accent).
+- Statement as an `h2`, `.ia-t-display-md` (26 px at 360 → 44 px): "Architecture is more than the creation of buildings. It is about understanding people, their aspirations and *the way they interact with their surroundings.*" (the PDF's own sentence with only its opening words "The practice believes that" removed; the last clause is the accent).
 - Supporting paragraph, `.ia-t-body-lg`, `--ia-fg-2`, max 52ch — the first "About In-Arch" paragraph from `studioContent`, verbatim: "In-Arch Architects & Interior Designer is an architectural and interior design practice based in Patna, Bihar, led by Principal Architect Ar. Mohammad Hassanuddin."
 - `TextLink` with arrow: "Discover the studio" → `/about`
 - Image: `home-intro` (4:5) in a `Frame` with `reveal` and `parallax`.
@@ -164,7 +164,7 @@ node scripts/qa/public-check.js
 
 - **Hero, measured in the browser** at 360, 390, 768, 1024, 1280, 1440 and 1920 px: the `h1` is two lines at every width and matches the type table (45.1 / 47.3 / 74.5 / 92.9 / 111.4 / 122.9 / 136 px); nothing is hidden behind the dock or the masthead; on a 360 × 640 viewport and on a landscape phone (844 × 390) the headline, lede and one action are all reachable without the hero overflowing awkwardly; the image never shows the person, cables or clutter listed in prompt 02.
 - **Contrast over the photograph.** Sample the pixels behind the eyebrow, each `h1` line, the lede, the ghost button's label and the meta at every width: ivory text ≥ 4.5:1 at its worst pixel (terracotta-300 accent line ≥ 3:1, it is display size).
-- **LCP.** In the PHP-served production build, with "Fast 4G" and 4× CPU throttling at 390 px: the LCP element is the hero image, it is requested from the preload before the main bundle finishes, LCP ≤ 2.5 s, CLS ≤ 0.02 for the whole page. Navigating to `/about` or `/contact` first must not request the hero image.
+- **LCP.** In the PHP-served production build, with "Fast 4G" and 4× CPU throttling at 390 px: the LCP element is the hero image, it is requested from the preload before the main bundle finishes, LCP ≤ 2.5 s, CLS ≤ 0.05 over a full scroll of the page (the budgets prompt 18 enforces site-wide). Navigating to `/about` or `/contact` first must not request the hero image.
 - **Actions.** Primary button opens the modal and the lead it sends has `source: "home-hero"` (check with `node scripts/qa/lead-flow.js` or the network panel); while that button is ≥ 60 % visible the dock's button is in its secondary style, and returns to primary when the hero has scrolled away; the ghost button navigates with the curtain.
 - **Motion.** The intro plays once per visit to the page, including after a page transition; resizing mid-animation does not break the line masks; with reduced motion nothing moves and the statement is fully legible; 60 fps on a 4×-throttled CPU while scrolling through both sections.
 - **The seam.** The old sections below are pixel-identical to before this prompt (compare screenshots of that region).

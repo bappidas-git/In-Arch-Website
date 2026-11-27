@@ -87,7 +87,7 @@ Budgets, measured on the PHP-served production build at 390 × 844 with "Fast 4G
 | Total Blocking Time | ≤ 200 ms |
 | JavaScript for first render (gzip) | main ≤ 120 KB; any route chunk ≤ 30 KB |
 | CSS for first render (gzip) | ≤ 25 KB |
-| Fonts | three WOFF2 files, ≤ 130 KB in total, two preloaded |
+| Fonts | three WOFF2 files, ≤ 180 KB in total (about 67 + 82 + 25 KB as Fontsource ships them); two preloaded, ≤ 95 KB |
 | First-screen image | ≤ 140 KB at phone width |
 | Third-party requests on first load | none |
 

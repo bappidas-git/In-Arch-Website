@@ -4,7 +4,7 @@ This folder is the complete plan for rebuilding the IN-ARCH public website on th
 
 ## 1. How to use this folder
 
-1. Answer what you can in [section 12, "Owner decisions"](#12-owner-decisions) — write the answer in the last column. Every prompt reads that table first; an empty answer means the stated default is used.
+1. Read [section 12, "Owner decisions"](#12-owner-decisions). The decisions are already taken (the last column); change a cell if you disagree, and fill in the three facts still needed from the client when they arrive. Every prompt reads that table first.
 2. Paste the prompts into fresh sessions **one at a time, in order**. Each is self-contained and repeats the values it needs, but each depends on the files earlier prompts create.
 3. Every session ends by appending to `prompts/BUILD_LOG.md` (created by prompt 01): what it did, what it deviated on and why, what is open. The next session reads that log first — it is the series' memory.
 4. Prompt 20 writes `prompts/FINAL_REPORT.md` with the evidence and the go-live list.
@@ -369,14 +369,14 @@ Audit prompts (16–20) own site-wide passes, not surfaces; they fix what they f
 | ph01 | living room with two green arched niches and teal sofa (crop out a person) | **Interior Design hero** | Living Room with Arched Niches |
 | ph02 | black gloss kitchen with blue-veined splashback | **Interior Design — kitchens story** | Black Kitchen with a Veined Splashback (cover) |
 | ph04 | ivory gloss kitchen with dark worktop | **Interior Design — kitchens story** | Ivory Kitchen with a Dark Worktop (cover) |
-| ph09 | prayer unit with lattice-cut doors, backlit | **Interior Design — details story / closing** | Made-to-Measure Prayer Units (cover) |
-| ph12a | prayer unit on a mint wall (left half of a collage) | **Interior Design — hero inset / details** | Made-to-Measure Prayer Units |
+| ph09 | prayer unit with lattice-cut doors, backlit | **Interior Design — made-to-measure story** | Made-to-Measure Prayer Units (cover) |
+| ph12a | prayer unit on a mint wall (left half of a collage) | **Interior Design — made-to-measure story** | Made-to-Measure Prayer Units |
 | ph11 | seating nook with buttoned bench (crop out a mirror reflection) | **Contact** | Living Room with Arched Niches |
-| ph14 | detail of the arched-niche living room | none (portfolio only) | Living Room with Arched Niches (cover); featured on Home |
+| ph14 | detail of the arched-niche living room | **Interior Design — living-spaces story** | Living Room with Arched Niches (cover); featured on Home |
 | ph12b | the ph09 prayer unit, second angle | none | Made-to-Measure Prayer Units |
-| ph10 | graphite kitchen from the side (soft) | none | Graphite Gloss Kitchen, small only |
+| ph10 | graphite kitchen from the side (soft) | **Interior Design — small hero inset** (200 px wide only) | Graphite Gloss Kitchen, small only |
 
-Rule: one editorial placement per photograph across the whole site, plus its own project's cover, gallery and square detail swatches. Six swatches (fluted panelling, veined stone-look surface, lattice screen, gloss cabinetry, wall moulding, buttoned upholstery) are cut for the Interior Design material board and the case studies.
+Rule: one editorial placement per photograph across the whole site, plus its own project's cover, gallery and square detail swatches — and no photograph twice on the same page (the Interior Design page therefore shows as tiles only the three projects it has not already pictured). Six swatches (fluted panelling, veined stone-look surface, lattice screen, gloss cabinetry, wall moulding, buttoned upholstery) are cut for the Interior Design material board and the case studies.
 
 **Where open-source imagery is needed.** Only on the Expertise page: one abstract light-and-shadow photograph for the hero and one drawings-on-a-desk photograph, both optional (the page works with an in-house line drawing instead). The architecture, 3D-visualisation and project-management services have **no client image at all** — they are carried by type, icons and the process, not by borrowed buildings.
 
@@ -401,38 +401,38 @@ Rule: one editorial placement per photograph across the whole site, plus its own
 
 ## 12. Owner decisions
 
-Write your answer in the last column; an empty cell means the default applies. Every prompt reads this table before doing anything. "First needed by" is the earliest prompt that uses the answer — an answer that arrives later is still picked up (facts live in one place, `src/data/`, and each session reconciles that data with this table before it starts), but answering early avoids rework.
+**Status, 27 November 2026.** The owner asked for whichever option suits IN-ARCH best, so every default below was reviewed and adopted; the last column records it. Three rows are not choices but facts only the client holds — the email address (D-03), the full postal address (D-04) and the domain (D-05). They are marked "still needed"; the build does not wait for them, and each surface stays silent until its value exists. To change a decision, edit its last cell: every prompt reads this table before doing anything, and an answer here overrides the default written in a prompt. "First needed by" is the earliest prompt that uses the answer — a change made later is still picked up (facts live in one place, `src/data/`, and each session reconciles that data with this table before it starts), but changing early avoids rework.
 
-| Id | Decision | Default the prompts use | First needed by prompt | Your answer |
+| Id | Decision | Default the prompts use | First needed by prompt | Decision taken |
 |---|---|---|---|---|
-| D-01 | When the admin logo is swapped, also change the brand name the admin prints beside it (login title, dashboard heading and footer line, mobile-menu footer, Guidelines subtitle, tab title)? It is the same shared value as the logo's alt text. | **Yes** — "IN-ARCH" / "In-Arch Architects & Interior Designer", in prompt 15, with no admin file edited. "No" leaves "Dulcey Lead Services" beside the new logo. | 15 | |
-| D-02 | Should the admin's "Interested In" filter list become the site's seven services? | **Yes**, in prompt 15 (via the shared export). "No" leaves the ten old consulting titles in the list; new values still appear after them once leads exist. | 15 | |
-| D-03 | Email address to publish. | **None** — every email row and link stays hidden. The dummy shows `inarcharchitect@gmail.com`; confirm it or give the right one. | 02 | |
-| D-04 | Postal address. | "Boring Road, Patna, Bihar, India" (the PDF). The dummy shows "R.P. Complex, Boring Road"; building, floor and PIN code are unknown. | 02 | |
-| D-05 | The site's domain. | **Not set.** Run-time tags use the current origin; static files carry `https://SITE-URL-NOT-SET.invalid` until `scripts/set-site-url.js` is run. Go-live blocker. | 02; final at 18 | |
-| D-06 | Is the seven-service list correct, and are all seven actively offered? | The PDF's seven (A–G), exactly. | 02 | |
-| D-07 | Projects: the 13 photographs are grouped into seven projects by what they show, with descriptive titles and no location, area, year or client. Correct the grouping, and supply real names and facts if you want them shown. | Seven descriptive entries, marked unverified internally. | 02 | |
-| D-08 | Form: phone required and email optional (the boilerplate had it the other way round). | **Phone required, email optional.** | 05 | |
-| D-09 | Budget options in the form. | Under ₹10 lakh · ₹10–25 lakh · ₹25–50 lakh · ₹50 lakh–₹1 crore · Above ₹1 crore · Not sure yet. | 05 | |
-| D-10 | Tagline. | "Designing Spaces. Shaping Experiences." (PDF suggestion). The dummy used "Spaces for a better tomorrow." | 02 | |
-| D-11 | Principal's portrait and a quotation in his own words. | **Neither**: a typographic plate in the portrait slot; no quotation (the dummy's was invented). | 07 | |
-| D-12 | Social profiles and the Google Business Profile link. | **Hidden** until supplied. Ratings are never hard-coded; with a profile link a plain "Read our reviews on Google" link appears. | 02 | |
-| D-13 | Do you hold a paid Icons8 licence? | **No** — a visible "Icons by Icons8" link is shown in the footer, as the free licence requires. | 02 | |
-| D-14 | Opening hours. | "From 10:00 AM" only (days and closing time are unknown). | 02 | |
-| D-15 | Keep the developer credit in the footer ("Designed & Developed by Assam Digital")? | **Keep** — it exists today. | 04 | |
-| D-16 | Exact map location (a Google Maps share link, plus code or coordinates). | The map and directions search for the studio's name on Boring Road; prompt 13 must verify the result or flag it. | 02 | |
-| D-17 | `/industries` ("Who We Serve"). | **Forwards to `/portfolio`.** Say so if you want a standalone sectors page instead. | 11 | |
-| D-18 | Analytics / tag manager IDs. | **None installed**; a `dataLayer` hook is prepared so one can be attached later. | 19 | |
-| D-19 | The lead store treats a second enquiry from the same mobile number as a duplicate and does not save it. With phone required, a returning client's new enquiry is not stored. | **Leave as is** (the API is frozen); the form then hands the full brief to WhatsApp so it still reaches the studio. Changing the rule means editing `leads.php`. | 05 | |
-| D-20 | The admin's Guidelines tab documents the previous client's site (its domain, colours, fonts, file names); the Guidelines password and the admin username carry the old name. | **Untouched** — outside "logo only". Listed in the final report. | 15 | |
-| D-21 | The dummy's project names (The Courtyard House, Urban Calm, The Avenue, The Workspace, Green Land Hospital, The Dining Room). | **Not used** — they are invented names over stock photographs. | 02 | |
-| D-22 | Use the wordmark without its descriptor line wherever the logo is under 44 px tall (the dock, phone masthead and all admin placements)? | **Yes** — the descriptor is illegible at those sizes. | 04 | |
-| D-23 | The "Zenith — Project Architect" entry, whose dates the PDF marks "to be confirmed". | Listed without dates. | 02 | |
-| D-24 | The loading screen and tab icon that appear on `/admin` URLs belong to the one HTML document the whole site shares, not to the admin's own code. Should they follow the new brand when the admin logo is swapped? | **Yes**, in prompt 15: the IN-ARCH splash and tab icon everywhere. "No" keeps the old Dulcey splash and icon on `/admin` URLs for good. Either way the admin's browser toolbar colour stays as it is today. | 15 | |
+| D-01 | When the admin logo is swapped, also change the brand name the admin prints beside it (login title, dashboard heading and footer line, mobile-menu footer, Guidelines subtitle, tab title)? It is the same shared value as the logo's alt text. | **Yes** — "IN-ARCH" / "In-Arch Architects & Interior Designer", in prompt 15, with no admin file edited. "No" leaves "Dulcey Lead Services" beside the new logo. | 15 | **Yes.** The admin reads "IN-ARCH" and "In-Arch Architects & Interior Designer". |
+| D-02 | Should the admin's "Interested In" filter list become the site's seven services? | **Yes**, in prompt 15 (via the shared export). "No" leaves the ten old consulting titles in the list; new values still appear after them once leads exist. | 15 | **Yes.** The seven services. |
+| D-03 | Email address to publish. | **None** — every email row and link stays hidden. The dummy shows `inarcharchitect@gmail.com`; confirm it or give the right one. | 02 | **Still needed from the client.** Hidden until supplied; the address on the dummy is unconfirmed and is not used. |
+| D-04 | Postal address. | "Boring Road, Patna, Bihar, India" (the PDF). The dummy shows "R.P. Complex, Boring Road"; building, floor and PIN code are unknown. | 02 | **The PDF's address as it stands.** Building, floor and PIN code still needed from the client. |
+| D-05 | The site's domain. | **Not set.** Run-time tags use the current origin; static files carry `https://SITE-URL-NOT-SET.invalid` until `scripts/set-site-url.js` is run. Go-live blocker. | 02; final at 18 | **Still needed.** Placeholder stands; go-live blocker. |
+| D-06 | Is the seven-service list correct, and are all seven actively offered? | The PDF's seven (A–G), exactly. | 02 | **The seven as listed.** Ask the client to confirm before launch. |
+| D-07 | Projects: the 13 photographs are grouped into seven projects by what they show, with descriptive titles and no location, area, year or client. Correct the grouping, and supply real names and facts if you want them shown. The client's PDF suggests eight portfolio entries; six of them — a congregational (mandap) hall, a multi-storey residential building, a commercial building, a modern house, an office interior and a resort — have no photograph or render in the repository (the PDF shows pictures from other firms' websites), so they are left out. IN-ARCH's own images of that work would give the portfolio its architecture. | Seven descriptive entries, all residential interiors, marked unverified internally. More are added as data when images arrive. | 02 | **The seven descriptive entries.** Ask the client to confirm the grouping; add the architecture work when its images arrive. |
+| D-08 | Form: phone required and email optional (the boilerplate had it the other way round). | **Phone required, email optional.** | 05 | **Phone required, email optional.** |
+| D-09 | Budget options in the form. | Under ₹10 lakh · ₹10–25 lakh · ₹25–50 lakh · ₹50 lakh–₹1 crore · Above ₹1 crore · Not sure yet. | 05 | **The default ranges**, as an optional field. |
+| D-10 | Tagline. | "Designing Spaces. Shaping Experiences." (PDF suggestion). The dummy used "Spaces for a better tomorrow." | 02 | **"Designing Spaces. Shaping Experiences."** |
+| D-11 | Principal's portrait and a quotation in his own words. | **Neither**: a typographic plate in the portrait slot; no quotation (the dummy's was invented). | 07 | **Neither, until supplied.** Typographic plate. |
+| D-12 | Social profiles and the Google Business Profile link. | **Hidden** until supplied. Ratings are never hard-coded; with a profile link a plain "Read our reviews on Google" link appears. | 02 | **Hidden until supplied.** |
+| D-13 | Do you hold a paid Icons8 licence? | **No** — a visible "Icons by Icons8" link is shown in the footer, as the free licence requires. | 02 | **No licence assumed.** Credit link shown; buying a licence removes it. |
+| D-14 | Opening hours. | "From 10:00 AM" only (days and closing time are unknown). | 02 | **"From 10:00 AM".** |
+| D-15 | Keep the developer credit in the footer ("Designed & Developed by Assam Digital")? | **Keep** — it exists today. | 04 | **Keep.** |
+| D-16 | Exact map location (a Google Maps share link, plus code or coordinates). | The map and directions search for the studio's name on Boring Road; prompt 13 must verify the result or flag it. | 02 | **Name-based search**, verified in prompt 13. An exact link is still welcome. |
+| D-17 | `/industries` ("Who We Serve"). | **Forwards to `/portfolio`.** Say so if you want a standalone sectors page instead. | 11 | **Forward to `/portfolio`.** |
+| D-18 | Analytics / tag manager IDs. | **None installed**; a `dataLayer` hook is prepared so one can be attached later. | 19 | **None.** Hook prepared. |
+| D-19 | The lead store treats a second enquiry from the same mobile number as a duplicate and does not save it. With phone required, a returning client's new enquiry is not stored. | **Leave as is** (the API is frozen); the form then hands the full brief to WhatsApp so it still reaches the studio. Changing the rule means editing `leads.php`. | 05 | **Leave as is.** |
+| D-20 | The admin's Guidelines tab documents the previous client's site (its domain, colours, fonts, file names); the Guidelines password and the admin username carry the old name. | **Untouched** — outside "logo only". Listed in the final report. | 15 | **Untouched.** |
+| D-21 | The dummy's project names (The Courtyard House, Urban Calm, The Avenue, The Workspace, Green Land Hospital, The Dining Room). | **Not used** — they are invented names over stock photographs. | 02 | **Not used.** |
+| D-22 | Use the wordmark without its descriptor line wherever the logo is under 44 px tall (the dock, phone masthead and all admin placements)? | **Yes** — the descriptor is illegible at those sizes. | 04 | **Yes.** |
+| D-23 | The "Zenith — Project Architect" entry, whose dates the PDF marks "to be confirmed". | Listed without dates. | 02 | **Without dates.** |
+| D-24 | The loading screen and tab icon that appear on `/admin` URLs belong to the one HTML document the whole site shares, not to the admin's own code. Should they follow the new brand when the admin logo is swapped? | **Yes**, in prompt 15: the IN-ARCH splash and tab icon everywhere. "No" keeps the old Dulcey splash and icon on `/admin` URLs for good. Either way the admin's browser toolbar colour stays as it is today. | 15 | **Yes.** IN-ARCH splash and tab icon everywhere. |
 
 ## 13. Open questions, assumptions and content gaps
 
-**Questions that change what gets built** — D-06 (the service list) and D-07 (the projects) shape the data model in prompt 02 and every page after it; D-01 and D-02 decide what prompt 15 does to the admin; D-05 (the domain) is a go-live blocker that prompt 18 needs. Everything else has a safe default.
+**Open questions** — none blocks the build. The decisions in section 12 are taken. What is still needed are facts and assets from the client, listed under "Content the client has not supplied" below; the three that matter most before go-live are the domain (D-05), the email address (D-03) and the full postal address with PIN code (D-04).
 
 **Assumptions made**
 
@@ -447,7 +447,7 @@ Write your answer in the last column; an empty cell means the default applies. E
 - Company: legal name confirmation, year established, full address with PIN code, email, domain, working days and closing time.
 - Principal: a portrait, his Council of Architecture registration number, the Zenith dates, any further qualifications, a quotation.
 - Services: confirmation of the list, areas served, whether construction / execution and site supervision are undertaken.
-- Projects: real names, locations, areas, years, clients and permissions; any architecture work at all (exteriors, drawings, 3D renders); higher-quality originals of the 13 photographs.
+- Projects: real names, locations, areas, years, clients and permissions; IN-ARCH's own photographs, drawings or 3D renders of the architecture and commercial work the PDF lists (mandap hall, multi-storey residential building, commercial building, modern house, office interior, resort) — none is in the repository, so the portfolio opens with residential interiors only; higher-quality originals of the 13 photographs.
 - Brand: vector logos; social links; the Google Business Profile link.
 - Ratings: the PDF mentions Google and Justdial ratings and itself advises against hard-coding them — they are not shown.
 

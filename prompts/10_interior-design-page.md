@@ -6,7 +6,7 @@
 
 Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
-- **Prompts 01–05** — design system; `src/data/interiors.js`, `services.js` (`e02` Interior Design, `e07` Renovation & Interior Upgradation), `process.js`, `faqs.js`, `projects.js`; image keys `interiors-hero-tall`, `interiors-hero-wide`, `interiors-kitchen`, `interiors-detail-a`, `interiors-detail-b`, `interiors-detail-c`, the six `sw-*` swatches and the seven `pr-*-cover-tall` covers; the kit (including `Frame`'s `arch` prop, `ProjectTile`, `Accordion`); the shell, where "Interior Design" is already the fourth navigation item and `/interior-design` currently renders `PendingPage`; the lead modal with its source names `interiors-hero` and `interiors-closing`.
+- **Prompts 01–05** — design system; `src/data/interiors.js`, `services.js` (`e02` Interior Design, `e07` Renovation & Interior Upgradation), `process.js`, `faqs.js`, `projects.js`; image keys `interiors-hero-tall`, `interiors-inset`, `interiors-living`, `interiors-kitchen`, `interiors-detail-a`, `interiors-detail-b`, `interiors-detail-c`, the six `sw-*` swatches and the `pr-*-cover-tall` covers; the kit (including `Frame`'s `arch` prop, `ProjectTile`, `Accordion`); the shell, where "Interior Design" is already the fourth navigation item and `/interior-design` currently renders `PendingPage`; the lead modal with its source names `interiors-hero` and `interiors-closing`.
 - **Prompt 09** — `generateFaqSchema` and the `faq` page-config key exist in the SEO layer; the Expertise page links here from its Interior Design service.
 
 ## Context
@@ -79,7 +79,7 @@ Rhythm: **paper** hero → **sand** scope → **paper** room stories → **dark*
 - Eyebrow: "Interior Design"; `h1` `.ia-t-display-xl`: "Interiors, *composed.*"; `Lede` — the description of service `e02`, verbatim from the PDF: "We design interior environments that reflect individual requirements, combining spatial planning, materials, lighting and furniture to create comfortable and visually cohesive spaces."
 - One primary `Button` `lg`, `data-primary-cta`: "Plan your interior" → `openLeadModal('interiors-hero', { service_interest: 'Interior Design', context: { label: 'Interior Design — hero' } })`; beside it a `TextLink` "See interior projects" → `#projects`.
 - Image: `interiors-hero-tall` (4:5) in an arched `Frame`, `Picture` with `priority`.
-- **Phones:** copy first (starting 112 px from the top), then the button, then the arched frame at full content width, its top curve cresting just above the fold so the shape is seen at once. **Tablet:** copy in columns 1–5 of 8, frame in columns 5–8, overlapping the copy column by one column. **Desktop:** copy in columns 1–6, vertically centred in an `88svh` section; the arched frame in columns 8–12 at 78 svh tall; a second, smaller arched frame (`interiors-detail-a`, 4:5, columns 6–7, 200 px wide) overlaps the big one's lower-left corner and drifts at `data-m-parallax="10"`.
+- **Phones:** copy first (starting 112 px from the top), then the button, then the arched frame at full content width, its top curve cresting just above the fold so the shape is seen at once. **Tablet:** copy in columns 1–5 of 8, frame in columns 5–8, overlapping the copy column by one column. **Desktop:** copy in columns 1–6, vertically centred in an `88svh` section; the arched frame in columns 8–12 at 78 svh tall; a second, smaller arched frame (`interiors-inset` — the graphite kitchen, 4:5, columns 6–7, 200 px wide, never larger: its source is sharp only at small sizes) overlaps the big one's lower-left corner and drifts at `data-m-parallax="7"`.
 - Motion: `h1` lines on load; the big arch opens with the shutter; the small one rises 40 px 0.2 s later.
 
 ### Section 2 — What we design (`tone="sand"`, `id="scope"`)
@@ -91,9 +91,9 @@ Rhythm: **paper** hero → **sand** scope → **paper** room stories → **dark*
 
 ### Section 3 — Room by room (`tone="paper"`)
 
-Three short stories from `interiors.js`, each a heading, two or three sentences and one or two photographs:
+Three short stories from `interiors.js`, each a heading, two or three sentences, one or two photographs and a `TextLink` to the project the photographs come from ("See this project" → `/portfolio/<slug>`; the kitchens story links to both kitchens by title):
 
-1. **Living spaces** — `interiors-hero-wide`. "Living rooms and bedrooms planned around how they are used: seating, storage, light and wall finishes considered together."
+1. **Living spaces** — `interiors-living` (a second photograph of the hero's room, not the hero photograph again). "Living rooms and bedrooms planned around how they are used: seating, storage, light and wall finishes considered together."
 2. **Kitchens** — `interiors-kitchen`, `interiors-detail-c`. "Modular kitchens planned for efficient work: storage, contemporary finishes and lighting, fitted to the room."
 3. **Made to measure** — `interiors-detail-a`, `interiors-detail-b`. "Panelling, lattice-cut screens, furniture and storage, drawn in detail before they are built."
 
@@ -104,7 +104,7 @@ Three short stories from `interiors.js`, each a heading, two or three sentences 
 
 - Eyebrow "02 — Materials and detail"; `h2` `.ia-t-display-lg`: "The detail *is the design.*"; `Text`: the PDF's "Attention to Detail" sentence from `studioContent`, verbatim.
 - Six square swatches with one-line captions in `.ia-t-label`: `sw-fluted` "Fluted panelling" · `sw-stone` "Veined stone-look surfaces" · `sw-lattice` "Lattice-cut screens" · `sw-gloss` "High-gloss cabinetry" · `sw-moulding` "Framed wall mouldings" · `sw-tufting` "Buttoned upholstery".
-- **Phones:** two columns, the right column offset down by 32 px. **Desktop:** six across the grid (two columns each), alternating 0 / 48 px vertical offsets, each swatch drifting slightly with `data-m-parallax` (values 3 to 8). Swatches are squares — the arch is not used here.
+- **Phones:** two columns, the right column offset down by 32 px. **Desktop:** six across the grid (two columns each), alternating 0 / 48 px vertical offsets, each swatch drifting slightly with `data-m-parallax` (values 3 to 7). Swatches are squares — the arch is not used here.
 - Captions describe what is seen; they name no species, brand or supplier.
 
 ### Section 5 — How an interior project runs (`tone="sand"`, `id="process"`)
@@ -116,8 +116,8 @@ Three short stories from `interiors.js`, each a heading, two or three sentences 
 ### Section 6 — Interior projects (`tone="paper"`, `id="projects"`)
 
 - Eyebrow "04 — Interior projects"; `h2` `.ia-t-display-lg`: "Rooms we have *designed.*"
-- All seven projects from `projects.js` as `ProjectTile`s with their `-cover-tall` (4:5) images, each linking to `/portfolio/<slug>`: one column on phones; two columns from 768 with the right column offset 96 px; three columns from 1280 with offsets 0 / 96 / 48 px.
-- `TextLink` "Open the portfolio" → `/portfolio`.
+- The three projects whose photographs have not appeared higher on this page — `walnut-and-marble-living-hall`, `panelled-living-hall`, `graphite-gloss-kitchen` — as `ProjectTile`s with their `-cover-tall` (4:5) images, each linking to `/portfolio/<slug>`: one column on phones; from 768 three across the grid with vertical offsets 0 / 96 / 48 px. The other four projects are reached from the room stories above, so all seven are one tap away from this page.
+- `TextLink` "Open the portfolio — all seven projects" → `/portfolio`.
 
 ### Section 7 — Questions (`tone="sand"`, `id="faq"`)
 
@@ -126,7 +126,7 @@ Three short stories from `interiors.js`, each a heading, two or three sentences 
 
 ### Section 8 — Closing (`tone="dark"`) — how this page ends
 
-- A small arched frame (`interiors-detail-b`, 4:5, 220 px wide on phones, 320 px on desktop) beside the copy — the page ends on its own motif.
+- A small arch beside the copy, drawn rather than photographed: an empty arched outline (1 px, terracotta-300; 220 px wide on phones, 320 px on desktop, 4:5), decorative and `aria-hidden` — the page ends on its own motif without showing any photograph a second time.
 - `h2` `.ia-t-display-lg`: "Planning an *interior?*"; `Text`: "Tell us about the rooms, the area and what you would like to change."
 - Primary `Button` `lg`, `data-primary-cta`: "Book an interior consultation" → `openLeadModal('interiors-closing', { service_interest: 'Interior Design', context: { label: 'Interior Design — closing' } })`; `TextLink` "WhatsApp".
 
@@ -137,7 +137,7 @@ Three short stories from `interiors.js`, each a heading, two or three sentences 
 - **Admin-bound values** keep their current values, because the admin prints or reads them: `siteConfig.brandName`, `siteConfig.legalName`, `siteConfig.logo` and `LOGO_SIZE` in `src/data/siteConfig.js`; `expertiseTitles` in `src/data/expertiseData.js`; `seoConfig.pages.admin` in `src/config/seo.js`; `getConfig()` in `src/utils/webhookSubmit.js`. Prompt 15 is the only place they change.
 - **A real, indexable, first-class route.** `/interior-design` is in the navigation (dock, index overlay, footer), lazy-loaded inside `PublicLayout`, resolved by `SEOHead` to its own config (indexable, with breadcrumb and FAQ schema), and no longer renders the interim page.
 - **Lead context.** Both CTAs open the modal with "Interior Design" pre-selected; the stored leads carry `source: "interiors-hero"` or `"interiors-closing"` and `service_interest: "Interior Design"`.
-- **Only client photographs.** No open-licence or stock image on this page. No photograph is used here in a second editorial placement beyond what prompt 02's plan assigns (the project covers and swatches are project contexts).
+- **Only client photographs, each once.** No open-licence or stock image on this page, and no photograph appears on it twice: the hero, the inset, the five story images and the three project covers are ten different photographs (the square swatches are texture crops, not repeats of a picture).
 - **The arch stays here.** Do not add the `arch` frame to any other page or to shared components' defaults.
 - **Swipe rows never trap the page** and have button alternatives; sticky layouts are CSS sticky, not pins.
 - **Truthful content.** Every fact comes from `details of in-arch.pdf` through the modules in `src/data/`. No testimonials, awards, client names, statistics, ratings, years, areas, locations or quotes are invented; where the client supplied nothing the surface stays silent and the gap is listed in `prompts/00_INDEX.md`. Service lists, process steps and FAQ answers are verbatim; swatch and story captions describe only what is visible; no price, duration, warranty, brand or supplier is stated.
@@ -172,7 +172,7 @@ node scripts/qa/public-check.js
 
 - **First impression test.** Load `/interior-design` cold at 390 px and at 1440 px and take one screenshot of the first screen each: without scrolling, the page name, the arch-framed interior photograph and one clear action are all visible, and the screen cannot be mistaken for Home, Studio or Expertise (compare the four first screens side by side and attach them to the build log).
 - **Layout** at 360, 390, 768, 1024, 1280, 1440 and 1920 px: the arch is a true semicircle top at every width (frame radius = half its width), never an ellipse; the small overlapping arch never covers the headline; the sticky story frame sticks and releases cleanly from 1024 and is stacked content below; the material board's offsets never cause overlap or horizontal scroll at 360.
-- **Images.** Every image on the page resolves from the manifest, has dimensions and alt text, is lazy except the hero, and shows none of the blemishes listed in prompt 02; the hero is the LCP element and LCP ≤ 2.5 s at 390 px on "Fast 4G" with 4× CPU.
+- **Images.** Every image on the page resolves from the manifest, has dimensions and alt text, is lazy except the hero, and shows none of the blemishes listed in prompt 02; list the manifest keys the page renders and confirm no source photograph appears twice, and that `interiors-inset` is never drawn wider than 200 CSS px; the hero is the LCP element and LCP ≤ 2.5 s at 390 px on "Fast 4G" with 4× CPU.
 - **Stepper.** Swipe, buttons and keyboard all move one step; the counter is announced; on desktop all seven steps fit one row at 1024 without truncation.
 - **Lead context.** Both CTAs: correct pre-selection and context line in the modal; stored `source` and `service_interest` as specified (`node scripts/qa/lead-flow.js` still passes).
 - **Structured data.** `schema-faq` on this route contains exactly the five questions shown and disappears on navigation away; the breadcrumb reads Home → Interior Design.
