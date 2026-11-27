@@ -5,18 +5,43 @@
    so a production build contains no Lab chunk and `/__lab` is the 404.
    Sections come from ./registry.js — later prompts append their primitives
    and assets there.
+
+   `/__lab?frame=<id>` renders one section alone (no Lab header), for the
+   phone and desktop iframes of the "Primitives" section (prompt 03).
    ============================================ */
 
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styles from './LabPage.module.css';
+import primitives from './sections/PrimitivesSection.module.css';
 import { LAB_SECTIONS } from './registry';
 import { activeBreakpoint, useViewportWidth } from './labUtils';
 
 const OVERLAY_COLUMNS = Array.from({ length: 12 }, (_, i) => i);
 
+// Sections that can be shown alone in a frame (they accept `embedded`).
+const FRAMEABLE = ['primitives'];
+
+const FrameView = ({ section }) => {
+  const { Component, title } = section;
+  return (
+    <div className={`ia ${primitives.frameView}`}>
+      <div className="ia-container">
+        <h1 className="ia-t-label">Design Lab · {title} · frame</h1>
+        <Component embedded />
+      </div>
+    </div>
+  );
+};
+
 const LabPage = () => {
   const [showGrid, setShowGrid] = useState(false);
   const width = useViewportWidth();
+  const { search } = useLocation();
+  const frameId = new URLSearchParams(search).get('frame');
+  const framed = FRAMEABLE.includes(frameId) && LAB_SECTIONS.find((s) => s.id === frameId);
+
+  if (framed) return <FrameView section={framed} />;
 
   return (
     <div className={`ia ${styles.lab}`}>

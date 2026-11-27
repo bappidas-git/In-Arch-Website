@@ -77,6 +77,9 @@ function smallTargets() {
   };
   const out = [];
   document.querySelectorAll('.ia a[href], .ia button, .ia [role="button"]').forEach((el) => {
+    // The Design Lab forces the press state (scale 0.98) for display; a real
+    // press is transient, so a forced one is not a resting target size.
+    if (el.closest('[data-force-active]')) return;
     const visible =
       typeof el.checkVisibility === 'function'
         ? el.checkVisibility({ checkOpacity: false, checkVisibilityCSS: true })

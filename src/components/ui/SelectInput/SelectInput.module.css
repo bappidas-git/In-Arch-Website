@@ -1,0 +1,35 @@
+.wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.select {
+  padding-inline-end: 52px;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+/* The placeholder option reads as a placeholder until a choice is made. */
+.showingPlaceholder {
+  color: var(--ia-fg-3);
+}
+
+/* Option lists that honour styling (Chrome on Windows, Firefox) stay legible on dark tones. */
+.select option {
+  background-color: var(--ia-field-bg);
+  color: var(--ia-fg);
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  color: var(--ia-fg);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.select:disabled + .chevron {
+  color: var(--ia-fg-3);
+}

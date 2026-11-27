@@ -1,0 +1,22 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ia-stack-gap, var(--ia-space-4));
+  min-width: 0;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+.align-stretch {
+  align-items: stretch;
+}

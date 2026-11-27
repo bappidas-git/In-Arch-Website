@@ -375,3 +375,220 @@ Owner decisions live in [`00_INDEX.md` §12](00_INDEX.md#12-owner-decisions). Th
 7. No screen reader was available again; the accessibility-tree check is automated (axe, heading order, names).
 8. **The admin's MUI filter and status selects have no accessible name.** This was found while driving them. It is pre-existing; the admin is frozen, so it goes on the final report's list (prompt 20), not into a fix.
 9. The baseline worktree `../inarch-baseline` was removed after this session's parity runs. Recreate it with `scripts/qa/README.md`.
+
+---
+
+## 2026-11-27 — Prompt 03: Core UI primitives
+
+**Branch:** `claude/amazing-keller-zolrno`, from `71ead18` (prompt 02 merged). **Baseline:** `cc2fc52d90987adcf62a5c286c4eb87d155fc3f3`, served from `../inarch-baseline` on port 8081 for parity (removed afterwards).
+
+**Starting state, confirmed:**
+- Prompt 01's and prompt 02's files exist: `base.css`, `useMotionScope.js`, `LabPage.jsx`, `public-check.js`, the brand files, `imageManifest.json`, `images.js`, `services.js`, the icons.
+- `src/components/ui/` did not exist.
+- Owner decisions read from `00_INDEX.md` §12. None conflicts with this prompt, so no data needed reconciling. The kit honours them where it touches them:
+  - D-22: `Logo` warns below 44 px for the lockup.
+  - D-03 and D-04: `FactList` stays silent for the empty email and PIN code.
+  - D-09: the budget ranges appear only as Lab demo text; prompt 05 owns them.
+
+### Files
+
+**Created**
+
+| Area | Files |
+|---|---|
+| Layout | `src/components/ui/Container/`, `Grid/` (`Grid` + `Col`), `Section/`, `Stack/` |
+| Type | `Eyebrow/`, `Heading/`, `Text/`, `Lede/`, `VisuallyHidden/` |
+| Actions | `Button/`, `TextLink/`, `IconButton/`, `Icon/`, `LinkProvider/` |
+| Forms | `Field/`, `TextInput/`, `TextArea/`, `SelectInput/`, `ChoiceChips/`, `Notice/` |
+| Media and brand | `Logo/`, `Picture/`, `Frame/`, `Figure/`, `LottieIcon/`, `LineIcon/`, `Illustration/` |
+| Content | `ProjectTile/`, `Accordion/` (+ `AccordionItem`), `FactList/`, `Rule/`, `Chip/`, `ScrollMarquee/`, `Skeleton/` |
+| Overlays | `Portal/`; `src/hooks/useFocusTrap.js`, `src/hooks/useScrollLock.js` |
+| Kit internals | `src/components/ui/_shared/` (`cx.js`, `dev.js`, `refs.js`, `tone.js`, `action.js`, `ArrowSwap.jsx` + `.module.css`, `Control.module.css`); `index.js` (barrel); `package.json` (`sideEffects`) |
+| Tests | `Button.test.jsx`, `Field.test.jsx`, `Accordion.test.jsx`, `Picture.test.jsx`, `Logo.test.jsx`, `FactList.test.jsx` beside their primitives; `src/hooks/__tests__/overlayHooks.test.jsx` |
+| Lab | `src/lab/sections/PrimitivesSection.jsx` + `.module.css`; `src/lab/sections/primitives/` (`LabBits`, `FramesBlock`, `LayoutTypeBlock`, `ActionsBlock`, `FormsBlock`, `MediaBlock`, `ContentBlock`, `OverlayBlock`, `KeyboardStrip`); `src/lab/forceStates.js` |
+
+**Changed**
+
+- `src/styles/inarch/base.css`: four tone variables in each tone block (Decision 1).
+- `src/lab/LabPage.jsx`: the `?frame=<section>` view, used by the phone and desktop iframes. `src/lab/registry.js`: one import and one entry.
+- `package.json`: `jest.moduleNameMapper` (Deviation 3). No dependency was added: `lottie-web` was already there from prompt 02.
+- `src/setupTests.js`: the `TextEncoder` and `matchMedia` stubs, and the act wrappers (Deviation 3).
+- `scripts/qa/public-check.js` and `scripts/qa/README.md`: the target check skips `[data-force-active]` (Deviation 4).
+- `CHANGELOG.md`: the prompt 03 entry.
+
+**Deleted:** nothing.
+
+### Decisions
+
+1. **Four new tone variables.** The prompt asks for colours that change with the tone but that the nine contract variables do not carry. Each tone block in `base.css` now also sets:
+   - `--ia-field-bg`: paper on light, sand and paper; forest-2 on dark.
+   - `--ia-placeholder`: stone on light tones; forest-3 on dark. It is used by disabled fills, `Skeleton` and image placeholders.
+   - `--ia-feedback-error` and `--ia-feedback-success`: the light or the dark value.
+
+   Every primitive still reads only tone variables. The token test still passes, and the change is inert because these are custom properties under `:where(.ia)`.
+2. **`Icon` is a glyph map, not an injected `<symbol>` sprite.** One module holds every glyph on the 24 px grid, and each `<Icon>` renders its own small inline `<svg>`. Nothing is written into the document, which keeps "no global side effects". The stroke uses `vector-effect: non-scaling-stroke`, so it is 1.5 px at every size. There are 18 glyphs: the 16 asked for, plus `chevron-down` (for `SelectInput`) and `info` (for `Notice`).
+3. **The wipe & swap mechanics**
+   - Hover styles apply only under `(hover: hover) and (pointer: fine)`; `:focus-visible` always applies. A tap therefore never leaves a wipe stuck.
+   - Press uses the individual `scale` property, and the magnet uses `translate` driven by `--ia-mx` / `--ia-my`. The two combine without fighting over `transform`.
+   - The magnet is plain pointer events plus a CSS transition (150 ms while moving, 400 ms spring back); there is no tween. It only runs for a mouse on a fine pointer, without reduced motion, and only on `lg`.
+   - The 1 px border is a `::after` drawn above the fill, so a wipe never leaves a seam.
+   - Loading locks the width by stacking the label and the loading label in one grid cell; nothing is measured.
+   - Disabled is `--ia-placeholder` with `--ia-fg-3`: stone with ink-3 on light tones, as specified, and forest-3 with mist-2 on dark. Disabled controls are exempt from the contrast rules.
+   - The arrow swap is a shared internal (`_shared/ArrowSwap`) keyed on a `data-ia-swap` host. Each arrow leaves in its own direction: `arrow-up-right` to (100 %, −100 %), `arrow-right` to the right, and so on. Other glyphs do not travel.
+   - Under reduced motion the fill fades in place (opacity) and the arrow does not move.
+4. **One action helper** (`_shared/action.js`) is used by `Button`, `TextLink`, `IconButton` and `Chip`.
+   - `to` renders the provider's link, `href` a plain `<a>`, and anything else a `<button type="button">`. New-tab links get `rel="noopener noreferrer"`.
+   - `disabled` is native on a `<button>`. On a link, or when `aria-disabled` is passed, the control stays focusable and every activation is swallowed.
+   - `loading` sets `aria-busy` and swallows activations, including a form's implicit submit.
+5. **`Col` breakpoints are `md` 768, `lg` 1024 and `xl` 1280.**
+   - Every level is written resolved, as `--ia-col`, `--ia-col-md`, `--ia-col-lg` and `--ia-col-xl`, even when it only repeats the level below. Custom properties inherit, so a `Col` nested in another `Col`'s grid must never pick up its parent's values.
+   - `span="full"` (the default) means `1 / -1`.
+6. **Forms**
+   - `Field` passes the id, `aria-describedby`, `aria-invalid` and `aria-required` to its control through context. It uses `aria-required`, not the native attribute, so no browser bubble competes with the form's own validation.
+   - The error slot is always in the DOM (`hidden` when empty), so its id always resolves.
+   - `group` renders a `<fieldset>` and `<legend>`, with the description on the fieldset, for `ChoiceChips`.
+   - The controls forward the ref and the remaining props to the control element itself. `SelectInput`'s `className` goes to the wrapper that holds the chevron.
+   - `ChoiceChips` are real radios covering each chip, so the browser supplies the arrow-key behaviour. The chosen chip also shows a tick, so the state does not rely on colour.
+   - The words "required" and "optional" can be replaced (`requiredText`, `optionalText`).
+7. **`Picture`**
+   - The image moves through three states: `idle` (rendered, not yet checked), `pending` (hidden over the placeholder, no transition) and `loaded` (fades in over 400 ms after `decode()`). A file that is already complete never fades.
+   - The placeholder is the `<picture>` element's background.
+   - `fetchpriority` is written in lowercase, because React 18.2 does not know `fetchPriority`.
+   - The fallback `src` is the 1080 px JPEG.
+   - Art-direction `<source>`s carry their own `width` and `height`. The placeholder is always the default key's: an inline style cannot carry a media query.
+8. **`Frame` parallax is capped at 6 % of the image's height.**
+   - The image is rendered 14 % taller, 7 % above and below. The motion hook's `yPercent` is relative to the image itself, so 7 % of 114 % would be 7.98 % of the frame and would show an edge. 6 × 1.14 = 6.84 % ≤ 7 %. Below 1024 px the hook caps it further, at 4 %.
+   - GSAP moves the `[data-m-media]` wrapper, while `ProjectTile`'s hover zoom scales the `<img>` inside it, so the two never fight.
+   - `arch` uses `border-radius: 9999px 9999px 0 0`, which gives an exact semicircle at any ratio up to 2:1.
+9. **`Logo`** finds the nearest `[data-tone]` in a layout effect, before the first paint, and gives the `<img>` no `src` until the tone is known, so the wrong file is never requested. A `MutationObserver` on that one element follows later tone changes, which the dock needs.
+10. **`LineIcon` (an extra primitive)** renders a content icon from `public/images/inarch/icons/` inline. A fetch per name is cached for the session, and anything that is not an `<svg>` is rejected. Inline rendering is required for the icon to follow the tone. It is `LottieIcon`'s static fallback, and prompts 09 and 10 need static icons too.
+11. **`LottieIcon`**
+    - lottie-web's light build is loaded through a dynamic import only when the icon comes within 200 px of the viewport; the JSON is loaded at the same time.
+    - The animation plays once at ≥ 50 % visibility. The static SVG is swapped out at that moment, so the icon is never blank at frame 0.
+    - It re-tints per tone through the layers' `cl` classes, as the Lab's prompt 02 version did.
+12. **`Accordion`**
+    - On mount, and on `hashchange`, it opens the item named by the hash. Scrolling stays with ScrollManager.
+    - Items that are open on arrival do not animate; items opened later raise their content.
+    - ↑ / ↓ / Home / End move focus between headers.
+    - The index column is a modifier class rather than `:has()`, which older Firefox and Safari lack.
+13. **`ScrollMarquee`** uses `useGSAP` directly. GSAP is still registered only in `gsapSetup.js`, and the scrub token is `PARALLAX.scrub`. `useMotionScope` has no marquee attribute to drive it.
+    - Its band is `overflow: hidden`, not `clip`, because axe recognises only `hidden` as clipping. It also has `contain: inline-size`, so its several-viewport-wide `nowrap` row cannot stretch a grid or flex track it sits in.
+14. **`Portal` renders its children into the container in the same commit.** The container is created with `class="ia"` and `data-tone` already set, and it is attached in a layout effect, so it is in the document before any passive effect runs.
+    - The first version rendered the children only after attaching. A dialog's own `useFocusTrap` therefore ran with an empty ref and never moved focus in. The Lab found this, and a regression test now covers it.
+15. **The overlay hooks**
+    - `useScrollLock` is the lead modal's technique, unchanged: the body fixed at the offset, restored only if the route is unchanged, and `scheduleRefresh()` on both edges. Two additions:
+      - locks are reference-counted across callers;
+      - the offset is restored with `behavior: 'instant'`, so the document's `scroll-behavior: smooth` cannot animate the jump.
+    - `useFocusTrap(ref, active, { initialFocus, returnFocus, onEscape })`:
+      - focus that lands outside the container (`focusin`) is pulled back in;
+      - focus returns to the opener with `preventScroll`, and only if the opener is still in the document and visible.
+16. **Tree-shaking.** `src/components/ui/package.json` declares `"sideEffects": ["*.css"]`. This was verified with a temporary probe (since reverted): importing only `Rule` from the barrel into the 404 chunk brought `Rule`'s CSS and JS and nothing else from the kit; lottie-web, `imageManifest` and the other primitives stayed out.
+17. **The Lab shows hover, focus and press states with `src/lab/forceStates.js`.**
+    - At run time, in development only, it copies every stylesheet rule that uses `:hover`, `:focus-visible`, `:focus` or `:active` into an attribute-selector twin (`[data-force-hover]` and so on).
+    - Each copy goes into the same stylesheet and `@media` group, after the original rules of that group.
+    - Nothing in the kit knows about it: the primitives simply forward `data-force-*` to their root.
+    - States that live on an inner element (a chip's hidden radio, an accordion header) are shown live only.
+
+### Deviations from the prompt
+
+1. **`LabPage.jsx` gains only the frame view.** The section itself is added through `registry.js`, as prompt 01 designed.
+   - The phone (390 px) and desktop (1280 px, scaled) frames are iframes of `/__lab?frame=primitives`, loaded on demand by a button, so `public-check` and axe do not crawl two extra app instances.
+   - Inside the frames the legacy fixed header still shows, as in the Lab itself, until prompt 04.
+2. **Extra pieces beyond the listed primitives:**
+   - the `LineIcon` primitive (Decision 10);
+   - the `chevron-down` and `info` glyphs (Decision 2);
+   - the `_shared/` internals and `package.json`, and the `forceStates.js` Lab helper.
+3. **Test infrastructure (`package.json` "jest", `setupTests.js`).** The listed tests could not run without these changes:
+   - `react-router-dom` 7.12's `main` points at a `dist/main.js` that does not exist, and Jest 27 ignores `exports`. So `^react-router-dom$` and `^react-router/dom$` are mapped to their `dist` files.
+   - GSAP's `gsap/ScrollTrigger` and `gsap/SplitText` entry files are ESM, so they are mapped to `gsap/dist/*.js`.
+   - jsdom lacks `TextEncoder` (react-router builds one at import) and `matchMedia` (ScrollTrigger calls it at registration).
+   - `@testing-library/user-event` resolves the top-level `@testing-library/dom` 10 while RTL patches its nested 9. The top-level copy is configured with RTL's `act`. The whole suite now runs with zero console warnings.
+4. **`public-check` skips controls in a forced press state** (`[data-force-active]`). A forced `scale(0.98)` makes a 44 px `md` button measure 43.1 px, but a real press is transient. No live page ever carries that attribute.
+5. **Disabled and skeleton fills use `--ia-placeholder`,** which is stone on light tones as specified, rather than a fixed stone: a stone block on forest would break the tone rule. On dark they are forest-3.
+6. **The regression pass was driven with Playwright,** as in prompts 01 and 02. The script was kept in the session scratchpad. Request bodies were read from the intercepted requests.
+
+### Evidence
+
+- **`npm test -- --watchAll=false`:** 10 suites, **158 tests, all passing** (115 before + 43 new), with zero console warnings.
+- **`npm run build`:** "Compiled successfully.", no warnings.
+  - `main.828ab5e9.js` is 461,903 B (156,148 B gzip): the same size prompt 02 logged.
+  - A local build of `71ead18` differs only in webpack module ids and chunk hashes, an artifact of its worktree resolving the symlinked `node_modules` through another path. The code is the same after normalising numbers.
+  - Main CSS grows by 65 B gzip (15,825 → 15,890 B): the four tone variables.
+  - There are 23 JS files, the same as after prompt 02. No production chunk contains the kit, the Lab, `forceStates`, lottie-web or any `data-ia-swap` / `data-accordion` code.
+- **Parity:**
+  - Calibration, baseline against baseline: admin 34/34, public 21/21 identical.
+  - **Baseline against this branch: admin 34/34, public 21/21 identical.** No `/fonts/` request.
+- **`public-check`, production build on PHP** (every route × 7 widths, plus reduced motion): **54/63 clean.** The 9 failures are the pre-existing legacy `/contact` contrast issue (prompt 01, Open item 7), identical to prompts 01 and 02.
+- **`public-check --base http://localhost:3000 --routes /__lab`:** **9/9 clean.** That covers seven widths plus reduced motion at 390 and 1440: zero serious or critical axe violations, no overflow, no console errors, and every resting target ≥ 44 × 44.
+  - Before the fix, axe flagged clipped marquee words at ≥ 1280 px (Decision 13).
+- **No overflow that the legacy clipping could hide.** The legacy `html { overflow-x: hidden }` masks overflow from `scrollWidth`, so every element of the section was also checked against the viewport at 360, 390, 768, 1024, 1280, 1440, 1920 and an 844 × 390 landscape phone. Nothing reaches past the edge.
+  - This check found the marquee's intrinsic width stretching a grid track (Decision 13).
+- **Contrast, measured in Chromium on all four tones: 76 pairs, all passing.**
+  - Primary label at rest: 13.27–15.86:1. On the hover fill: 5.77 (ivory), 5.17 (sand), 6.18 (paper), 7.74 (dark).
+  - Secondary label on its hover fill: ≥ 13.27:1. Secondary border against the surround: ≥ 13.27:1.
+  - Field borders: 3.42 / 3.06 / 3.66 / 5.54:1 against the surround, and ≥ 3.66:1 against the field.
+  - Error text: 5.81 / 5.21 / 6.22 / 8.21:1. Placeholder: ≥ 4.94:1.
+  - Focus ring against the surround: 5.77 / 5.17 / 6.18 / 7.74:1, and ≥ 6.18:1 against a field.
+  - IconButton and Chip borders: ≥ 3.06:1. Hints: ≥ 7.3:1.
+  - The ring sits 3 px off the control, so the only colour it touches is the surround. Against the focused primary's own accent fill it is 1:1 by the contract's design (see Open item 3).
+- **Sizes:** field text 16 px; the smallest visible text 12 px (labels); no resting target below 44 × 44.
+- **Interaction in Chromium** (29 checks, all passing):
+  - **Hover and touch:** real hover wipes the fill up and swaps the arrow; it retracts on leave. On iPhone 13 emulation a tap leaves no stuck hover.
+  - **Magnet:** follows the pointer by 5.9 px and springs back to 0.
+  - **Dialog** (a Portal with the trap and the lock):
+    - focus moves in, and Tab and Shift+Tab cycle;
+    - Escape, the close button and the backdrop all close it, and focus returns to the opener;
+    - the body is fixed at −73,355 px while open and restored to exactly 73,355; the container is removed.
+  - **Keyboard strip:** Tab order is 1 to 8, each stop with the ring.
+  - **Accordion:** Space opens an item, single-open closes the other, ↓ moves to the next header.
+  - **Live form:**
+    - an empty submit puts errors on name, mobile and service, focuses name and shows `role="alert"`;
+    - an invalid email errors on blur;
+    - a valid submit shows `aria-busy`, then a `role="status"` success notice.
+  - **Reduced motion:** hover changes colour only (no transform, no arrow travel, no twin arrow); shutter covers rest off the image; the marquee is still; no Lottie plays.
+- **Motion:**
+  - **ScrollMarquee:** its track x follows the scroll (one band left, one right) and does not move during 3 s without scrolling.
+  - **Shutter:** its triggers fire when scrolled into view.
+  - **LottieIcon:** no player or JSON request at the top of the page. Near the icons, the `lottie_light` chunk and the JSONs load and all 8 play once.
+- **60 fps at 4× CPU throttling** (Chromium CDP), hovering Button primary, Button secondary, IconButton and ProjectTile: the median and p95 frame are 16.7–16.8 ms. There is one long frame (33–50 ms) at the instant the hover starts (the style recalculation); everything after it is on 16.7 ms.
+- **Frames:** the iframes report `innerWidth` 390 and 1280, with no overflow in either.
+- **Regression pass** (production build on PHP, Playwright; 44 checks plus 14 route checks, all passing):
+  - **Routes:** `/`, `/about`, `/expertise`, `/industries`, `/contact` and a nonsense URL at 390 and 1440 have the right titles and robots (`noindex` on the 404). `/expertise#e03` opens and scrolls.
+  - **Modal:**
+    - it opens from `header-cta`, `home-hero` and `expertise-e01`;
+    - focus is trapped and scroll is locked;
+    - it closes on Escape, the button, the backdrop and Back, and focus returns to the opener.
+  - **Enquiries:**
+    - one enquiry through the modal sends exactly the 21 frozen keys (`source: home-hero`, `state` empty, `status: new`), and the success state shows the first name;
+    - the same mobile number through `/contact` returns `duplicate: true`, and "Already received!" shows.
+  - **Admin:**
+    - login and the dashboard (the new lead, 4 stat cards);
+    - the leads page: search, all four filters, sorting, pagination, bulk select ("Delete Selected"), CSV export (contains the lead), CSV import ("Imported 0 leads (1 duplicates skipped)"), inline status change (saved: `contacted`), and the delete dialog (cancelled, the lead kept);
+    - the detail page shows the name, mobile, email, interest, message, source and page URL; a note is added and the status changed (`consultation_booked`);
+    - the Guidelines gate opens 4 distinct tabs, and logout works.
+  - No console errors. All test leads were deleted; the store ended empty.
+- **Admin-frozen check:** `git diff --stat cc2fc52… -- src/admin src/theme … .env .env.example` prints nothing.
+  - `App.jsx`, `index.js`, `public/index.html`, every page, shell component, data module, config, util and context show no diff.
+  - Nothing outside `src/components/ui/`, `src/lab/` and the tests imports the kit.
+
+### Open items
+
+1. **Admin dashboard race (pre-existing, frozen; for the final report, prompt 20).**
+   - Right after login the dashboard sometimes logs "[Admin] Synced n lead(s) from server" and still renders 0 everywhere. It reproduces on the baseline build.
+   - Rate: 5 of 20 logins in one batch, 0 of 10 in another (this branch: 11 of 20 and 0 of 10; the code is the same).
+   - A reload shows the data. The regression script retries the dashboard to absorb it.
+2. **The admin sends its key in the `list` request's query string** (`admin_key=…`), so it lands in server and proxy logs. Pre-existing; add it to the go-live key-rotation item.
+3. **Prompt 18:** decide how to read "focus ring ≥ 3:1 against the control" for the primary button. By the contract, the focus fill and the ring are the same terracotta; they never touch, because 3 px of surround separates them.
+4. **Prompt 04:**
+   - Wrap the routes in `<LinkProvider component={TLink}>`.
+   - `Logo` follows a tone change on its nearest `[data-tone]` element, so the dock should change its own `data-tone` attribute.
+   - `Portal` and the two hooks are ready for the index overlay.
+5. **Prompt 05:**
+   - Rebuild `LeadModal` on `Portal`, `useFocusTrap` and `useScrollLock`.
+   - `Button` with `loading` / `loadingLabel` gives "Sending…" with `aria-busy`.
+   - `Field` with `group` and `ChoiceChips` gives the budget field. The D-09 ranges belong in the data layer.
+6. **Once prompt 04 adds `overflow-x: clip`,** `public-check`'s `scrollWidth` test stops seeing overflow at all. The legacy `html` already masks it today. Prompt 17 should add an element-extent check, like the one run here, to `public-check`.
+7. **`LineIcon` fetches its SVG on mount, not lazily** (about 1 KB each, cached). Prompt 16 may defer it if a page shows many.
+8. **`react-router-dom`'s missing `dist/main.js`:** if the package is upgraded, check whether the Jest `moduleNameMapper` entries are still needed.
+9. **No VoiceOver or NVDA was available.** Accessibility was checked through axe, the heading order, names and live regions.
+10. `npm audit` advisories in CRA 5's tree are unchanged.

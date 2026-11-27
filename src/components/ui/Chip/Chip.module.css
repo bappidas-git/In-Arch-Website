@@ -1,0 +1,70 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ia-space-2);
+  min-height: 44px;
+  min-width: 44px;
+  max-width: 100%;
+  padding: var(--ia-space-2) var(--ia-space-4);
+  border: 1px solid var(--ia-line-strong);
+  border-radius: var(--ia-radius);
+  background: transparent;
+  color: var(--ia-fg);
+  font-family: var(--ia-font-sans);
+  font-size: var(--ia-fs-small);
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  scale: 1;
+  transition:
+    background-color var(--ia-dur-2) var(--ia-ease-out),
+    color var(--ia-dur-2) var(--ia-ease-out),
+    border-color var(--ia-dur-2) var(--ia-ease-out),
+    scale var(--ia-dur-1) var(--ia-ease-out);
+}
+
+.count {
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  color: var(--ia-fg-2);
+}
+
+.on {
+  border-color: var(--ia-fg);
+  background: var(--ia-fg);
+  color: var(--ia-bg);
+}
+
+.on .count {
+  color: inherit;
+}
+
+.enabled:focus-visible {
+  border-color: var(--ia-fg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .enabled:hover {
+    border-color: var(--ia-fg);
+  }
+}
+
+.enabled:active {
+  scale: 0.98;
+}
+
+.inactive {
+  border-color: var(--ia-line);
+  color: var(--ia-fg-3);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enabled:active {
+    scale: none;
+  }
+}

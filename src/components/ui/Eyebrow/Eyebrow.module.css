@@ -1,0 +1,24 @@
+.eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ia-space-2) var(--ia-space-3);
+  color: var(--ia-fg);
+}
+
+.index {
+  color: var(--ia-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.rule {
+  flex: none;
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background: var(--ia-line-strong);
+}
+
+.label {
+  min-width: 0;
+}

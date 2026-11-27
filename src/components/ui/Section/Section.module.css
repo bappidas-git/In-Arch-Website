@@ -1,0 +1,19 @@
+.band {
+  position: relative;
+}
+
+.rhythm-default {
+  padding-block: var(--ia-section-y);
+}
+
+.rhythm-compact {
+  padding-block: var(--ia-section-y-sm);
+}
+
+.rhythm-none {
+  padding-block: 0;
+}
+
+.screen {
+  min-height: 100svh;
+}

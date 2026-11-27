@@ -1,0 +1,134 @@
+.accordion {
+  border-bottom: 1px solid var(--ia-line);
+}
+
+.item {
+  border-top: 1px solid var(--ia-line);
+}
+
+.heading {
+  margin: 0;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--ia-space-4);
+  width: 100%;
+  min-height: 64px;
+  padding: var(--ia-space-5) 0;
+  color: var(--ia-fg);
+  text-align: start;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.withIndex {
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+}
+
+@media (min-width: 768px) {
+  .header {
+    gap: var(--ia-space-6);
+    padding-block: var(--ia-space-6);
+  }
+
+  .withIndex {
+    grid-template-columns: 4rem minmax(0, 1fr) auto;
+  }
+}
+
+.index {
+  align-self: start;
+  padding-top: 0.6em;
+  color: var(--ia-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.title {
+  min-width: 0;
+  transition: color var(--ia-dur-2) var(--ia-ease-out);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--ia-line-strong);
+  border-radius: 50%;
+  transition: border-color var(--ia-dur-2) var(--ia-ease-out);
+}
+
+.plus {
+  transition: transform var(--ia-dur-3) var(--ia-ease-expo);
+}
+
+.open .plus {
+  transform: rotate(45deg);
+}
+
+.header:focus-visible .title {
+  color: var(--ia-accent);
+}
+
+.header:focus-visible .toggle {
+  border-color: var(--ia-fg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .header:hover .title {
+    color: var(--ia-accent);
+  }
+
+  .header:hover .toggle {
+    border-color: var(--ia-fg);
+  }
+}
+
+.header:active .toggle {
+  border-color: var(--ia-fg);
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.content {
+  padding-bottom: var(--ia-space-8);
+}
+
+@media (min-width: 768px) {
+  .indented .content {
+    padding-inline-start: calc(4rem + var(--ia-space-6));
+  }
+}
+
+.entering {
+  animation: raise var(--ia-dur-3) var(--ia-ease-out) both;
+}
+
+@keyframes raise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entering {
+    animation: none;
+  }
+
+  .plus {
+    transition: none;
+  }
+}

@@ -1,0 +1,127 @@
+.round {
+  --ib-fg: var(--ia-fg);
+  --ib-border: var(--ia-line-strong);
+  --ib-fill: var(--ia-fg);
+  --ib-fg-hover: var(--ia-bg);
+  /* The base focus rule squares the outline; keep it round. */
+  --ia-focus-radius: 50%;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--ib-size, 48px);
+  height: var(--ib-size, 48px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ib-fg);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  scale: 1;
+  transition:
+    color var(--ia-dur-3) var(--ia-ease-expo),
+    scale var(--ia-dur-1) var(--ia-ease-out);
+}
+
+.round::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: 1px solid var(--ib-border);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.ghost {
+  --ib-fg: var(--ia-ivory);
+  --ib-border: var(--ia-ivory);
+  --ib-fill: var(--ia-ivory);
+  --ib-fg-hover: var(--ia-forest);
+  --ia-focus: var(--ia-ivory);
+}
+
+.ghost:focus-visible {
+  box-shadow: 0 0 0 9px var(--ia-forest);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ib-fill);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform var(--ia-dur-3) var(--ia-ease-expo);
+}
+
+.icon {
+  position: relative;
+}
+
+.enabled:focus-visible {
+  color: var(--ib-fg-hover);
+}
+
+.enabled:focus-visible .fill {
+  transform: scaleY(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .enabled:hover {
+    color: var(--ib-fg-hover);
+  }
+
+  .enabled:hover .fill {
+    transform: scaleY(1);
+  }
+}
+
+.enabled:active {
+  scale: 0.94;
+}
+
+.inactive {
+  --ib-fg: var(--ia-fg-3);
+  --ib-border: var(--ia-line);
+  cursor: not-allowed;
+}
+
+.inactive.ghost {
+  --ib-fg: var(--ia-mist-2);
+  --ib-border: var(--ia-mist-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .round {
+    transition: color var(--ia-dur-2) linear;
+  }
+
+  .fill,
+  .enabled:focus-visible .fill {
+    transform: none;
+    opacity: 0;
+    transition: opacity var(--ia-dur-2) linear;
+  }
+
+  .enabled:focus-visible .fill {
+    opacity: 1;
+  }
+
+  .enabled:active {
+    scale: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .enabled:hover .fill {
+    transform: none;
+    opacity: 1;
+  }
+}

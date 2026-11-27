@@ -1,0 +1,8 @@
+.text {
+  max-width: var(--ia-measure);
+  color: var(--ia-fg);
+}
+
+.muted {
+  color: var(--ia-fg-2);
+}

@@ -1,0 +1,38 @@
+/* `hidden`, not `clip`: accessibility checkers (axe) recognise only
+   `overflow: hidden` as clipping, and would otherwise measure the
+   off-band copies against the page behind them.
+   `contain: inline-size`: the row is nowrap and several viewports wide;
+   without containment that width would become the band's min-content
+   contribution and stretch any grid or flex track it sits in. */
+.band {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  contain: inline-size;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+}
+
+.copy {
+  display: flex;
+  flex: none;
+  align-items: baseline;
+  margin: 0;
+  white-space: nowrap;
+  text-wrap: nowrap;
+  color: var(--ia-fg);
+}
+
+.word {
+  padding-inline: 0.3em;
+}
+
+/* The only accent: the small separator between words. */
+.separator {
+  padding-inline: 0.3em;
+  color: var(--ia-accent-display);
+}

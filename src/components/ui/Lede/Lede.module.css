@@ -1,0 +1,5 @@
+/* Not named `.lede`: the legacy stylesheet defines that class. */
+.opening {
+  max-width: 52ch;
+  color: var(--ia-fg);
+}

@@ -1,0 +1,27 @@
+.picture {
+  display: block;
+  background-color: var(--ia-placeholder);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity var(--ia-dur-3) var(--ia-ease-out);
+}
+
+/* Still downloading: hidden over the placeholder, no transition on the way
+   out. On load it fades in with the transition above. */
+.picture[data-state='pending'] .img {
+  opacity: 0;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img {
+    transition: none;
+  }
+}

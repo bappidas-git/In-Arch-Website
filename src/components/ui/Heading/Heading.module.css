@@ -1,0 +1,9 @@
+.heading {
+  color: var(--ia-fg);
+  max-width: 100%;
+}
+
+.heading em {
+  font-style: italic;
+  color: var(--ia-accent-display);
+}

@@ -1,0 +1,115 @@
+.link {
+  --ia-focus-offset: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ia-space-2);
+  min-width: 44px;
+  min-height: 44px;
+  max-width: 100%;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: opacity var(--ia-dur-1) var(--ia-ease-out);
+}
+
+.accent {
+  color: var(--ia-accent);
+}
+
+.text {
+  position: relative;
+  min-width: 0;
+  padding-bottom: 2px;
+}
+
+/* Rest underline: 1 px of the text colour at 35 %. */
+.text::before,
+.text::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  pointer-events: none;
+}
+
+.text::before {
+  background: currentColor;
+  opacity: 0.35;
+}
+
+/* Active underline: full opacity in the accent, drawn from the left. */
+.text::after {
+  background: var(--ia-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--ia-dur-3) var(--ia-ease-expo);
+}
+
+.arrow {
+  display: inline-flex;
+  flex: none;
+  transition: transform var(--ia-dur-3) var(--ia-ease-expo);
+}
+
+.enabled:focus-visible .text::after {
+  transform: scaleX(1);
+}
+
+.enabled:focus-visible .arrow {
+  transform: translate(var(--ia-nudge-x, 0), var(--ia-nudge-y, 0));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .enabled:hover .text::after {
+    transform: scaleX(1);
+  }
+
+  .enabled:hover .arrow {
+    transform: translate(var(--ia-nudge-x, 0), var(--ia-nudge-y, 0));
+  }
+}
+
+.enabled:active {
+  opacity: 0.7;
+}
+
+.inactive {
+  color: var(--ia-fg-3);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text::after,
+  .enabled:focus-visible .text::after {
+    transform: none;
+    opacity: 0;
+    transition: opacity var(--ia-dur-2) linear;
+  }
+
+  .enabled:focus-visible .text::after {
+    opacity: 1;
+  }
+
+  .arrow,
+  .enabled:focus-visible .arrow {
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .enabled:hover .text::after {
+    transform: none;
+    opacity: 1;
+  }
+
+  .enabled:hover .arrow {
+    transform: none;
+  }
+}

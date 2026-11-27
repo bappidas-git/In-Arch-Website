@@ -1,0 +1,9 @@
+/* Fixed height, natural width; if a narrow box caps the width, `contain`
+   keeps the ratio instead of stretching the mark. */
+.logo {
+  display: block;
+  flex: none;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
+}

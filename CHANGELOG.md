@@ -71,6 +71,31 @@ Assets and data only. **No live page or admin screen changes**: nothing new is i
 - `src/lab/registry.js`: the "Assets & content" section.
 - `package.json`: the `build:brand`, `build:images` and `build:icons` scripts.
 
+### Prompt 03 — Core UI primitives (2026-11-27)
+
+The component kit every later prompt builds from. **No live page, shell component or admin screen changes**: nothing outside the kit, the Lab and the tests imports it, the production `main` JavaScript is byte-for-byte the size it was after prompt 02, and `scripts/qa/parity.js` proves both surfaces identical to `cc2fc52`. Everything is shown in the Design Lab's new "Primitives" section.
+
+#### Added
+
+- **`src/components/ui/`**: one folder per primitive and a barrel, `index.js`.
+  - Layout: `Container`, `Grid` + `Col` (placement per breakpoint, written as custom properties), `Section`, `Stack`.
+  - Type: `Eyebrow`, `Heading` (one `<em>` accent; development warnings), `Text`, `Lede`, `VisuallyHidden`.
+  - Actions, the "wipe & swap" family: `Button` (primary, secondary, ghost; lg / md; disabled, aria-disabled, loading, magnetic), `TextLink`, `IconButton`, `Icon` (an 18-glyph UI sprite), and `LinkProvider`, the one place prompt 04 swaps in the transition-aware link.
+  - Forms: `Field` (label, hint, error and ARIA wiring through context; `group` for fieldsets), `TextInput`, `TextArea` (grows to 12 lines), `SelectInput`, `ChoiceChips` (native radios), `Notice`.
+  - Media and brand: `Logo` (file chosen by the nearest tone), `Picture` (AVIF / WebP / JPEG, art direction, placeholder, fade-in), `Frame` (ratio, shutter reveal, parallax, arch), `Figure`, `LineIcon`, `LottieIcon` (player and JSON loaded only near the viewport), `Illustration`.
+  - Content: `ProjectTile`, `Accordion` + `AccordionItem` (single- or multi-open, controlled, deep links, arrow keys), `FactList` (skips empty values), `Rule`, `Chip`, `ScrollMarquee` (moves only with the scroll), `Skeleton`.
+  - Overlays: `Portal`, plus `src/hooks/useFocusTrap.js` and `src/hooks/useScrollLock.js` (the lead modal's lock, extracted, with reference counting).
+- **Four tone variables** in `src/styles/inarch/base.css`: `--ia-field-bg`, `--ia-placeholder`, `--ia-feedback-error`, `--ia-feedback-success`.
+- **Design Lab, "Primitives"**: every primitive in every state on all four tones (hover, focus and press forced for display by `src/lab/forceStates.js`), phone and desktop frames on demand, a live-validating form, both accordions, project tiles from real image keys, a Portal dialog, and a keyboard strip with Tab-order numbers.
+- **Tests:** 43 new, beside the primitives and in `src/hooks/__tests__/` (158 in all).
+
+#### Changed
+
+- `package.json`: a `jest.moduleNameMapper` so Jest 27 resolves `react-router-dom` 7 and GSAP's plugin files.
+- `src/setupTests.js`: `TextEncoder` and `matchMedia` for jsdom, and the act wrappers for user-event's copy of Testing Library.
+- `src/lab/LabPage.jsx`: the `?frame=<section>` view; `src/lab/registry.js`: the "Primitives" entry.
+- `scripts/qa/public-check.js`: the target-size check skips controls the Lab shows in a forced press state.
+
 ## [2.31.0] — 2026-08-20 — Who We Serve hero: the right edge dissolves too
 
 `[2.30.0]` drew the frame at the section's full width, which put the

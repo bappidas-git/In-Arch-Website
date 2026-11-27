@@ -1,0 +1,220 @@
+/* ============================================
+   Button — "wipe & swap"
+   The class names avoid the legacy `.btn` family.
+   ============================================ */
+
+.cta {
+  /* Per-variant paint, set below. */
+  --cta-bg: transparent;
+  --cta-fg: var(--ia-fg);
+  --cta-fill: var(--ia-fg);
+  --cta-fg-hover: var(--ia-bg);
+  --cta-border: transparent;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ia-space-3);
+  max-width: 100%;
+  padding-block: var(--ia-space-3);
+  border: 0;
+  border-radius: var(--ia-radius);
+  background: var(--cta-bg);
+  color: var(--cta-fg);
+  font-family: var(--ia-font-sans);
+  font-size: var(--ia-fs-label);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  text-wrap: balance;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  scale: 1;
+  translate: var(--ia-mx, 0px) var(--ia-my, 0px);
+  transition:
+    color var(--ia-dur-3) var(--ia-ease-expo),
+    scale var(--ia-dur-1) var(--ia-ease-out),
+    translate var(--cta-magnet-dur, var(--ia-dur-3)) var(--ia-ease-expo);
+}
+
+/* The 1 px border is drawn above the fill, so a wipe never leaves a seam. */
+.cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: 1px solid var(--cta-border);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.lg {
+  min-height: 52px;
+  padding-inline: 28px;
+}
+
+.md {
+  min-height: 44px;
+  padding-inline: 20px;
+}
+
+.full,
+.fullMobile {
+  display: flex;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .fullMobile {
+    display: inline-flex;
+    width: auto;
+  }
+}
+
+/* ---------- Variants ---------- */
+.primary {
+  --cta-bg: var(--ia-fg);
+  --cta-fg: var(--ia-bg);
+  --cta-fill: var(--ia-accent);
+  --cta-fg-hover: var(--ia-bg); /* ivory on #8F4A2B 5.77:1; forest on #DDA27F 7.74:1 */
+}
+
+.secondary {
+  --cta-border: var(--ia-fg);
+  --cta-fill: var(--ia-fg);
+  --cta-fg-hover: var(--ia-bg);
+}
+
+/* Over photographs: ivory whatever the tone. */
+.ghost {
+  --cta-fg: var(--ia-ivory);
+  --cta-border: var(--ia-ivory);
+  --cta-fill: var(--ia-ivory);
+  --cta-fg-hover: var(--ia-forest);
+  --ia-focus: var(--ia-ivory);
+}
+
+/* 2 px ivory ring with a forest halo either side, visible on any photograph. */
+.ghost:focus-visible {
+  box-shadow: 0 0 0 9px var(--ia-forest);
+}
+
+/* ---------- The wipe ---------- */
+.fill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--cta-fill);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform var(--ia-dur-3) var(--ia-ease-expo);
+}
+
+.enabled:focus-visible {
+  color: var(--cta-fg-hover);
+}
+
+.enabled:focus-visible .fill {
+  transform: scaleY(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .enabled:hover {
+    color: var(--cta-fg-hover);
+  }
+
+  .enabled:hover .fill {
+    transform: scaleY(1);
+  }
+}
+
+/* Press — touch gets this and nothing else. */
+.enabled:active {
+  scale: 0.98;
+}
+
+/* Magnetic follow: quick while the pointer moves, a 400 ms spring back. */
+.cta[data-magnet='on'] {
+  --cta-magnet-dur: var(--ia-dur-1);
+}
+
+/* ---------- Labels ---------- */
+.labels,
+.arrow {
+  position: relative;
+  z-index: 0;
+}
+
+.labels {
+  display: grid;
+  min-width: 0;
+}
+
+.label,
+.loadingLabel {
+  grid-area: 1 / 1;
+}
+
+.loadingLabel,
+.cta[data-loading] .label {
+  visibility: hidden;
+}
+
+.cta[data-loading] .loadingLabel {
+  visibility: visible;
+}
+
+.cta[aria-busy='true'] {
+  cursor: progress;
+}
+
+/* ---------- Unavailable ---------- */
+.inactive {
+  --cta-bg: var(--ia-placeholder);
+  --cta-fg: var(--ia-fg-3);
+  --cta-border: transparent;
+  cursor: not-allowed;
+}
+
+.inactive.ghost {
+  --ia-focus: var(--ia-ivory);
+}
+
+/* ---------- Reduced motion: colour only ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .cta {
+    transition: color var(--ia-dur-2) linear;
+    translate: none;
+  }
+
+  .fill,
+  .enabled:focus-visible .fill {
+    transform: none;
+    opacity: 0;
+    transition: opacity var(--ia-dur-2) linear;
+  }
+
+  .enabled:focus-visible .fill {
+    opacity: 1;
+  }
+
+  .enabled:active {
+    scale: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .enabled:hover .fill {
+    transform: none;
+    opacity: 1;
+  }
+}

@@ -1,0 +1,62 @@
+/* ============================================
+   Kit internals — the text-control box
+   Shared by TextInput, TextArea and SelectInput.
+   ============================================ */
+
+.control {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--ia-line-strong); /* ≥ 3:1 against the surround */
+  border-radius: var(--ia-radius);
+  background: var(--ia-field-bg);
+  color: var(--ia-fg);
+  font-family: var(--ia-font-sans);
+  font-size: 1rem; /* 16 px: iOS does not zoom */
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: normal;
+  outline-offset: 3px;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color var(--ia-dur-2) var(--ia-ease-out);
+}
+
+.control::placeholder {
+  color: var(--ia-fg-3);
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .control:hover:not(:disabled):not(:focus) {
+    border-color: var(--ia-fg);
+  }
+}
+
+/* Focus: accent border plus the standard 2 px ring (base layer). */
+.control:focus,
+.control:focus-visible {
+  border-color: var(--ia-accent);
+}
+
+.control[aria-invalid='true'] {
+  border-color: var(--ia-feedback-error);
+}
+
+.control:disabled {
+  background: var(--ia-placeholder);
+  color: var(--ia-fg-3);
+  border-color: var(--ia-line);
+  cursor: not-allowed;
+}
+
+/* Autofill keeps the field's own colours. */
+.control:-webkit-autofill,
+.control:-webkit-autofill:hover,
+.control:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ia-fg);
+  box-shadow: 0 0 0 100px var(--ia-field-bg) inset;
+  caret-color: var(--ia-fg);
+}

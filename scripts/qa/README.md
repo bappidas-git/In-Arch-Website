@@ -38,7 +38,7 @@ For each route and width, the script loads the page, waits for network idle and 
 - any same-origin request that returns 400 or higher, or fails;
 - horizontal overflow (`scrollWidth > innerWidth + 1`);
 - any serious or critical axe-core violation (tags `wcag2a`, `wcag2aa`, `wcag21aa`, `wcag22aa`);
-- at widths of 768 px and below, any visible link or button inside `.ia` smaller than 44 × 44 CSS px. The report gives the element and its size.
+- at widths of 768 px and below, any visible link or button inside `.ia` smaller than 44 × 44 CSS px. The report gives the element and its size. Controls the Design Lab shows in a forced press state (`data-force-active`, scaled to 0.98) are skipped.
 
 The 390 and 1440 runs are repeated with `prefers-reduced-motion: reduce`. Full-page screenshots go to `qa-artifacts/public/`. The exit code is non-zero on any failure.
 
