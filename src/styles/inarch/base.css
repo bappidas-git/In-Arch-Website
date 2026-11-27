@@ -1,0 +1,224 @@
+/* ============================================
+   IN-ARCH base layer — scoped to `.ia`
+   --------------------------------------------
+   Nothing here matches an element outside an `.ia` scope. Components opt in
+   by sitting inside an element that carries the class `ia`.
+
+   Two jobs:
+   1. Set the IN-ARCH defaults inside the scope.
+   2. Cancel every legacy rule (src/styles/*.css, src/App.css — never
+      edited) and every MUI CssBaseline rule that would otherwise leak in.
+      Those stay on every page until prompt 14 splits the surfaces.
+
+   Specificity policy
+   - `:where(.ia)` (zero specificity) for the scope root, the tones and all
+     element defaults, so any CSS Module class can override them. The
+     element resets still beat the legacy element rules they cancel
+     (`a`, `h1`, `p` …): same weight, and this file is emitted after the
+     legacy sheets (src/index.js imports it after App).
+   - Plain `.ia` only where a legacy or MUI rule of equal weight is injected
+     later in the cascade (MUI's Emotion styles are appended at run time):
+     ::selection, :focus-visible and the scroll margin.
+
+   Document-level rules (html, body, .app, scrollbars) are NOT set here;
+   prompt 04 adds them under html[data-surface="public"].
+   ============================================ */
+
+/* ---------- Scope root ---------- */
+:where(.ia) {
+  font-family: var(--ia-font-sans);
+  font-size: var(--ia-fs-body);
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--ia-fg);
+  background: var(--ia-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  font-optical-sizing: auto;
+}
+
+/* ---------- Tones ----------
+   `.ia` itself is light. Any `[data-tone]` on or inside the scope switches
+   all nine variables, so tones nest (a paper card inside a dark band reads
+   as light again). Order matters: every tone rule has the same (zero)
+   weight, so the later rule wins on an element that is both `.ia` and
+   `[data-tone]`. */
+:where(.ia),
+:where(.ia[data-tone="light"], .ia [data-tone="light"]) {
+  --ia-bg: var(--ia-ivory);
+  --ia-fg: var(--ia-espresso);
+  --ia-fg-2: var(--ia-ink-2);
+  --ia-fg-3: var(--ia-ink-3);
+  --ia-accent: var(--ia-terracotta-700);
+  --ia-accent-display: var(--ia-terracotta-500);
+  --ia-line: var(--ia-hairline);
+  --ia-line-strong: var(--ia-border);
+  --ia-focus: var(--ia-terracotta-700);
+}
+
+:where(.ia[data-tone="sand"], .ia [data-tone="sand"]) {
+  --ia-bg: var(--ia-sand);
+  --ia-fg: var(--ia-espresso);
+  --ia-fg-2: var(--ia-ink-2);
+  --ia-fg-3: var(--ia-ink-3);
+  --ia-accent: var(--ia-terracotta-700);
+  --ia-accent-display: var(--ia-terracotta-500);
+  --ia-line: var(--ia-hairline);
+  --ia-line-strong: var(--ia-border);
+  --ia-focus: var(--ia-terracotta-700);
+}
+
+:where(.ia[data-tone="paper"], .ia [data-tone="paper"]) {
+  --ia-bg: var(--ia-paper);
+  --ia-fg: var(--ia-espresso);
+  --ia-fg-2: var(--ia-ink-2);
+  --ia-fg-3: var(--ia-ink-3);
+  --ia-accent: var(--ia-terracotta-700);
+  --ia-accent-display: var(--ia-terracotta-500);
+  --ia-line: var(--ia-hairline);
+  --ia-line-strong: var(--ia-border);
+  --ia-focus: var(--ia-terracotta-700);
+}
+
+:where(.ia[data-tone="dark"], .ia [data-tone="dark"]) {
+  --ia-bg: var(--ia-forest);
+  --ia-fg: var(--ia-ivory);
+  --ia-fg-2: var(--ia-mist);
+  --ia-fg-3: var(--ia-mist-2);
+  --ia-accent: var(--ia-terracotta-300);
+  --ia-accent-display: var(--ia-terracotta-300);
+  --ia-line: var(--ia-hairline-dark);
+  --ia-line-strong: var(--ia-border-dark);
+  --ia-focus: var(--ia-terracotta-300);
+}
+
+/* An element that names a tone also paints it. */
+:where(.ia[data-tone], .ia [data-tone]) {
+  background: var(--ia-bg);
+  color: var(--ia-fg);
+}
+
+/* ---------- Reset inside the scope ---------- */
+:where(.ia),
+:where(.ia) *,
+:where(.ia) *::before,
+:where(.ia) *::after {
+  box-sizing: border-box;
+}
+
+:where(.ia) :is(h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dd, figure, figcaption, blockquote) {
+  margin: 0;
+  padding: 0;
+}
+
+/* Cancels the legacy h1–h6 family, weight 700, colour, line-height and the
+   per-breakpoint sizes in responsive.css. Type comes from .ia-t-* classes. */
+:where(.ia) :is(h1, h2, h3, h4, h5, h6) {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-wrap: balance;
+}
+
+/* Legacy forces 1.625 on every paragraph. */
+:where(.ia) p {
+  line-height: inherit;
+  text-wrap: pretty;
+}
+
+/* Legacy paints every link red with a 150 ms colour transition. */
+:where(.ia) a,
+:where(.ia) a:hover {
+  color: inherit;
+  text-decoration: none;
+  transition: none;
+}
+
+:where(.ia) :is(ul, ol) {
+  list-style: none;
+}
+
+:where(.ia) :is(img, picture, video, canvas) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Legacy makes every inline SVG a block. */
+:where(.ia) svg {
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Legacy disables drag / selection on images and sets
+   `-webkit-optimize-contrast` on retina, which coarsens photographs. */
+:where(.ia) img {
+  user-select: auto;
+  -webkit-user-drag: auto;
+  image-rendering: auto;
+}
+
+:where(.ia) :is(button, input, select, textarea, optgroup) {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+:where(.ia) button {
+  background: none;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+/* Legacy dims disabled buttons to 0.6; components show their own state. */
+:where(.ia) button:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* Legacy forces 44 × 44 on every link and button on touch devices; the new
+   components size their own targets (public-check enforces ≥ 44 px). */
+:where(.ia) :is(a, button) {
+  min-width: 0;
+  min-height: 0;
+}
+
+:where(.ia),
+:where(.ia) * {
+  scrollbar-color: var(--ia-line-strong) transparent;
+}
+
+/* Deliberately left alone:
+   - the legacy rule forcing 16 px on inputs at ≤ 768 px (prevents iOS zoom);
+   - the legacy reduced-motion kill-switch (it only helps). */
+
+/* ---------- Rules that need the `.ia` prefix ----------
+   A legacy or MUI rule of equal weight comes later in the cascade. */
+
+/* Legacy and MUI both select in Dulcey red. */
+.ia ::selection {
+  background: var(--ia-terracotta-700);
+  color: var(--ia-ivory);
+}
+
+/* Legacy sets an ink ring globally and a red one on links. Components tune
+   the ring through the three custom properties — never by out-specifying
+   this rule. */
+.ia :focus-visible {
+  outline: var(--ia-focus-width, 2px) solid var(--ia-focus);
+  outline-offset: var(--ia-focus-offset, 3px);
+  border-radius: var(--ia-focus-radius, 2px);
+}
+
+.ia :focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Legacy reserves 100 px for a fixed header that will no longer exist. */
+.ia [id] {
+  scroll-margin-top: var(--ia-scroll-margin, 2rem);
+}

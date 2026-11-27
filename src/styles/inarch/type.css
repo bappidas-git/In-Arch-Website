@@ -1,0 +1,119 @@
+/* ============================================
+   IN-ARCH type helpers — one class per step
+   --------------------------------------------
+   Display: Fraunces, weight 300 at ≥ 40 px and 400 below, tracking −0.02em,
+   optical sizing on. Text and UI: Manrope.
+   One italic terracotta phrase per headline (`.ia-accent`), never more.
+   ============================================ */
+
+.ia-t-display-2xl,
+.ia-t-display-xl,
+.ia-t-display-lg,
+.ia-t-display-md,
+.ia-t-display-sm {
+  font-family: var(--ia-font-serif);
+  font-optical-sizing: auto;
+  font-style: normal;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* 45 → 136 px: always ≥ 40 px */
+.ia-t-display-2xl {
+  font-size: var(--ia-fs-display-2xl);
+  font-weight: 300;
+  line-height: 1.02;
+}
+
+/* 40 → 104 px: always ≥ 40 px */
+.ia-t-display-xl {
+  font-size: var(--ia-fs-display-xl);
+  font-weight: 300;
+  line-height: 1.02;
+}
+
+/* 32 → 72 px: crosses 40 px at a 600 px viewport (1.3rem + 3.2vw = 40px) */
+.ia-t-display-lg {
+  font-size: var(--ia-fs-display-lg);
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+/* 26 → 44 px: crosses 40 px at a 1177 px viewport (1.25rem + 1.7vw = 40px) */
+.ia-t-display-md {
+  font-size: var(--ia-fs-display-md);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+/* 22 → 30 px: always below 40 px */
+.ia-t-display-sm {
+  font-size: var(--ia-fs-display-sm);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+@media (min-width: 600px) {
+  .ia-t-display-lg {
+    font-weight: 300;
+  }
+}
+
+@media (min-width: 1177px) {
+  .ia-t-display-md {
+    font-weight: 300;
+  }
+}
+
+/* ---------- Text ---------- */
+.ia-t-body-lg,
+.ia-t-body,
+.ia-t-small,
+.ia-t-caption,
+.ia-t-label {
+  font-family: var(--ia-font-sans);
+  font-style: normal;
+  letter-spacing: normal;
+  text-wrap: pretty;
+}
+
+.ia-t-body-lg {
+  font-size: var(--ia-fs-body-lg);
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+.ia-t-body {
+  font-size: var(--ia-fs-body);
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+.ia-t-small {
+  font-size: var(--ia-fs-small);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.ia-t-caption {
+  font-size: var(--ia-fs-caption);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.ia-t-label {
+  font-size: var(--ia-fs-label);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ---------- The one italic phrase ----------
+   Fraunces italic carries its own optical sizes; no variation settings are
+   needed. terracotta-500 on light tones is 3.75:1 — display sizes (≥ 24 px)
+   only; on dark tones the variable resolves to terracotta-300 (7.74:1). */
+.ia-accent {
+  font-style: italic;
+  color: var(--ia-accent-display);
+}

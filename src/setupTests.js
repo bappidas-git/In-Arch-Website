@@ -1,0 +1,3 @@
+// Jest setup (Create React App runs this before every test file).
+// Adds the jest-dom matchers: toBeInTheDocument, toHaveAttribute, …
+import '@testing-library/jest-dom';

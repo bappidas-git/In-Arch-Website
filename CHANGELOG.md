@@ -12,6 +12,37 @@ prompt per branch/PR — and the entries below summarise each phase under the
 
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [3.0.0] — IN-ARCH redesign (in progress)
+
+The public site is being rebuilt for **IN-ARCH: In-Arch Architects & Interior Designer** through the prompt series in [`prompts/`](prompts/00_INDEX.md). Each prompt adds one entry here. The running record is [`prompts/BUILD_LOG.md`](prompts/BUILD_LOG.md).
+
+### Prompt 01 — Design system, tokens and motion foundation (2026-11-27)
+
+Foundation only. **Every existing page and every admin screen is unchanged**: they are pixel- and style-identical to the baseline commit `cc2fc52`, and `scripts/qa/parity.js` proves it.
+
+#### Added
+
+- **Design tokens** in `src/styles/inarch/`: colour, type scale, space, layout, motion and layers, all `--ia-*` on `:root`. Two metric-matched fallback faces sit in `fonts.css`.
+- **A scoped base layer** (`base.css`). It applies only inside an element with the class `ia`, and it cancels the legacy global rules that would otherwise leak in. `type.css` provides the `.ia-t-*` type classes; `layout.css` provides the container, the 4/8/12 grid, sections, bleed, measure and visually-hidden helpers.
+- **Self-hosted fonts.** Fraunces (roman and italic, variable `opsz` and `wght`) and Manrope (variable `wght`) are three Latin WOFF2 files in `public/fonts/`, with their SIL OFL licences. They are declared in `<style id="ia-fonts">` in `public/index.html`, and they are inert on every existing page.
+- **The surface attribute.** `<html data-surface="public | admin">` is set by the first inline script and kept in step with the router by `src/surfaces/SurfaceManager.jsx`.
+- **Motion foundation** in `src/motion/`. `useMotionScope()` drives every `data-m` effect (`rise`, `lines`, `shutter`, `rule`, `fade`, `data-m-parallax`, `data-m-delay`, `data-m-now`) from one `useGSAP` + `gsap.matchMedia()` scope. It does nothing under reduced motion. `src/motion/` also holds the GSAP motion tokens and `useReducedMotion()`.
+- **The Design Lab** at `/__lab`, development only. It shows swatches with live contrast on four tones, the live type scale against the contract, fallback-font matching, the spacing scale, a grid overlay and a replayable demo of each motion effect. Its section registry is `src/lab/registry.js`. A production build contains no Lab chunk.
+- **QA tooling:**
+  - `scripts/dev-router.php` serves a build with the PHP lead API on one origin.
+  - `scripts/qa/public-check.js` (`npm run qa:public`) checks routes × widths for console errors, failed requests, overflow, axe and tap targets.
+  - `scripts/qa/parity.js` (`npm run qa:parity`) compares two builds with a frozen clock, seeded leads, a pixel comparison and a computed-style digest.
+  - `scripts/qa/README.md` documents all three.
+- **Tests:** `src/setupTests.js`, the token and scope contract test, and the `getSurface` test.
+- **devDependencies:** `axe-core`, `@fontsource-variable/fraunces`, `@fontsource-variable/manrope`, `@testing-library/react@14`, `@testing-library/jest-dom`, `@testing-library/user-event@14`. No runtime dependency changed.
+
+#### Changed
+
+- `src/index.js`: one import of `./styles/inarch/index.css`, placed after `App`.
+- `src/App.jsx`: renders `<SurfaceManager />` and adds the development-only `/__lab` route.
+- `public/index.html`: one statement in the first inline script, and the `ia-fonts` style block.
+- `.gitignore`: adds `/qa-artifacts/`.
+
 ## [2.31.0] — 2026-08-20 — Who We Serve hero: the right edge dissolves too
 
 `[2.30.0]` drew the frame at the section's full width, which put the
