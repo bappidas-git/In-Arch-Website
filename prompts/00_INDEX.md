@@ -210,6 +210,7 @@ Line-height 1.02 (2xl, xl), 1.08 (lg), 1.15 (md), 1.2 (sm), 1.65 (body); measure
 | | Value |
 |---|---|
 | Durations | 150 ms press · 240 ms colour · 400 ms wipes and UI · 700 ms reveals · 1000 ms headlines and image shutters |
+| Named exceptions | index overlay and lead sheet 500 ms in / 350 ms out · page curtain lift 550 ms · portfolio re-flow 600 ms · rule draw 900 ms · image settle 1.4 s in a shutter, 1.6 s in the Home hero |
 | Easing | CSS `cubic-bezier(0.22,1,0.36,1)`, `cubic-bezier(0.65,0,0.35,1)`, `cubic-bezier(0.16,1,0.3,1)`; GSAP `power3.out`, `expo.out`, `power3.inOut`, `none` (scrub) |
 | Reveals | text rises 24 px (40 from 1024) at `top 85%`, once; headlines rise line by line through masks; images open with a "shutter" (cover slides away while the image settles from 1.12 to 1); rules draw from the left |
 | Parallax | ≤ 4 % below 1024 px, ≤ 7 % above |
@@ -247,7 +248,7 @@ Prompt 02 cuts trimmed copies into `public/images/brand/`: the full lockup (for 
 - **Coexistence.** From prompt 04 the new shell wraps the old page bodies; each page prompt replaces one body. The old pages keep the legacy typography because the `ia` scope is applied per component, not at the root, until prompt 14.
 - **Surface split (prompt 14).** The legacy stylesheets, the old fonts and the MUI providers stop being imported by the entry point and are imported — unchanged, in the same order — by one lazy wrapper, `src/surfaces/AdminSurface.jsx`, that only `/admin` routes load. The measured stylesheet order on the baseline (`/admin/login`: legacy CSS → login CSS → MUI styles; `/admin/dashboard`: legacy CSS → MUI styles → admin layout and page CSS) is the acceptance criterion. If parity cannot be proven the split is reverted and the public site simply keeps the extra weight.
 - **Admin logo swap (prompt 15).** A new image with the old image's exact pixel dimensions (1351 × 200), so no admin box moves; one config value changes; no file under `src/admin/` is edited.
-- **Document-level items shared with the admin** (`public/index.html`): the favicon, the splash and the fonts are made surface-aware in prompt 04 so `/admin` keeps its old ones until prompt 15.
+- **Document-level items shared with the admin** (`public/index.html`): the tab icon, the loading splash, the boot-time tab title, the browser toolbar colour (`theme-color`) and the font links are made surface-aware in prompt 04, so `/admin` keeps today's until prompt 15 (owner decision D-24 covers the splash and icon; the toolbar colour never changes). The web app manifest is the one exception: it is a single file for the whole origin, so its name, colours and icons become IN-ARCH's in prompt 04 — visible on `/admin` only if someone installs the site as an app from an admin page.
 - **QA toolkit** (created by the prompts): `scripts/dev-router.php`; `scripts/qa/public-check.js` (routes × widths: console errors, failed requests, overflow, target sizes, axe); `scripts/qa/parity.js` (pixel and computed-style comparison of two builds, with time frozen and identical seeded leads — the admin proof); `scripts/qa/lead-flow.js` (form → API → admin, asserting the payload keys); `scripts/qa/perf-check.js` (throttled Core Web Vitals and byte budgets).
 
 **Page concepts — every page opens, moves and ends differently**
@@ -427,6 +428,7 @@ Write your answer in the last column; an empty cell means the default applies. E
 | D-21 | The dummy's project names (The Courtyard House, Urban Calm, The Avenue, The Workspace, Green Land Hospital, The Dining Room). | **Not used** — they are invented names over stock photographs. | 02 | |
 | D-22 | Use the wordmark without its descriptor line wherever the logo is under 44 px tall (the dock, phone masthead and all admin placements)? | **Yes** — the descriptor is illegible at those sizes. | 04 | |
 | D-23 | The "Zenith — Project Architect" entry, whose dates the PDF marks "to be confirmed". | Listed without dates. | 02 | |
+| D-24 | The loading screen and tab icon that appear on `/admin` URLs belong to the one HTML document the whole site shares, not to the admin's own code. Should they follow the new brand when the admin logo is swapped? | **Yes**, in prompt 15: the IN-ARCH splash and tab icon everywhere. "No" keeps the old Dulcey splash and icon on `/admin` URLs for good. Either way the admin's browser toolbar colour stays as it is today. | 15 | |
 
 ## 13. Open questions, assumptions and content gaps
 
