@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="M18 9L12 9C10.9 9 10 9.9 10 11L10 41C10 42.1 10.9 43 12 43L36 43C37.1 43 38 42.1 38 41L38 11C38 9.9 37.1 9 36 9L30 9" vector-effect="non-scaling-stroke"/>
+  <rect x="18" y="5" width="12" height="7" rx="1.5" vector-effect="non-scaling-stroke"/>
+  <path d="M17 27L22 32L31 21" stroke="var(--ia-accent-display, currentColor)" vector-effect="non-scaling-stroke"/>
+</svg>

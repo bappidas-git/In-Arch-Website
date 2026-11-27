@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="M6 22L24 8L42 22" vector-effect="non-scaling-stroke"/>
+  <path d="M10 19L10 41L38 41L38 19" vector-effect="non-scaling-stroke"/>
+  <path d="M32 14.2L32 8L36 8L36 17.3" vector-effect="non-scaling-stroke"/>
+  <rect x="30" y="26" width="4" height="4" rx="0.5" vector-effect="non-scaling-stroke"/>
+  <path d="M19 41L19 30L26 30L26 41" stroke="var(--ia-accent-display, currentColor)" vector-effect="non-scaling-stroke"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="M6 19L27 15L31 41L8 42Z" vector-effect="non-scaling-stroke"/>
+  <path d="M10 27C15 24 20 30 28.5 26.5" vector-effect="non-scaling-stroke"/>
+  <path d="M10.5 35C16 32 21 37 29.5 33.5" vector-effect="non-scaling-stroke"/>
+  <circle cx="37" cy="11" r="6.5" stroke="var(--ia-accent-display, currentColor)" vector-effect="non-scaling-stroke"/>
+  <path d="M37 6.5L39.5 14L37 12.5L34.5 14Z" fill="var(--ia-accent-display, currentColor)" stroke="none" vector-effect="non-scaling-stroke"/>
+</svg>

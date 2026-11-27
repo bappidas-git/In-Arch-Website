@@ -1,0 +1,2756 @@
+{
+  "home-hero-wide": {
+    "key": "home-hero-wide",
+    "width": 1920,
+    "height": 1080,
+    "ratio": 1.7778,
+    "sources": {
+      "avif": [
+        {
+          "w": 768,
+          "src": "/images/inarch/home-hero-wide-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/home-hero-wide-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/home-hero-wide-1440.avif"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/home-hero-wide-1920.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 768,
+          "src": "/images/inarch/home-hero-wide-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/home-hero-wide-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/home-hero-wide-1440.webp"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/home-hero-wide-1920.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 768,
+          "src": "/images/inarch/home-hero-wide-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/home-hero-wide-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/home-hero-wide-1440.jpg"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/home-hero-wide-1920.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAAAwBACdASoYAA4APu1kqk2ppaQiMAgBMB2JQBdgA9JZmCo97q5mDeKNJwAA/tOV82HOV7lG3Uu06bsXTIbxewVoT3FOWl3dzSzWV0e/+L7uYQy0ZuIwkfIbHVXUqxQJZ5YCnGhUBowxjVsbMQAAAA=="
+  },
+  "home-hero-tall": {
+    "key": "home-hero-tall",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/home-hero-tall-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/home-hero-tall-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/home-hero-tall-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/home-hero-tall-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/home-hero-tall-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/home-hero-tall-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/home-hero-tall-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/home-hero-tall-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/home-hero-tall-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRsAAAABXRUJQVlA4ILQAAADwBACdASoYAB4APu1oqk8ppiOiKA1RMB2JQBYdj21q9xClRRFe/90x2y0CzQcnbAAA/vYGDQMXEgB/gceGK7bDf6LmPgdHNGWH6KB5SpVBcY91qWpjVIVvLxpi0rDdgHWjqmclzv5a0DR3mNnOXgeSg3CdtSEYh5cmLTpc1HMiYzvWDsbTP7dy6LNLyGoMPhclmd0xDPCDDUyEyMXQVBoAP/SubNJ5wDhkB/sG9NQIlHWAAAA="
+  },
+  "home-intro": {
+    "key": "home-intro",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/home-intro-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/home-intro-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/home-intro-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/home-intro-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/home-intro-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/home-intro-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/home-intro-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/home-intro-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/home-intro-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAADwBACdASoYAB4APulep02pJSOiN/VYASAdCWUAwNwJgkorDyjVgttOcT2BJ8NQ0+wA9ya1xzm13uqbnR4cbXx+6gA5OBsoEDpMZI4GlbFl7fNLNdzNZBB6GazZt6U9I90TYCOwZlvKEHbLwQ0HSyK5lmiwQkiDoAA="
+  },
+  "studio-band-wide": {
+    "key": "studio-band-wide",
+    "width": 1920,
+    "height": 823,
+    "ratio": 2.3329,
+    "sources": {
+      "avif": [
+        {
+          "w": 768,
+          "src": "/images/inarch/studio-band-wide-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/studio-band-wide-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/studio-band-wide-1440.avif"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/studio-band-wide-1920.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 768,
+          "src": "/images/inarch/studio-band-wide-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/studio-band-wide-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/studio-band-wide-1440.webp"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/studio-band-wide-1920.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 768,
+          "src": "/images/inarch/studio-band-wide-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/studio-band-wide-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/studio-band-wide-1440.jpg"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/studio-band-wide-1920.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAABQBACdASoYAAoAPu1yrU+pp6QiMAgBMB2JYwC7AGmcrWrKETEJ+FzpxJAAAP7iG5Byal7j2Gqa9YofBuDqG1abECQqSDMYz0wAsgtpip1hWY3tTO6Y98rp4xrk6mvnilNyKCtWnPgQWN2AAAA="
+  },
+  "studio-band-tall": {
+    "key": "studio-band-tall",
+    "width": 1080,
+    "height": 810,
+    "ratio": 1.3333,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/studio-band-tall-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/studio-band-tall-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/studio-band-tall-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/studio-band-tall-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/studio-band-tall-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/studio-band-tall-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/studio-band-tall-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/studio-band-tall-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/studio-band-tall-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAADQBACdASoYABIAPu1kpk4ppaMiMBgMATAdiWUAtOgRe0rwnMREXwIXsKHihhNjgAD+xqTHAmwz/dN2GV5rUALupRGCubIEo2aXDU7mKutGTHusVHxQcB58UJcsbNGY8rGhelJD2f+3uDEcQ+rWi9g9IogflxB2sUIDceQImpUFdVMQAAA="
+  },
+  "studio-detail": {
+    "key": "studio-detail",
+    "width": 1080,
+    "height": 739,
+    "ratio": 1.4614,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/studio-detail-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/studio-detail-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/studio-detail-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/studio-detail-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/studio-detail-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/studio-detail-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/studio-detail-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/studio-detail-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/studio-detail-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQAwCdASoYABAAPu1oqk6ppiQiMAgBMB2JZwDImBrKaTTnnHJCeSgA/dIBbM+z45j5t81VrTmialCcfKz61lUxoM4OV5hEYLY4IrM61BUVlbMDyaoAAA=="
+  },
+  "expertise-interiors": {
+    "key": "expertise-interiors",
+    "width": 960,
+    "height": 1200,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/expertise-interiors-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/expertise-interiors-768.avif"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/expertise-interiors-960.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/expertise-interiors-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/expertise-interiors-768.webp"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/expertise-interiors-960.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/expertise-interiors-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/expertise-interiors-768.jpg"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/expertise-interiors-960.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRrgAAABXRUJQVlA4IKwAAAAwBQCdASoYAB4APu1kq08ppSOiMBgIATAdiWUAyrQvB7LnH8WZdNCAU3FVwPwAWJEcgAD5J9lUx/aMUd3YwNtqXU8K2mgwgD9EYk9Bqsew1qr8a7UvrA5Og7+gnrNItovcGE++5bz5fwotWPHZsMha9rt6wJOf1Zc/jJ+TJrha1OxC7NyPUXMg4+sLaYJd4i7q92Yb7yLZZ/zjjwzmFak7E7b7z3mfifdsAAAA"
+  },
+  "interiors-hero-tall": {
+    "key": "interiors-hero-tall",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-hero-tall-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-hero-tall-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-hero-tall-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-hero-tall-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-hero-tall-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-hero-tall-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-hero-tall-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-hero-tall-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-hero-tall-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRsoAAABXRUJQVlA4IL4AAACwBQCdASoYAB4APuVeo02pJSMiMAwBIByJbACdL46B0jG8uGe0cNyRcshe+6ttaCzccroiJ2AA/t/0PVqqMwhJUyC+BBLYK6Th0DAlE4OHypT36jjs7CfCBey1wRW5lkrNfk/fI8PopQ8UfacqErP+wG34QwNSnz4iXH/T9Cs+l+UqLCMVExGIh0wD11DLHI/2yrn3fUoeSUmUP0M3kBPQVyGVurI2t/2s1zttlmBarrtMucJ6YwE8sOHQAAAA"
+  },
+  "interiors-living": {
+    "key": "interiors-living",
+    "width": 1440,
+    "height": 960,
+    "ratio": 1.5,
+    "sources": {
+      "avif": [
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-living-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-living-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-living-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-living-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-living-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-living-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-living-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-living-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-living-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAACwBACdASoYABAAPu1kqU4ppaOiMAgBMB2JYgCdMoADX2yiwa1Del7P5+OtrSWIAP3wY7yT0sAkHzh9PcmBlRwwMl2i4/wdV5MDLmRXdFeC/Qjms6cyU5z4TXl3pnjzkGcfz7ezGFPvhuHXMOZ2xCq4185oNn97fsi2IUV47H0CjtOwAAA="
+  },
+  "interiors-inset": {
+    "key": "interiors-inset",
+    "width": 640,
+    "height": 800,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 320,
+          "src": "/images/inarch/interiors-inset-320.avif"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-inset-480.avif"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/interiors-inset-640.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 320,
+          "src": "/images/inarch/interiors-inset-320.webp"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-inset-480.webp"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/interiors-inset-640.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 320,
+          "src": "/images/inarch/interiors-inset-320.jpg"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-inset-480.jpg"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/interiors-inset-640.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4ILAAAAAQBQCdASoYAB4APuVep02pJSOiN/VYASAciWMAyrQ6cp0pAaYCqhSm+BzrXg+/Cr8AAN4F1puKQ6fY5Ldi9PTp0mz/oBX4i9PehFQ5NKuYlRGHVVvo93aFP+8BjYeowpLleVhFzBgSMmYR+Wf1qjZBky5U0ozDbmiYcOwc5iY6Yz/jPzWd6rC48qHwhrivOtMc2wGNhseabgc1lcGtrfIiKbZL30OvAD+9JfglJ0AAAA=="
+  },
+  "interiors-kitchen": {
+    "key": "interiors-kitchen",
+    "width": 1440,
+    "height": 960,
+    "ratio": 1.5,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-kitchen-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-kitchen-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-kitchen-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-kitchen-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-kitchen-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-kitchen-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-kitchen-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-kitchen-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-kitchen-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-kitchen-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-kitchen-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-kitchen-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAACwAwCdASoYABAAPu1krU6ppaSiMAgBMB2JZwAAW4ycknFrYgwiYAD+4w9LakXb/D4S72WjUNBhl8JW4/VaUxXyQZH68QAtjn4HhunWA/wGnvHqSnwcTJdmAH48Hy3DCOUjN1gA"
+  },
+  "interiors-detail-a": {
+    "key": "interiors-detail-a",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-detail-a-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-detail-a-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-detail-a-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-detail-a-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-detail-a-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-detail-a-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-detail-a-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-detail-a-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-detail-a-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRqAAAABXRUJQVlA4IJQAAABwBQCdASoYAB4APu1oq08ppiOiMBgIATAdiWYAqRTm5kIT0XdIxAFPqYvwfNY52cTLM0HAAP5xsBZpIgr4Csn8fCVhhA1zvMSbdL7fPYwymcgH54oVLnlrNl7uEaXh0UP2/TIsKcIfL7zjvyNA/hXKSvPDAMxPw5OAziTPBgwKTVeacholTnRB+64bXxPB9lrLSAAA"
+  },
+  "interiors-detail-b": {
+    "key": "interiors-detail-b",
+    "width": 1440,
+    "height": 810,
+    "ratio": 1.7778,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-detail-b-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-detail-b-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-detail-b-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-detail-b-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-detail-b-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-detail-b-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-detail-b-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-detail-b-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-detail-b-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-detail-b-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-detail-b-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-detail-b-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAABQBACdASoYAA4APu1iqk4ppaQiMAgBMB2JaACdMoRwAB6HPav/co0p9BAAAP3qdc3hBglSQ3Rbua6MKP0fxroqOHqOGqeCR4qb1JMoKOD48QwSwQyxG0cTsXq9/hoAAAA="
+  },
+  "interiors-detail-c": {
+    "key": "interiors-detail-c",
+    "width": 1440,
+    "height": 810,
+    "ratio": 1.7778,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-detail-c-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-detail-c-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-detail-c-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-detail-c-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-detail-c-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-detail-c-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-detail-c-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-detail-c-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/interiors-detail-c-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/interiors-detail-c-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/interiors-detail-c-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/interiors-detail-c-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAACwAwCdASoYAA4APu1iqU2ppaQiMAgBMB2JZQC7AB5dJp92xe3PoAD8ckbaEX2YwISds9QQguGfYS4x8pn5UZ/09QELvUHhnMH2g2/E4YgOtawjaImgX/RXUi8BB1S13DTIcAAA"
+  },
+  "contact-nook": {
+    "key": "contact-nook",
+    "width": 768,
+    "height": 960,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/contact-nook-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/contact-nook-768.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/contact-nook-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/contact-nook-768.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/contact-nook-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/contact-nook-768.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRqoAAABXRUJQVlA4IJ4AAACQBQCdASoYAB4APuFeqE2opSQiMAwBEBwJZwDGQBemyZbl/j8DWUz3r3b7SyusQ7HrlTWcsAD4Q5V+n8mJTbpq8KXIMl7PvNamiHE60BNJ51fY2Rpt4/CH0fwNOCVrw9Ddbjr2ygD+WQb6Y35lHVk4GIxEpjm7/rCVCCK+VpvetnpXYrqMM3frDg0pnYyQ6guKskm0iXWWE+OTyAAAAA=="
+  },
+  "pr-walnut-cover-tall": {
+    "key": "pr-walnut-cover-tall",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-walnut-cover-tall-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-walnut-cover-tall-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-walnut-cover-tall-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-walnut-cover-tall-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-walnut-cover-tall-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-walnut-cover-tall-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-walnut-cover-tall-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-walnut-cover-tall-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-walnut-cover-tall-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRsAAAABXRUJQVlA4ILQAAADwBACdASoYAB4APu1oqk8ppiOiKA1RMB2JQBYdj21q9xClRRFe/90x2y0CzQcnbAAA/vYGDQMXEgB/gceGK7bDf6LmPgdHNGWH6KB5SpVBcY91qWpjVIVvLxpi0rDdgHWjqmclzv5a0DR3mNnOXgeSg3CdtSEYh5cmLTpc1HMiYzvWDsbTP7dy6LNLyGoMPhclmd0xDPCDDUyEyMXQVBoAP/SubNJ5wDhkB/sG9NQIlHWAAAA="
+  },
+  "pr-walnut-cover-wide": {
+    "key": "pr-walnut-cover-wide",
+    "width": 1440,
+    "height": 960,
+    "ratio": 1.5,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-walnut-cover-wide-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-walnut-cover-wide-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-walnut-cover-wide-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-walnut-cover-wide-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-walnut-cover-wide-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-walnut-cover-wide-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-walnut-cover-wide-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-walnut-cover-wide-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-walnut-cover-wide-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-walnut-cover-wide-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-walnut-cover-wide-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-walnut-cover-wide-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAACwBACdASoYABAAPu1iqU2ppaOiMAgBMB2JQBdmUAUgAJ7+GYpoj20K4FZXC8sAAP7Tm0m1zgpr4K9vcA5WCA0IfayLeDTDq1s5iXr42bVmL6ollRj3yrfsyQ+tZV4YJYImo8VUP1uPT8eP1jglu/4ms/hI0khF/aA2l/YwAAA="
+  },
+  "pr-arches-cover-tall": {
+    "key": "pr-arches-cover-tall",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-arches-cover-tall-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-arches-cover-tall-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-arches-cover-tall-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-arches-cover-tall-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-arches-cover-tall-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-arches-cover-tall-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-arches-cover-tall-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-arches-cover-tall-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-arches-cover-tall-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRr4AAABXRUJQVlA4ILIAAAAQBgCdASoYAB4APu1mrE+ppaQiMBgIATAdiWIAnTNlr/4B5yR8h/ufkvyvGImPprPSiqUSeQj7AoAA/sXG/C+hkRzrQ0L5zrxdvAzgGEkJxTVNj5bzZQghhwklwbgZE/XNi3afgPxdCJlhYxD1MIGOEDwsWUNOfZYGucfPB6jQUw45NoXwSdaXhcEwWKfXQag7sCZkziFpRYTLpSXsT5GGiV7RpF0n2fovKpoAvKq+wAAA"
+  },
+  "pr-arches-cover-wide": {
+    "key": "pr-arches-cover-wide",
+    "width": 1440,
+    "height": 960,
+    "ratio": 1.5,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-arches-cover-wide-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-arches-cover-wide-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-arches-cover-wide-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-arches-cover-wide-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-arches-cover-wide-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-arches-cover-wide-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-arches-cover-wide-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-arches-cover-wide-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-arches-cover-wide-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-arches-cover-wide-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-arches-cover-wide-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-arches-cover-wide-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAACwBACdASoYABAAPu1kqU4ppaOiMAgBMB2JYgCdMoADX2yiwa1Del7P5+OtrSWIAP3wY7yT0sAkHzh9PcmBlRwwMl2i4/wdV5MDLmRXdFeC/Qjms6cyU5z4TXl3pnjzkGcfz7ezGFPvhuHXMOZ2xCq4185oNn97fsi2IUV47H0CjtOwAAA="
+  },
+  "pr-panelled-cover-tall": {
+    "key": "pr-panelled-cover-tall",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-panelled-cover-tall-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-panelled-cover-tall-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-panelled-cover-tall-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-panelled-cover-tall-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-panelled-cover-tall-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-panelled-cover-tall-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-panelled-cover-tall-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-panelled-cover-tall-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-panelled-cover-tall-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAADwBACdASoYAB4APulep02pJSOiN/VYASAdCWUAwNwJgkorDyjVgttOcT2BJ8NQ0+wA9ya1xzm13uqbnR4cbXx+6gA5OBsoEDpMZI4GlbFl7fNLNdzNZBB6GazZt6U9I90TYCOwZlvKEHbLwQ0HSyK5lmiwQkiDoAA="
+  },
+  "pr-panelled-cover-wide": {
+    "key": "pr-panelled-cover-wide",
+    "width": 1440,
+    "height": 960,
+    "ratio": 1.5,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-panelled-cover-wide-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-panelled-cover-wide-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-panelled-cover-wide-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-panelled-cover-wide-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-panelled-cover-wide-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-panelled-cover-wide-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-panelled-cover-wide-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-panelled-cover-wide-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-panelled-cover-wide-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-panelled-cover-wide-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-panelled-cover-wide-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-panelled-cover-wide-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQBACdASoYABAAPu1iqU2ppaOiMAgBMB2JZQCdACIdk3eDXKnRo+R7gAD93YieEVPWwxd6CEEN5F0ZHqM0CwLYrXOwRezmORAIJXi2rpfYymTAAAA="
+  },
+  "pr-graphite-cover-tall": {
+    "key": "pr-graphite-cover-tall",
+    "width": 960,
+    "height": 1200,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-graphite-cover-tall-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-graphite-cover-tall-768.avif"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/pr-graphite-cover-tall-960.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-graphite-cover-tall-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-graphite-cover-tall-768.webp"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/pr-graphite-cover-tall-960.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-graphite-cover-tall-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-graphite-cover-tall-768.jpg"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/pr-graphite-cover-tall-960.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRrgAAABXRUJQVlA4IKwAAAAwBQCdASoYAB4APu1kq08ppSOiMBgIATAdiWUAyrQvB7LnH8WZdNCAU3FVwPwAWJEcgAD5J9lUx/aMUd3YwNtqXU8K2mgwgD9EYk9Bqsew1qr8a7UvrA5Og7+gnrNItovcGE++5bz5fwotWPHZsMha9rt6wJOf1Zc/jJ+TJrha1OxC7NyPUXMg4+sLaYJd4i7q92Yb7yLZZ/zjjwzmFak7E7b7z3mfifdsAAAA"
+  },
+  "pr-graphite-cover-wide": {
+    "key": "pr-graphite-cover-wide",
+    "width": 960,
+    "height": 640,
+    "ratio": 1.5,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-graphite-cover-wide-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-graphite-cover-wide-768.avif"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/pr-graphite-cover-wide-960.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-graphite-cover-wide-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-graphite-cover-wide-768.webp"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/pr-graphite-cover-wide-960.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-graphite-cover-wide-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-graphite-cover-wide-768.jpg"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/pr-graphite-cover-wide-960.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAABQBACdASoYABAAPu1iqU2ppaOiMAgBMB2JZQC7H8ADGNN2N+CH2Bg/LUXAAMs0mrqoow7grPplpLeX2yGaekAS3Bu9wz318cW50gt/S1NwsCqSsI12/J+c/n7J4FHf6eeSxPemv5p52TtPgBz9GKQYonC8It+4CcNdXoAA"
+  },
+  "pr-black-cover-tall": {
+    "key": "pr-black-cover-tall",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-black-cover-tall-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-black-cover-tall-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-black-cover-tall-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-black-cover-tall-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-black-cover-tall-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-black-cover-tall-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-black-cover-tall-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-black-cover-tall-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-black-cover-tall-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRq4AAABXRUJQVlA4IKIAAABwBQCdASoYAB4APu1srFEppaQiqAqpMB2JZQDD6DXwB4yph6Mt1Dkr5s9vJfp39ceOfjKQAP7uoRquz/3hKAqKO2iDwocrmOAuUaqBp8kNpDzjkI+tKNVn/3w465ago65ttUYrg37xQsai1nJSF0U9YSpDpHLf9LIv+jkODgC8lUBjcYUpHWQMygtGYSBkTMqopUE3BDnwgUEQ2WjnvkgC6AA="
+  },
+  "pr-black-cover-wide": {
+    "key": "pr-black-cover-wide",
+    "width": 1440,
+    "height": 960,
+    "ratio": 1.5,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-black-cover-wide-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-black-cover-wide-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-black-cover-wide-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-black-cover-wide-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-black-cover-wide-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-black-cover-wide-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-black-cover-wide-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-black-cover-wide-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-black-cover-wide-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-black-cover-wide-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-black-cover-wide-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-black-cover-wide-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAACwAwCdASoYABAAPu1krU6ppaSiMAgBMB2JZwAAW4ycknFrYgwiYAD+4w9LakXb/D4S72WjUNBhl8JW4/VaUxXyQZH68QAtjn4HhunWA/wGnvHqSnwcTJdmAH48Hy3DCOUjN1gA"
+  },
+  "pr-ivory-cover-tall": {
+    "key": "pr-ivory-cover-tall",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-ivory-cover-tall-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-ivory-cover-tall-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-ivory-cover-tall-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-ivory-cover-tall-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-ivory-cover-tall-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-ivory-cover-tall-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-ivory-cover-tall-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-ivory-cover-tall-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-ivory-cover-tall-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAABQBQCdASoYAB4APu1oqk8ppiOiMBgIATAdiWUArhw0VlOgo6YiRCVuwiFIlj3OmSLJOYAA90fb3OysvC/oOYD0Q2TYOklYyBjhtvaX1qGECt+28n2nrYkn4Jm2Dg45CHCh7Z3JNSNFoQyVkh01taNaSK34qE4ClcRKEqSFL8mCAA=="
+  },
+  "pr-ivory-cover-wide": {
+    "key": "pr-ivory-cover-wide",
+    "width": 1440,
+    "height": 960,
+    "ratio": 1.5,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-ivory-cover-wide-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-ivory-cover-wide-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-ivory-cover-wide-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-ivory-cover-wide-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-ivory-cover-wide-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-ivory-cover-wide-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-ivory-cover-wide-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-ivory-cover-wide-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-ivory-cover-wide-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-ivory-cover-wide-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-ivory-cover-wide-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/pr-ivory-cover-wide-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAwBACdASoYABAAPu1kqU2ppaQiMAgBMB2JZQCo9CHNw0eDojUxNgdiAAAA/MjL9P5c8Iz0gxUPmwwdvQalPV1fCIM+LPoB3hZZoPTE7gpVznpHHZO3dAaVs/uECMEV8LeCnb35pr3eUkMAAAA="
+  },
+  "pr-pooja-cover-tall": {
+    "key": "pr-pooja-cover-tall",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-pooja-cover-tall-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-pooja-cover-tall-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-pooja-cover-tall-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-pooja-cover-tall-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-pooja-cover-tall-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-pooja-cover-tall-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-pooja-cover-tall-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-pooja-cover-tall-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-pooja-cover-tall-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAACwBACdASoYAB4APu1oqk8ppiOiKA1RMB2JQBajZDArQbZBPWcaM1Z40J41qxEAAPyMmZmlPI5dG5WyVL+UhMCo1KW792mfOUU2FxFx9VSwU2bu6Ngl3R7Vnk5Mf3nDSrtFNwnYSd6WTrMWbwaKPQrGsKsLrIDxgQaAPXLgOsWlPxnyAE3WajtR8r38g079LDegsQD/BWq0x6iA55CYLPPyWtIBnIcAAAA="
+  },
+  "pr-pooja-cover-wide": {
+    "key": "pr-pooja-cover-wide",
+    "width": 1080,
+    "height": 720,
+    "ratio": 1.5,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-pooja-cover-wide-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-pooja-cover-wide-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-pooja-cover-wide-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-pooja-cover-wide-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-pooja-cover-wide-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-pooja-cover-wide-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/pr-pooja-cover-wide-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/pr-pooja-cover-wide-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/pr-pooja-cover-wide-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAAAQBACdASoYABAAPu1iqk4ppaQiMAgBMB2JaACdMoR3ACWcCua661nYyAD9/ermr/ykTJVpxPAw5bNP+IYw9oTi1fHaO2EE94FO0zH8vhJJIcTNhuEpIEq67RFM5866R6vtu3IAAAA="
+  },
+  "g-ph08": {
+    "key": "g-ph08",
+    "width": 1920,
+    "height": 1080,
+    "ratio": 1.7778,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph08-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph08-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph08-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph08-1440.avif"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph08-1920.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph08-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph08-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph08-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph08-1440.webp"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph08-1920.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph08-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph08-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph08-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph08-1440.jpg"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph08-1920.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAAAwBACdASoYAA4APu1kqk2ppaQiMAgBMB2JQBdgA9JZmCo97q5mDeKNJwAA/tOV82HOV7lG3Uu06bsXTIbxewVoT3FOWl3dzSzWV0e/+L7uYQy0ZuIwkfIbHVXUqxQJZ5YCnGhUBowxjVsbMQAAAA=="
+  },
+  "g-ph07": {
+    "key": "g-ph07",
+    "width": 1920,
+    "height": 1080,
+    "ratio": 1.7778,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph07-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph07-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph07-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph07-1440.avif"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph07-1920.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph07-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph07-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph07-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph07-1440.webp"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph07-1920.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph07-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph07-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph07-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph07-1440.jpg"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph07-1920.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAACwAwCdASoYAA4APu1Ct1apoqakGAEwHYllAABWFeXSVfSLVFbEAAD+jTezHBVfrvsIDa8evs4g0z3O/V7pXs/vRSWBpS4h8rgk8ikzH9mSj72l8D9f4iTtHYiRWKpQnb9OpzIkG23HvH4hcAA="
+  },
+  "g-ph14": {
+    "key": "g-ph14",
+    "width": 1920,
+    "height": 1080,
+    "ratio": 1.7778,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph14-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph14-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph14-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph14-1440.avif"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph14-1920.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph14-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph14-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph14-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph14-1440.webp"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph14-1920.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph14-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph14-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph14-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph14-1440.jpg"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph14-1920.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAAAwBACdASoYAA4APu1kqU2ppaOiMAgBMB2JYgCdMoAC2vxIlFU6XLqUtIAA/miGusmZ8De+y2AjokYw++zDoKCUnGQf1/STWVjJ7jrsMkwAiemYbsmKUrQ/JVNA95wMOD5keUW36/MWJtHRA7mqlj0VyAcvQni3XqQRvmVxqrrjf+ZgAAA="
+  },
+  "g-ph06": {
+    "key": "g-ph06",
+    "width": 1920,
+    "height": 1440,
+    "ratio": 1.3333,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph06-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph06-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph06-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph06-1440.avif"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph06-1920.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph06-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph06-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph06-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph06-1440.webp"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph06-1920.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph06-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph06-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph06-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph06-1440.jpg"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph06-1920.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAACQAwCdASoYABIAPu1urlIppiQiqAgBMB2JZwDO7AM6+bQsQGgAAP3pMESsbuYC/FY1U6CSV5gWeCv0V4mmYFa1hmpxGqmJzoMercEYWsvjnizdDwsHmSq9zmUKlUaCrzHZ5IAA"
+  },
+  "g-ph02": {
+    "key": "g-ph02",
+    "width": 1920,
+    "height": 1920,
+    "ratio": 1,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph02-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph02-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph02-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph02-1440.avif"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph02-1920.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph02-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph02-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph02-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph02-1440.webp"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph02-1920.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph02-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph02-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph02-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph02-1440.jpg"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph02-1920.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAABQBQCdASoYABgAPu1qqE8ppiOiMBgIATAdiWcAyrQ0jcvz5ibkhweUMmL5/Kww+tfYFwAA/ujQOje7dO0ZrAya5v7RCGOd5DfCMA2i1I52+t2fVJWwKBHY1uOuJhm0S6Wb8KKfi3cWmJNmqJfYICY88eo4uX/6bnMalcDFv0YZT//79paw+fsnC3p4EQIJYupMDExakAqtiZSAAAA="
+  },
+  "g-ph04": {
+    "key": "g-ph04",
+    "width": 1920,
+    "height": 1080,
+    "ratio": 1.7778,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph04-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph04-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph04-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph04-1440.avif"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph04-1920.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph04-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph04-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph04-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph04-1440.webp"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph04-1920.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph04-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph04-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph04-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph04-1440.jpg"
+        },
+        {
+          "w": 1920,
+          "src": "/images/inarch/g-ph04-1920.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAACwAwCdASoYAA4APu1iqU2ppaQiMAgBMB2JZQC7AB5dJp92xe3PoAD8ckbaEX2YwISds9QQguGfYS4x8pn5UZ/09QELvUHhnMH2g2/E4YgOtawjaImgX/RXUi8BB1S13DTIcAAA"
+  },
+  "g-ph01": {
+    "key": "g-ph01",
+    "width": 1440,
+    "height": 890,
+    "ratio": 1.618,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph01-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph01-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph01-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph01-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph01-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph01-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph01-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph01-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph01-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph01-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph01-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph01-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABQBACdASoYAA8APu1iqk2ppaQiMAgBMB2JbACdMoACs10lOS3eZ/GpmvLgAP6U+Xqa7DvfCWcZY3TP2ufY7d/jbmIXP4AZ7XnIyjHwxF08Zdn2n5RPYUuscFpZInGD/+LAocvboBJXooaiiLByiXrM4T/3P+2Eb5sdA1vmTRWf9PLgAAA="
+  },
+  "g-ph03": {
+    "key": "g-ph03",
+    "width": 1440,
+    "height": 810,
+    "ratio": 1.7778,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph03-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph03-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph03-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph03-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph03-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph03-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph03-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph03-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph03-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph03-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph03-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph03-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwAwCdASoYAA4APu1kq04ppaQiMAgBMB2JZQAAXqS60EAr8Jil1JAAAM3MSFIgCiyykTWoPxgo2bpoaKmizXblCjq05OCBA86LMvxNiCrzYlLigUuS9xncQ+5f8XpOvp6WscAeuTaehBnPeQnhmuAA"
+  },
+  "g-ph09": {
+    "key": "g-ph09",
+    "width": 1440,
+    "height": 810,
+    "ratio": 1.7778,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph09-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph09-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph09-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph09-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph09-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph09-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph09-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph09-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph09-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph09-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph09-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph09-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAABQBACdASoYAA4APu1iqk4ppaQiMAgBMB2JaACdMoRwAB6HPav/co0p9BAAAP3qdc3hBglSQ3Rbua6MKP0fxroqOHqOGqeCR4qb1JMoKOD48QwSwQyxG0cTsXq9/hoAAAA="
+  },
+  "g-ph05": {
+    "key": "g-ph05",
+    "width": 1440,
+    "height": 986,
+    "ratio": 1.4604,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph05-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph05-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph05-1080.avif"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph05-1440.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph05-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph05-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph05-1080.webp"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph05-1440.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph05-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph05-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph05-1080.jpg"
+        },
+        {
+          "w": 1440,
+          "src": "/images/inarch/g-ph05-1440.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQAwCdASoYABAAPu1oqk6ppiQiMAgBMB2JZwDImBrKaTTnnHJCeSgA/dIBbM+z45j5t81VrTmialCcfKz61lUxoM4OV5hEYLY4IrM61BUVlbMDyaoAAA=="
+  },
+  "g-ph11": {
+    "key": "g-ph11",
+    "width": 1080,
+    "height": 810,
+    "ratio": 1.3333,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph11-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph11-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph11-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph11-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph11-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph11-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph11-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph11-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph11-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAADQBACdASoYABIAPu1urlKppiQiqAgBMB2JZwAALePj8JqbhKDs8g6AovIspmNq0AD7zg1uPe79ymm9moAFF/XewHUh08e+aZiOoPokIQTaBIndNuDQOgpdpOJlnklrWD8Zr0BdWv0hehdCvPmKhP9Fcmz5ngq/KLkDV2hBjxyt9FwZgAAAAA=="
+  },
+  "g-ph12a": {
+    "key": "g-ph12a",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph12a-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph12a-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph12a-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph12a-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph12a-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph12a-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph12a-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph12a-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph12a-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRqAAAABXRUJQVlA4IJQAAABwBQCdASoYAB4APu1oq08ppiOiMBgIATAdiWYAqRTm5kIT0XdIxAFPqYvwfNY52cTLM0HAAP5xsBZpIgr4Csn8fCVhhA1zvMSbdL7fPYwymcgH54oVLnlrNl7uEaXh0UP2/TIsKcIfL7zjvyNA/hXKSvPDAMxPw5OAziTPBgwKTVeacholTnRB+64bXxPB9lrLSAAA"
+  },
+  "g-ph12b": {
+    "key": "g-ph12b",
+    "width": 1080,
+    "height": 1350,
+    "ratio": 0.8,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph12b-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph12b-768.avif"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph12b-1080.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph12b-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph12b-768.webp"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph12b-1080.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph12b-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph12b-768.jpg"
+        },
+        {
+          "w": 1080,
+          "src": "/images/inarch/g-ph12b-1080.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAAAwBQCdASoYAB4APu1irE4ppaSiKA1RMB2JQBOmWhg1NQBSas4xcIMrWKUKKc2UZThAAAD8hfZCutgV4P+Fiujg4wyvRRRPTXrmD6oUOT7PXchspubY/PPBDyuFV8tj2feUtD/JYclyjS/1i2ZESqA9L9SeeFfNGx+R2WkC2wX32s5SYPHIYjQ95/kFla8AAAA="
+  },
+  "g-ph10": {
+    "key": "g-ph10",
+    "width": 960,
+    "height": 641,
+    "ratio": 1.4977,
+    "sources": {
+      "avif": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph10-480.avif"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph10-768.avif"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/g-ph10-960.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph10-480.webp"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph10-768.webp"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/g-ph10-960.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 480,
+          "src": "/images/inarch/g-ph10-480.jpg"
+        },
+        {
+          "w": 768,
+          "src": "/images/inarch/g-ph10-768.jpg"
+        },
+        {
+          "w": 960,
+          "src": "/images/inarch/g-ph10-960.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAADQAwCdASoYABAAPu1iqU2ppaOiMAgBMB2JQBZwAuXI7ER8GuDKbAAA9dD/jc31VN6jekzIRd+bKLayam/OMYZksyj72SlK80vkhm1S+xfxIjwQz/6YEf4MfUSJg8V5yBxtaTlhVBnS/R8T5oVm2TYnaUQJ1JnFz5QAAA=="
+  },
+  "sw-fluted": {
+    "key": "sw-fluted",
+    "width": 640,
+    "height": 640,
+    "ratio": 1,
+    "sources": {
+      "avif": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-fluted-320.avif"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/sw-fluted-640.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-fluted-320.webp"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/sw-fluted-640.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-fluted-320.jpg"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/sw-fluted-640.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAACQBACdASoYABgAPu1eqE6ppKOiMBgMATAdiWMAvzgPRMAzkcqEgwB1PMPhNLAA4YKfV8ZVIOqIuoCg8sPSXQtgEnKeD7DGz4ORA3n1GhUAkmx4Mgskeuhwooq3dtSAAAA="
+  },
+  "sw-stone": {
+    "key": "sw-stone",
+    "width": 480,
+    "height": 480,
+    "ratio": 1,
+    "sources": {
+      "avif": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-stone-320.avif"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/sw-stone-480.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-stone-320.webp"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/sw-stone-480.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-stone-320.jpg"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/sw-stone-480.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAQBACdASoYABgAPu1mqk2ppaQiMAgBMB2JaWM+ADc6P6GeoGs4jhgVgAD+7f6f+cwxdYqIyLpdhlsGyqt6FNpggQeKA2UMBl75MBZQa5UJyvZ2otjP8Ljo0oAAAA=="
+  },
+  "sw-lattice": {
+    "key": "sw-lattice",
+    "width": 480,
+    "height": 480,
+    "ratio": 1,
+    "sources": {
+      "avif": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-lattice-320.avif"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/sw-lattice-480.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-lattice-320.webp"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/sw-lattice-480.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-lattice-320.jpg"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/sw-lattice-480.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAACwAwCdASoYABgAPu1or1AppaSiqAqpMB2JQBgbgrDkhy9TEu2+aAD+6dsd4rEcffs7fqQLaR7WUVF1GU/r7yhrxw7pP1PjQcIAWEAOHgkZDNUyEzzAKHSyGRAxgF7k6FAvqxY5KW+sTOopwAA="
+  },
+  "sw-gloss": {
+    "key": "sw-gloss",
+    "width": 640,
+    "height": 640,
+    "ratio": 1,
+    "sources": {
+      "avif": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-gloss-320.avif"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/sw-gloss-640.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-gloss-320.webp"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/sw-gloss-640.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-gloss-320.jpg"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/sw-gloss-640.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAABwBACdASoYABgAPu1sq08ppqOwMBgIAgAdiWcAyJgRAT3d2n0d4EkRwMJ1YAD+1IAimbwgIeARSC3ERFSn3CZSUO7k+jW/t/waEVwOH4KhrBAA"
+  },
+  "sw-moulding": {
+    "key": "sw-moulding",
+    "width": 640,
+    "height": 640,
+    "ratio": 1,
+    "sources": {
+      "avif": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-moulding-320.avif"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/sw-moulding-640.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-moulding-320.webp"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/sw-moulding-640.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-moulding-320.jpg"
+        },
+        {
+          "w": 640,
+          "src": "/images/inarch/sw-moulding-640.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAwCdASoYABgAPu1kqU2ppaOiMAgBMB2JZwDHMC8vk7SrMxt4AAD+7P15wpGXZR1efCB++IK4HwMvapTZoTnnRQ4AAA=="
+  },
+  "sw-tufting": {
+    "key": "sw-tufting",
+    "width": 480,
+    "height": 480,
+    "ratio": 1,
+    "sources": {
+      "avif": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-tufting-320.avif"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/sw-tufting-480.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-tufting-320.webp"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/sw-tufting-480.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 320,
+          "src": "/images/inarch/sw-tufting-320.jpg"
+        },
+        {
+          "w": 480,
+          "src": "/images/inarch/sw-tufting-480.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQBACdASoYABgAPu1qr1CppaQqqAqpUB2JZwDDNA9nbfoLh9S9MGaDEs6+V37UwAD+wFO782EvN1GyBcMneHJcFb8eNS4LkBVLMdLYTizbr1V2EAnoAA=="
+  },
+  "og-source": {
+    "key": "og-source",
+    "width": 1200,
+    "height": 630,
+    "ratio": 1.9048,
+    "sources": {
+      "avif": [
+        {
+          "w": 1200,
+          "src": "/images/inarch/og-source-1200.avif"
+        }
+      ],
+      "webp": [
+        {
+          "w": 1200,
+          "src": "/images/inarch/og-source-1200.webp"
+        }
+      ],
+      "jpg": [
+        {
+          "w": 1200,
+          "src": "/images/inarch/og-source-1200.jpg"
+        }
+      ]
+    },
+    "placeholder": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAAAQBACdASoYAA0APu1kqk2ppaQiMAgBMB2JQBdgA9HcKA+tXLdFFOUeQAD+04dkrEZjFPSSZCu3MXK4BKpyXb3gPVGGxhz1A+yztQywexWOjb5+KAHe2YBBCBt5lQUfPzA/ocn/LT+ewdMvoxgAAA=="
+  }
+}

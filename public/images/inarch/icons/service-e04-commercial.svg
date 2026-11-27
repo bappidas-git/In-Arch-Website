@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="M7 42L7 8L20 8L20 42" vector-effect="non-scaling-stroke"/>
+  <path d="M11 15L16 15" vector-effect="non-scaling-stroke"/>
+  <path d="M11 22L16 22" vector-effect="non-scaling-stroke"/>
+  <path d="M11 29L16 29" vector-effect="non-scaling-stroke"/>
+  <path d="M4 42L44 42" vector-effect="non-scaling-stroke"/>
+  <path d="M24 25L42 25" vector-effect="non-scaling-stroke"/>
+  <path d="M27.5 25L27.5 39" vector-effect="non-scaling-stroke"/>
+  <path d="M33 25L33 39" vector-effect="non-scaling-stroke"/>
+  <path d="M38.5 25L38.5 39" vector-effect="non-scaling-stroke"/>
+  <path d="M24 39L42 39" vector-effect="non-scaling-stroke"/>
+  <path d="M23 22L33 15.5L43 22Z" stroke="var(--ia-accent-display, currentColor)" vector-effect="non-scaling-stroke"/>
+</svg>

@@ -1,0 +1,297 @@
+/* ============================================
+   Design Lab — "Assets & content" (development only)
+   Tokens and tone variables only; no legacy names.
+   ============================================ */
+
+.block {
+  display: grid;
+  gap: var(--ia-space-6);
+  padding-top: var(--ia-space-12);
+  min-width: 0;
+}
+
+.tonePanel {
+  min-width: 0;
+  padding: var(--ia-space-6) var(--ia-space-5);
+  border: 1px solid var(--ia-line);
+}
+
+.toneStack {
+  display: grid;
+  gap: var(--ia-space-4);
+}
+
+.toneGrid {
+  display: grid;
+  gap: var(--ia-space-4);
+}
+
+@media (min-width: 1024px) {
+  .toneGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.figure {
+  display: grid;
+  gap: var(--ia-space-3);
+  min-width: 0;
+}
+
+.caption {
+  display: grid;
+  gap: var(--ia-space-2);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.wrap {
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Brand files ---------- */
+.scrollRow {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: var(--ia-space-4);
+  padding-bottom: var(--ia-space-2);
+}
+
+.logoRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--ia-space-6);
+}
+
+.logoItem {
+  display: grid;
+  justify-items: start;
+  gap: var(--ia-space-2);
+}
+
+.clear {
+  display: block;
+  outline: 1px dashed var(--ia-line-strong);
+  outline-offset: -1px;
+}
+
+.clear img {
+  display: block;
+  max-width: none;
+}
+
+/* ---------- Photographs ---------- */
+.photoGrid {
+  display: grid;
+  gap: var(--ia-space-10) var(--ia-space-6);
+}
+
+@media (min-width: 768px) {
+  .photoGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .photoGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.photo {
+  width: 100%;
+  height: auto;
+  background-color: var(--ia-stone);
+  background-size: cover;
+  background-position: center;
+}
+
+.bytes {
+  border-collapse: collapse;
+  font-size: var(--ia-fs-caption);
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  caption-side: top;
+  text-align: left;
+}
+
+.bytes caption {
+  padding-bottom: var(--ia-space-2);
+}
+
+.bytes th,
+.bytes td {
+  padding: var(--ia-space-1) var(--ia-space-3) var(--ia-space-1) 0;
+  border-bottom: 1px solid var(--ia-line);
+  font-weight: 400;
+  text-align: left;
+}
+
+.bytes thead th {
+  font-weight: 600;
+}
+
+/* ---------- Swatches ---------- */
+.swatchGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ia-space-6) var(--ia-space-4);
+}
+
+@media (min-width: 768px) {
+  .swatchGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .swatchGrid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Icons ---------- */
+.icon {
+  display: inline-block;
+  flex: none;
+  color: var(--ia-fg);
+}
+
+.icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.iconList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+  gap: var(--ia-space-4) var(--ia-space-6);
+  margin-top: var(--ia-space-4);
+}
+
+.iconRow {
+  display: grid;
+  gap: var(--ia-space-2);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.iconSizes {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--ia-space-4);
+}
+
+/* ---------- Animated icons ---------- */
+.lottieGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr));
+  gap: var(--ia-space-6) var(--ia-space-4);
+  margin-top: var(--ia-space-4);
+}
+
+.lottieCard {
+  display: grid;
+  justify-items: start;
+  gap: var(--ia-space-2);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.lottie {
+  display: block;
+  color: var(--ia-fg);
+}
+
+.lottie svg {
+  display: block;
+}
+
+/* The Lottie files carry espresso and terracotta; these follow the tone
+   (lottie-web puts each layer's `cl` on its <g>). */
+.lottie :global(.ia-l-ink) path[stroke] {
+  stroke: currentColor;
+}
+
+.lottie :global(.ia-l-ink) path[fill]:not([fill-opacity='0']) {
+  fill: currentColor;
+}
+
+.lottie :global(.ia-l-accent) path[stroke] {
+  stroke: var(--ia-accent-display);
+}
+
+.lottie :global(.ia-l-accent) path[fill]:not([fill-opacity='0']) {
+  fill: var(--ia-accent-display);
+}
+
+/* ---------- Illustrations ---------- */
+.illustrationGrid {
+  display: grid;
+  gap: var(--ia-space-4);
+}
+
+@media (min-width: 768px) {
+  .illustrationGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .illustrationGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.illustration {
+  width: 100%;
+  max-width: 20rem;
+  height: auto;
+}
+
+/* ---------- Content dump ---------- */
+.dumpBlock {
+  display: grid;
+  gap: var(--ia-space-4);
+  max-width: var(--ia-measure);
+  padding-top: var(--ia-space-8);
+  border-top: 1px solid var(--ia-line);
+  overflow-wrap: anywhere;
+}
+
+.dumpList {
+  display: grid;
+  gap: var(--ia-space-4);
+}
+
+.bullets {
+  display: grid;
+  gap: var(--ia-space-1);
+  padding-left: var(--ia-space-5);
+  list-style: disc;
+}
+
+.facts {
+  display: grid;
+  gap: var(--ia-space-1) var(--ia-space-6);
+}
+
+.facts dd {
+  margin: 0 0 var(--ia-space-3);
+}
+
+@media (min-width: 768px) {
+  .facts {
+    grid-template-columns: 11rem minmax(0, 1fr);
+  }
+
+  .facts dd {
+    margin: 0;
+  }
+}
+
+.missing {
+  color: var(--ia-fg-3);
+}
