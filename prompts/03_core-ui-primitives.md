@@ -4,7 +4,7 @@
 
 ## Depends on
 
-Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt. If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
+Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
 - **Prompt 01** — tokens, base layer, `src/motion`, the Design Lab and the QA scripts exist (`src/styles/inarch/base.css`, `src/motion/useMotionScope.js`, `src/lab/LabPage.jsx`, `scripts/qa/public-check.js`).
 - **Prompt 02** — brand files, image manifest, icons, illustrations and data modules exist (`public/images/brand/inarch-wordmark-on-light-1383.png`, `src/data/imageManifest.json`, `src/data/images.js`, `src/data/services.js`, `public/images/inarch/icons/`).

@@ -4,7 +4,7 @@
 
 ## Depends on
 
-Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt. If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
+Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
 - **Prompt 01** — tokens, base layer, motion, QA scripts.
 - **Prompt 02** — `studio` and its helpers (`studioTelHref`, `studioWhatsAppHref`, `studioMailHref`) in `src/data/siteConfig.js`; `serviceTitles` and `SOMETHING_ELSE` in `src/data/services.js`; the `enquiry-sent` illustration and the "done" Lottie icon.
@@ -104,7 +104,7 @@ Phone is required and email optional by default (owner decision D-08) — the re
 ### 3. Result states — inline, never a pop-up
 
 - **Success** (replaces the form; `role="status"`; focus moves to its heading): the `enquiry-sent` illustration at 120 px (or the "done" Lottie icon, played once), heading in `.ia-t-display-sm` "Thank you, {first name}.", body "Your enquiry has reached the studio. We will call you on +91 {mobile} to arrange an initial consultation." — no promised response time, because none was supplied. Actions: `Button` secondary "Message us on WhatsApp" and, in the modal, `TextLink` "Close".
-- **Duplicate** (the API answers `{ duplicate: true }` when that mobile number is already stored, and does not save the new enquiry): `Notice` `info` above the untouched form — "We already have an enquiry from this number." / "The studio has your earlier details. To add to it, send this brief on WhatsApp or call us." Actions: "Send this brief on WhatsApp" (`studioWhatsAppHref` pre-filled with name, service and the composed message), "Call +91 72928 31128". Nothing the visitor typed is cleared.
+- **Duplicate** (the API answers `{ duplicate: true }` when that mobile number is already stored, and does not save the new enquiry — a rule in the frozen `leads.php` that owner decision D-19 leaves as it is): `Notice` `info` above the untouched form — "We already have an enquiry from this number." / "The studio has your earlier details. To add to it, send this brief on WhatsApp or call us." Actions: "Send this brief on WhatsApp" (`studioWhatsAppHref` pre-filled with name, service and the composed message), "Call +91 72928 31128". Nothing the visitor typed is cleared.
 - **Failure** (network or server error): `Notice` `error` with the message `submitLeadToWebhook` returns, and the actions "Try again", "Send on WhatsApp instead" (same pre-filled brief) and "Call". Values stay.
 
 ### 4. The modal

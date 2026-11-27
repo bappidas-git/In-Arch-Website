@@ -4,7 +4,7 @@
 
 ## Depends on
 
-Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt. If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
+Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
 - **Prompt 01** — tokens, base layer, `src/motion`, `src/surfaces/SurfaceManager.jsx`, the `data-surface` attribute and the QA scripts exist.
 - **Prompt 02** — `studio` in `src/data/siteConfig.js`, the six files in `public/images/brand/`, `src/data/services.js`, `src/data/credits.js` and the image manifest exist.
@@ -132,7 +132,7 @@ Because the dock is fixed to the bottom, the public document gets `scroll-paddin
 
 - Opening line: the ivory lockup (44 px tall on phones, 56 px from 768) and `studio.blurb`, with one quiet action beside it — "Have a project in mind?" + `TextLink` "Start a project" (lead modal, source `footer-cta`). No large CTA band here: pages end in their own way.
 - Four groups — stacked on phones, two columns from 768, four across the 12-column grid from 1024: **Explore** (the six `NAV_LINKS`); **Services** (the seven service titles, each linking to `/expertise#e0N`); **Visit** (address from `studio.address`, "From 10:00 AM" from `studio.hours`, `TextLink` "Get directions" → `studioMapsHref`); **Talk** (phone as `tel:`, WhatsApp, and the email only if `studio.email` is set). Any empty value renders nothing.
-- Legal row in `.ia-t-caption`: "© {year} In-Arch Architects & Interior Designer. All rights reserved." · the existing developer credit from `siteConfig.developer` (new-tab link with the screen-reader note, as today) · the "Icons by Icons8" link from `credits.js` when it is required · a "Back to top" `IconButton`.
+- Legal row in `.ia-t-caption`: "© {year} In-Arch Architects & Interior Designer. All rights reserved." · the existing developer credit from `siteConfig.developer` (new-tab link with the screen-reader note, as today; owner decision D-15 keeps it) · the "Icons by Icons8" link from `credits.js` when it is required · a "Back to top" `IconButton`.
 
 ### 6. Page transitions
 

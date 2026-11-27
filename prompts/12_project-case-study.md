@@ -4,7 +4,7 @@
 
 ## Depends on
 
-Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt. If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
+Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
 - **Prompts 01–05** — design system; `src/data/projects.js` (each project: `slug`, `title`, `category`, `projectType`, `scope`, `focus`, `summary`, `images`, optional `location` / `area` / `year` / `client`, `verified`); the `pr-*-cover-*`, `g-*` and `sw-*` image keys; the kit (`Frame`, `Figure`, `FactList`, `Portal`, `useFocusTrap`, `useScrollLock`, `IconButton`); the shell; the lead modal with the source pattern `project-<slug>`.
 - **Prompt 11** — the Portfolio listing exists and its tiles link to `/portfolio/<slug>`; that route still renders `PendingPage`, which this prompt replaces and then removes.

@@ -4,7 +4,7 @@
 
 ## Depends on
 
-Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt. If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
+Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
 - **Prompts 01–05** — design system; `src/data/projects.js` (`categories`, seven `projects`) and the `pr-*-cover-tall` / `pr-*-cover-wide` image keys; the `nothing-here` illustration; the kit (`ProjectTile`, `Chip`, `Illustration`); the shell, where "Portfolio" is the fifth navigation item and `/portfolio` currently renders `PendingPage`; the lead modal with its source name `portfolio-invite`.
 - **Prompts 06–10** — Home, Studio, Expertise and Interior Design are finished and already link to `/portfolio` and `/portfolio/<slug>`.

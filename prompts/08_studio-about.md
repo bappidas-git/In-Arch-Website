@@ -4,7 +4,7 @@
 
 ## Depends on
 
-Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt. If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
+Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
 - **Prompts 01–05** — design system, assets and data (`src/data/studioContent.js`, image keys `studio-band-wide`, `studio-band-tall`, `studio-detail`), the kit, the shell and the lead modal.
 - **Prompts 06–07** — the Home page is finished; its principal block links to `/about#principal`, which this prompt must provide.
@@ -100,8 +100,8 @@ Rhythm: **light** type-led hero with one photographic band → **light** reading
 - Eyebrow "04 — Principal architect"; `h2` `.ia-t-display-lg`: "Ar. Mohammad *Hassanuddin.*"; `.ia-t-label`: "Principal Architect & Founder".
 - The biography paragraphs from `studioContent`, verbatim.
 - A statement set apart in `.ia-t-display-sm` — in the third person and **without quotation marks**, because it is the document's description of him, not his words: "He believes in continuously improving design skills, exploring new ideas and delivering projects with a strong focus on functionality and aesthetics."
-- `FactList` "Credentials" — the five from the PDF. A compact table "Experience" — organisation, role, period — in the PDF's order; the Zenith row shows no period. "Education" — B.Arch, Piloo Mody College of Architecture (PMCA), Cuttack, Odisha.
-- **The portrait slot.** No photograph of the principal was supplied, so the slot (4:5, columns 1–5 on desktop, full width on phones, above the name) renders a typographic plate: a forest panel with the ivory "IA" mark at 72 px, centred, and `.ia-t-label` "Principal Architect" at the bottom. When `studio.principal.portrait` holds an image key, the same slot renders that `Picture` instead — no layout change. Never substitute a stock photograph of a person.
+- `FactList` "Credentials" — the five from the PDF. A compact table "Experience" — organisation, role, period — in the PDF's order; the Zenith row shows no period (owner decision D-23). "Education" — B.Arch, Piloo Mody College of Architecture (PMCA), Cuttack, Odisha.
+- **The portrait slot** (owner decision D-11). No photograph of the principal was supplied, so the slot (4:5, columns 1–5 on desktop, full width on phones, above the name) renders a typographic plate: a forest panel with the ivory "IA" mark at 72 px, centred, and `.ia-t-label` "Principal Architect" at the bottom. When `studio.principal.portrait` holds an image key, the same slot renders that `Picture` instead — no layout change. Never substitute a stock photograph of a person.
 - **Desktop:** plate in columns 1–5, sticky; name, biography, statement and lists in columns 7–12.
 
 ### Section 6 — Visit and talk (`tone="dark"`) — how Studio ends

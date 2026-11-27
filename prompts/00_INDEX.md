@@ -293,8 +293,11 @@ Audit prompts (16–20) own site-wide passes, not surfaces; they fix what they f
 | `SEOHead` and SEO config — site level | 04 | each page prompt owns its own entry; FAQ schema 09; project schema 12 |
 | Static SEO fallback, sitemap, robots, domain handling | 18 | |
 | `ErrorBoundary`, route-loading fallback, no-JavaScript message | 14 | |
-| `ScrollManager` | preserved | one guard added in 11 for the filter |
+| `ScrollManager` and `src/utils/hashScroll.js` | preserved | 04 changes one constant (the header offset); 11 adds one guard for the filter |
+| `ThemeContext` | preserved | the admin relies on it; 04 adds one guard |
+| `reportWebVitals` (web-vitals logging) | preserved | |
 | Legacy CSS, old fonts, MUI providers | 14 | relocated to the admin surface, never edited |
+| Old public code: `src/animations/`, `src/styles/layout.module.css`, `src/utils/swalHelper.js` and the `sweetalert2` package, leftover page files | 14 | each page prompt deletes the sections it replaces; `gsapSetup.js` moves to `src/motion/` |
 | **Flows** | | |
 | Enquiry through the modal; duplicate, failure and success handling; draft; honeypot | 05 | |
 | Enquiry through the inline form on Contact | 13 | same component as 05 |
@@ -318,8 +321,13 @@ Audit prompts (16–20) own site-wide passes, not surfaces; they fix what they f
 | Legacy `siteConfig` keys | 14 | admin-bound keys in 15 |
 | `expertiseData.js` | 15 | becomes an adapter (D-02) |
 | `industriesData.js` | 11 | deleted |
+| Old images in `public/images/` (hero and band photographs, `icons/`) | 14 | deleted; the two old logo files in `public/images/logo/` that the admin uses go in 15 |
+| Icon and Open Graph generator scripts (`scripts/generate-icons.js`, `generate-og.js`) | 04 | `scripts/generate-images.js` is deleted in 14 |
 | **Infrastructure and docs** | | |
+| `src/index.js` (entry point: providers, global CSS imports) | 14 | 01 adds one import line |
+| `src/App.jsx` (route table, lazy routes, wrappers) | 04 | each page prompt swaps its own route's import; 11 adds the redirect and the scroll guard; 14 the states and the surface split |
 | `public/index.html` | 04 | 01 adds the surface attribute; 06 the hero preload; 14 admin-only fonts; 15 removes the admin branch; 18 the static SEO |
+| `package.json` (dependencies and scripts), `.gitignore` | 01 | later prompts add only what they name; 14 removes `sweetalert2`; 20 tidies the metadata |
 | `public/.htaccess` | 18 | one added line (font caching) |
 | `public/api/leads.php`, `.env` | none | never edited |
 | QA scripts | 01 | 05 adds lead-flow; 18 adds perf-check |
@@ -392,37 +400,37 @@ Rule: one editorial placement per photograph across the whole site, plus its own
 
 ## 12. Owner decisions
 
-Write your answer in the last column; an empty cell means the default applies. Prompts read this table before doing anything.
+Write your answer in the last column; an empty cell means the default applies. Every prompt reads this table before doing anything. "First needed by" is the earliest prompt that uses the answer — an answer that arrives later is still picked up (facts live in one place, `src/data/`, and each session reconciles that data with this table before it starts), but answering early avoids rework.
 
-| Id | Decision | Default the prompts use | Your answer |
-|---|---|---|---|
-| D-01 | When the admin logo is swapped, also change the brand name the admin prints beside it (login title, dashboard heading and footer line, mobile-menu footer, Guidelines subtitle, tab title)? It is the same shared value as the logo's alt text. | **Yes** — "IN-ARCH" / "In-Arch Architects & Interior Designer", in prompt 15, with no admin file edited. "No" leaves "Dulcey Lead Services" beside the new logo. | |
-| D-02 | Should the admin's "Interested In" filter list become the site's seven services? | **Yes**, in prompt 15 (via the shared export). "No" leaves the ten old consulting titles in the list; new values still appear after them once leads exist. | |
-| D-03 | Email address to publish. | **None** — every email row and link stays hidden. The dummy shows `inarcharchitect@gmail.com`; confirm it or give the right one. | |
-| D-04 | Postal address. | "Boring Road, Patna, Bihar, India" (the PDF). The dummy shows "R.P. Complex, Boring Road"; building, floor and PIN code are unknown. | |
-| D-05 | The site's domain. | **Not set.** Run-time tags use the current origin; static files carry `https://SITE-URL-NOT-SET.invalid` until `scripts/set-site-url.js` is run. Go-live blocker. | |
-| D-06 | Is the seven-service list correct, and are all seven actively offered? | The PDF's seven (A–G), exactly. | |
-| D-07 | Projects: the 13 photographs are grouped into seven projects by what they show, with descriptive titles and no location, area, year or client. Correct the grouping, and supply real names and facts if you want them shown. | Seven descriptive entries, marked unverified internally. | |
-| D-08 | Form: phone required and email optional (the boilerplate had it the other way round). | **Phone required, email optional.** | |
-| D-09 | Budget options in the form. | Under ₹10 lakh · ₹10–25 lakh · ₹25–50 lakh · ₹50 lakh–₹1 crore · Above ₹1 crore · Not sure yet. | |
-| D-10 | Tagline. | "Designing Spaces. Shaping Experiences." (PDF suggestion). The dummy used "Spaces for a better tomorrow." | |
-| D-11 | Principal's portrait and a quotation in his own words. | **Neither**: a typographic plate in the portrait slot; no quotation (the dummy's was invented). | |
-| D-12 | Social profiles and the Google Business Profile link. | **Hidden** until supplied. Ratings are never hard-coded; with a profile link a plain "Read our reviews on Google" link appears. | |
-| D-13 | Do you hold a paid Icons8 licence? | **No** — a visible "Icons by Icons8" link is shown in the footer, as the free licence requires. | |
-| D-14 | Opening hours. | "From 10:00 AM" only (days and closing time are unknown). | |
-| D-15 | Keep the developer credit in the footer ("Designed & Developed by Assam Digital")? | **Keep** — it exists today. | |
-| D-16 | Exact map location (a Google Maps share link, plus code or coordinates). | The map and directions search for the studio's name on Boring Road; prompt 13 must verify the result or flag it. | |
-| D-17 | `/industries` ("Who We Serve"). | **Forwards to `/portfolio`.** Say so if you want a standalone sectors page instead. | |
-| D-18 | Analytics / tag manager IDs. | **None installed**; a `dataLayer` hook is prepared so one can be attached later. | |
-| D-19 | The lead store treats a second enquiry from the same mobile number as a duplicate and does not save it. With phone required, a returning client's new enquiry is not stored. | **Leave as is** (the API is frozen); the form then hands the full brief to WhatsApp so it still reaches the studio. Changing the rule means editing `leads.php`. | |
-| D-20 | The admin's Guidelines tab documents the previous client's site (its domain, colours, fonts, file names); the Guidelines password and the admin username carry the old name. | **Untouched** — outside "logo only". Listed in the final report. | |
-| D-21 | The dummy's project names (The Courtyard House, Urban Calm, The Avenue, The Workspace, Green Land Hospital, The Dining Room). | **Not used** — they are invented names over stock photographs. | |
-| D-22 | Use the wordmark without its descriptor line wherever the logo is under 44 px tall (the dock, phone masthead and all admin placements)? | **Yes** — the descriptor is illegible at those sizes. | |
-| D-23 | The "Zenith — Project Architect" entry, whose dates the PDF marks "to be confirmed". | Listed without dates. | |
+| Id | Decision | Default the prompts use | First needed by prompt | Your answer |
+|---|---|---|---|---|
+| D-01 | When the admin logo is swapped, also change the brand name the admin prints beside it (login title, dashboard heading and footer line, mobile-menu footer, Guidelines subtitle, tab title)? It is the same shared value as the logo's alt text. | **Yes** — "IN-ARCH" / "In-Arch Architects & Interior Designer", in prompt 15, with no admin file edited. "No" leaves "Dulcey Lead Services" beside the new logo. | 15 | |
+| D-02 | Should the admin's "Interested In" filter list become the site's seven services? | **Yes**, in prompt 15 (via the shared export). "No" leaves the ten old consulting titles in the list; new values still appear after them once leads exist. | 15 | |
+| D-03 | Email address to publish. | **None** — every email row and link stays hidden. The dummy shows `inarcharchitect@gmail.com`; confirm it or give the right one. | 02 | |
+| D-04 | Postal address. | "Boring Road, Patna, Bihar, India" (the PDF). The dummy shows "R.P. Complex, Boring Road"; building, floor and PIN code are unknown. | 02 | |
+| D-05 | The site's domain. | **Not set.** Run-time tags use the current origin; static files carry `https://SITE-URL-NOT-SET.invalid` until `scripts/set-site-url.js` is run. Go-live blocker. | 02; final at 18 | |
+| D-06 | Is the seven-service list correct, and are all seven actively offered? | The PDF's seven (A–G), exactly. | 02 | |
+| D-07 | Projects: the 13 photographs are grouped into seven projects by what they show, with descriptive titles and no location, area, year or client. Correct the grouping, and supply real names and facts if you want them shown. | Seven descriptive entries, marked unverified internally. | 02 | |
+| D-08 | Form: phone required and email optional (the boilerplate had it the other way round). | **Phone required, email optional.** | 05 | |
+| D-09 | Budget options in the form. | Under ₹10 lakh · ₹10–25 lakh · ₹25–50 lakh · ₹50 lakh–₹1 crore · Above ₹1 crore · Not sure yet. | 05 | |
+| D-10 | Tagline. | "Designing Spaces. Shaping Experiences." (PDF suggestion). The dummy used "Spaces for a better tomorrow." | 02 | |
+| D-11 | Principal's portrait and a quotation in his own words. | **Neither**: a typographic plate in the portrait slot; no quotation (the dummy's was invented). | 07 | |
+| D-12 | Social profiles and the Google Business Profile link. | **Hidden** until supplied. Ratings are never hard-coded; with a profile link a plain "Read our reviews on Google" link appears. | 02 | |
+| D-13 | Do you hold a paid Icons8 licence? | **No** — a visible "Icons by Icons8" link is shown in the footer, as the free licence requires. | 02 | |
+| D-14 | Opening hours. | "From 10:00 AM" only (days and closing time are unknown). | 02 | |
+| D-15 | Keep the developer credit in the footer ("Designed & Developed by Assam Digital")? | **Keep** — it exists today. | 04 | |
+| D-16 | Exact map location (a Google Maps share link, plus code or coordinates). | The map and directions search for the studio's name on Boring Road; prompt 13 must verify the result or flag it. | 02 | |
+| D-17 | `/industries` ("Who We Serve"). | **Forwards to `/portfolio`.** Say so if you want a standalone sectors page instead. | 11 | |
+| D-18 | Analytics / tag manager IDs. | **None installed**; a `dataLayer` hook is prepared so one can be attached later. | 19 | |
+| D-19 | The lead store treats a second enquiry from the same mobile number as a duplicate and does not save it. With phone required, a returning client's new enquiry is not stored. | **Leave as is** (the API is frozen); the form then hands the full brief to WhatsApp so it still reaches the studio. Changing the rule means editing `leads.php`. | 05 | |
+| D-20 | The admin's Guidelines tab documents the previous client's site (its domain, colours, fonts, file names); the Guidelines password and the admin username carry the old name. | **Untouched** — outside "logo only". Listed in the final report. | 15 | |
+| D-21 | The dummy's project names (The Courtyard House, Urban Calm, The Avenue, The Workspace, Green Land Hospital, The Dining Room). | **Not used** — they are invented names over stock photographs. | 02 | |
+| D-22 | Use the wordmark without its descriptor line wherever the logo is under 44 px tall (the dock, phone masthead and all admin placements)? | **Yes** — the descriptor is illegible at those sizes. | 04 | |
+| D-23 | The "Zenith — Project Architect" entry, whose dates the PDF marks "to be confirmed". | Listed without dates. | 02 | |
 
 ## 13. Open questions, assumptions and content gaps
 
-**Questions that change what gets built** — D-01, D-02, D-05, D-06, D-07 above. Please answer these before prompts 05, 11 and 15 respectively.
+**Questions that change what gets built** — D-06 (the service list) and D-07 (the projects) shape the data model in prompt 02 and every page after it; D-01 and D-02 decide what prompt 15 does to the admin; D-05 (the domain) is a go-live blocker that prompt 18 needs. Everything else has a safe default.
 
 **Assumptions made**
 

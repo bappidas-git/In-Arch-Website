@@ -4,7 +4,7 @@
 
 ## Depends on
 
-Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt. If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
+Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
 - **Prompts 01–14** — all finished; in particular prompt 02 (the brand files in `public/images/brand/`, `src/data/services.js` with `serviceTitles`), prompt 04 (the surface-aware boot in `public/index.html`: the admin still gets the old splash and, from `public/legacy-icons/`, the old tab icon) and prompt 14 (the public site no longer reads any legacy `siteConfig` key; the admin loads through `src/surfaces/AdminSurface.jsx`; the build log says whether the surface split was kept or reverted — either state is fine for this prompt).
 - Read the answers to owner decisions **D-01**, **D-02** and **D-22** in `prompts/00_INDEX.md` before touching anything; the defaults are restated below.

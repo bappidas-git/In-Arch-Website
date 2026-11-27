@@ -4,7 +4,7 @@
 
 ## Depends on
 
-Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt. If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
+Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
 - **Prompts 01–04** — design system; `studio` and its helpers (`studioTelHref`, `studioWhatsAppHref`, `studioMailHref`, `studioMapsHref`) and the image key `contact-nook`; the kit; the shell — including the dock rule that on `/contact` its button reads "Write to us" and scrolls to `#enquiry`.
 - **Prompt 05** — `UnifiedLeadForm` with `variant="full"`, its inline success / duplicate / failure states and `scripts/qa/lead-flow.js`. The old Contact page already renders this new form inside its old panel; this prompt replaces everything around it.

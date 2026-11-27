@@ -4,7 +4,7 @@
 
 ## Depends on
 
-Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt. If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
+Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
 - **Prompts 01–05** — design system; `src/data/services.js` (ids `e01`–`e07`), `process.js`, `faqs.js`, `studioContent.js` (the seven differentiators); the Icons8 icons and Lottie files; image keys `expertise-interiors`, and `expertise-atmosphere` / `expertise-drawing` if prompt 02's build log says the open-licence photographs were obtained; the kit (`Accordion`, `LottieIcon`, `Chip`); the shell; the lead modal with its source names `expertise-e01` … `expertise-e07` and `expertise-closing`.
 - **Prompts 06–08** — Home and Studio are finished; Home's service ledger links to `/expertise#e01` … `#e07` and its process link to `/expertise#process`, which this prompt must honour.

@@ -4,7 +4,7 @@
 
 ## Depends on
 
-Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt. If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
+Before writing anything, read in this order: `prompts/00_INDEX.md` (at least "Owner decisions", "Design direction" and "Build architecture"), then `prompts/BUILD_LOG.md` (what earlier sessions really did, including deviations). An owner decision recorded in the index overrides any default written in this prompt; if an answer there disagrees with what the modules in `src/data/` currently hold, bring the data into line first and log it (the admin-bound values named under the guardrails are the exception — only prompt 15 changes those). If the build log shows a dependency below is unfinished, stop and say so instead of improvising it.
 
 - **Prompts 01–05** — design system, assets and data, the kit, the shell and the lead modal.
 - **Prompt 06** — `src/pages/Home/HomePage.jsx` already renders the new `HeroSection` and `ManifestoSection` inside its `ia` root, followed by a non-scoped wrapper holding the four old sections (`BeliefSection`, `ExpertiseIndexSection`, `WhoWeServeSection`, `ClosingCtaSection`). This prompt replaces that wrapper.
@@ -101,7 +101,7 @@ The page's trust signal, built only from supplied facts.
 - Eyebrow "05 — Who leads the work"; `h2` `.ia-t-display-lg`: "Ar. Mohammad *Hassanuddin.*"; under it `.ia-t-label`: "Principal Architect & Founder".
 - A `FactList` with three lines from `studioContent`: "Registered Architect — Council of Architecture, India"; "Registered Architect — Patna Municipal Corporation and Gaya Municipal Corporation"; "B.Arch — Piloo Mody College of Architecture, Cuttack".
 - `TextLink` "About the principal" → `/about#principal`.
-- No portrait, no quotation, no registration number, no years of experience: none was supplied. The layout is typographic — name across columns 1–7, facts in columns 8–12 on desktop; stacked on phones.
+- No portrait, no quotation, no registration number, no years of experience: none was supplied (owner decision D-11). The layout is typographic — name across columns 1–7, facts in columns 8–12 on desktop; stacked on phones.
 
 ### Section 8 — The invitation (`tone="dark"`) — how Home ends
 
