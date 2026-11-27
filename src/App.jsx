@@ -26,6 +26,7 @@ import PublicLayout from './components/layout/PublicLayout/PublicLayout';
 import HomePage from './pages/Home/HomePage';
 import LeadModal from './components/common/LeadModal/LeadModal';
 import SEOHead from './components/common/SEO/SEOHead';
+import SurfaceManager from './surfaces/SurfaceManager';
 
 // Shared #hash → scroll helper (also used by the /expertise accordion)
 import { hashToId, scrollToHash } from './utils/hashScroll';
@@ -36,6 +37,10 @@ const ExpertisePage = lazy(() => import('./pages/Expertise/ExpertisePage'));
 const IndustriesPage = lazy(() => import('./pages/Industries/IndustriesPage'));
 const ContactPage = lazy(() => import('./pages/Contact/ContactPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFound/NotFoundPage'));
+
+// IN-ARCH Design Lab — development only. In a production build the condition
+// is a constant `false`, so webpack drops the import and emits no Lab chunk.
+const LabPage = process.env.NODE_ENV === 'development' ? lazy(() => import('./lab/LabPage')) : null;
 
 // Admin — lazy, so nothing under /admin ships in the public bundle
 // (Prompt 12). The auth provider is pulled in through this same boundary
@@ -388,6 +393,9 @@ const App = () => {
             {/* Route-change scrolling (top, or to a #hash target) */}
             <ScrollManager />
 
+            {/* Keeps <html data-surface="public | admin"> in step with the route */}
+            <SurfaceManager />
+
             <Routes>
               {/* Public site — one shared Dulcey shell */}
               <Route element={<PublicLayout />}>
@@ -402,6 +410,7 @@ const App = () => {
                   element={lazyRoute(<IndustriesPage />)}
                 />
                 <Route path="/contact" element={lazyRoute(<ContactPage />)} />
+                {LabPage && <Route path="/__lab" element={lazyRoute(<LabPage />)} />}
                 <Route path="*" element={lazyRoute(<NotFoundPage />)} />
               </Route>
 

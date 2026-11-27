@@ -1,0 +1,378 @@
+/* ============================================
+   Design Lab styles (development only)
+   Tokens and tone variables only; no legacy names.
+   ============================================ */
+
+.lab {
+  /* The legacy fixed header (80 px) still sits over the page until prompt 04. */
+  --ia-scroll-margin: 7rem;
+  padding-bottom: var(--ia-space-16);
+}
+
+.head {
+  display: grid;
+  gap: var(--ia-space-6);
+  padding-block: var(--ia-space-16) var(--ia-space-8);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ia-space-4);
+}
+
+.labButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--ia-space-5);
+  border: 1px solid var(--ia-line-strong);
+  border-radius: var(--ia-radius);
+  color: var(--ia-fg);
+  font-size: var(--ia-fs-label);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: background-color var(--ia-dur-2) var(--ia-ease-out), color var(--ia-dur-2) var(--ia-ease-out);
+}
+
+.labButton[aria-pressed='true'] {
+  background: var(--ia-fg);
+  color: var(--ia-bg);
+}
+
+.labButton:active {
+  transform: scale(0.98);
+}
+
+.sectionNav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--ia-space-5);
+}
+
+.sectionNav a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--ia-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+  text-decoration-thickness: 1px;
+}
+
+.section {
+  border-top: 1px solid var(--ia-line);
+}
+
+.note {
+  max-width: var(--ia-measure);
+  margin-block: var(--ia-space-4) var(--ia-space-8);
+  color: var(--ia-fg-2);
+}
+
+.lab code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95em;
+}
+
+/* ---------- Colour ---------- */
+.toneGrid {
+  display: grid;
+  gap: var(--ia-space-6);
+}
+
+@media (min-width: 1024px) {
+  .toneGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.tonePanel {
+  min-width: 0;
+  padding: var(--ia-space-6) var(--ia-space-5);
+  border: 1px solid var(--ia-line);
+}
+
+.toneTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ia-space-3);
+  text-transform: capitalize;
+}
+
+.toneTitle span {
+  text-transform: none;
+  color: var(--ia-fg-2);
+}
+
+.pairList {
+  display: grid;
+  gap: var(--ia-space-4);
+  margin-block: var(--ia-space-6) var(--ia-space-8);
+}
+
+.pairRow {
+  display: grid;
+  gap: var(--ia-space-1);
+}
+
+.pairBorder {
+  display: block;
+  width: 4rem;
+  height: 2rem;
+  border: 2px solid;
+  border-radius: var(--ia-radius);
+}
+
+.swatchGroup {
+  margin-top: var(--ia-space-6);
+}
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: var(--ia-space-3);
+  margin-top: var(--ia-space-2);
+}
+
+.swatch {
+  display: flex;
+  align-items: center;
+  gap: var(--ia-space-3);
+  min-width: 0;
+}
+
+.chip {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--ia-line);
+}
+
+/* ---------- Type ---------- */
+.typeList {
+  display: grid;
+  gap: var(--ia-space-8);
+}
+
+.typeRow {
+  display: grid;
+  gap: var(--ia-space-3);
+  padding-bottom: var(--ia-space-6);
+  border-bottom: 1px solid var(--ia-line);
+  min-width: 0;
+}
+
+.typeMeta {
+  color: var(--ia-fg-2);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Space ---------- */
+.spaceList {
+  display: grid;
+  gap: var(--ia-space-3);
+  margin-bottom: var(--ia-space-8);
+}
+
+.spaceRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--ia-space-1) var(--ia-space-4);
+}
+
+.spaceBar {
+  grid-column: 1 / -1;
+  display: block;
+  max-width: 100%;
+  height: 0.5rem;
+  background: var(--ia-accent-display);
+}
+
+@media (min-width: 768px) {
+  .spaceRow {
+    grid-template-columns: 12rem 8rem minmax(0, 1fr);
+  }
+
+  .spaceBar {
+    grid-column: auto;
+  }
+}
+
+/* ---------- Grid ---------- */
+.gridDemo {
+  margin-top: var(--ia-space-4);
+}
+
+.gridCell {
+  min-height: 6rem;
+  padding: var(--ia-space-3);
+  background: var(--ia-sand);
+  border: 1px solid var(--ia-line);
+}
+
+.spanA,
+.spanB,
+.spanC {
+  grid-column: span 4;
+}
+
+@media (min-width: 768px) {
+  .spanA { grid-column: span 5; }
+  .spanB { grid-column: span 3; }
+  .spanC { grid-column: span 8; }
+}
+
+@media (min-width: 1024px) {
+  .spanA { grid-column: span 7; }
+  .spanB { grid-column: span 5; }
+  .spanC { grid-column: span 12; }
+}
+
+.gridOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ia-z-overlay);
+  pointer-events: none;
+}
+
+.overlayInner,
+.overlayGrid {
+  height: 100%;
+}
+
+.overlayCol {
+  display: block;
+  background: rgba(181, 101, 63, 0.1);
+  box-shadow: inset 1px 0 0 rgba(181, 101, 63, 0.45), inset -1px 0 0 rgba(181, 101, 63, 0.45);
+}
+
+.overlayCol:nth-child(n + 5) {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .overlayCol:nth-child(n + 5) { display: block; }
+  .overlayCol:nth-child(n + 9) { display: none; }
+}
+
+@media (min-width: 1024px) {
+  .overlayCol:nth-child(n + 9) { display: block; }
+}
+
+/* ---------- Motion ---------- */
+.demoGrid {
+  display: grid;
+  gap: var(--ia-space-10);
+}
+
+@media (min-width: 1024px) {
+  .demoGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--ia-space-10) var(--ia-space-8);
+  }
+}
+
+.demo {
+  min-width: 0;
+  padding-top: var(--ia-space-4);
+  border-top: 1px solid var(--ia-line);
+}
+
+.demoHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ia-space-3);
+  margin-bottom: var(--ia-space-4);
+}
+
+.demoAttr {
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ia-fg-2);
+}
+
+.demoStage {
+  display: grid;
+  gap: var(--ia-space-3);
+  min-height: 8rem;
+}
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: var(--ia-stone);
+}
+
+/* Stand-in for a photograph until prompt 02 supplies the real ones. */
+.fakeImage {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(35, 27, 21, 0.08) 0 2px, transparent 2px 48px),
+    linear-gradient(160deg, var(--ia-sand) 0%, var(--ia-stone) 45%, var(--ia-forest-3) 100%);
+}
+
+.fakeImageTall {
+  inset: -8% 0;
+}
+
+/* Rests OFF the image (no-JS and reduced motion show the picture); the
+   motion hook moves it over the image before the reveal. */
+.cover {
+  position: absolute;
+  inset: 0;
+  background: var(--ia-bg);
+  transform: translateY(-101%);
+}
+
+.rule {
+  height: 1px;
+  background: var(--ia-fg);
+}
+
+/* ---------- Fonts ---------- */
+.faceList {
+  display: grid;
+  gap: var(--ia-space-1);
+  margin-block: var(--ia-space-4) var(--ia-space-6);
+}
+
+.fontCases {
+  display: grid;
+  gap: var(--ia-space-10);
+}
+
+.fontCase {
+  display: grid;
+  gap: var(--ia-space-2);
+  min-width: 0;
+}
+
+.fontPair {
+  display: grid;
+  gap: var(--ia-space-6);
+}
+
+.fontPair p {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1024px) {
+  .fontPair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

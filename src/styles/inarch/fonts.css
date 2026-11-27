@@ -1,0 +1,101 @@
+/* ============================================
+   IN-ARCH metric-matched fallback faces
+   --------------------------------------------
+   The three web-font faces ("Fraunces" roman + italic, "Manrope") are NOT
+   declared here: Create React App resolves a root-relative url("/fonts/…")
+   at build time and fails, and moving the files under src/ would give them
+   hashed names that index.html cannot preload. They live in
+   <style id="ia-fonts"> in public/index.html.
+
+   These faces only point at installed system fonts through local(), so they
+   compile and download nothing. While a web font is still loading (or if it
+   fails), text renders in Georgia / Arial scaled and re-spaced to occupy the
+   same lines, so nothing reflows when the real face swaps in.
+
+   Fraunces changes width with its optical size and weight. The design
+   contract uses weight 300 for display (≥ 40 px) and 400 for text, so the
+   fallback is split by weight and the browser's normal face matching picks
+   the right `size-adjust`. Each italic has its own pair for `.ia-accent`.
+
+   Measured (prompt 01) in Chromium against metric-compatible stand-ins —
+   Gelasio for Georgia, Liberation Sans for Arial — by comparing the advance
+   width of a 60-word paragraph, then validated on 25 paragraph/width cases at
+   16 px and 48 px: identical line breaks, block heights equal within 0.1 px.
+   ascent/descent = the web font's hhea metrics ÷ size-adjust
+   (Fraunces 1956 / 510, Manrope 2132 / 600, both 2000 UPM; line gap 0).
+   Numbers and method are recorded in prompts/BUILD_LOG.md.
+   ============================================ */
+
+/* ---------- Fraunces → Georgia ---------- */
+
+/* display: weight 300 at opsz ≈ 48 */
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia");
+  font-style: normal;
+  font-weight: 100 349;
+  size-adjust: 97.44%;
+  ascent-override: 100.37%;
+  descent-override: 26.17%;
+  line-gap-override: 0%;
+}
+
+/* text: weight 400 at opsz ≈ 16 */
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia");
+  font-style: normal;
+  font-weight: 350 900;
+  size-adjust: 104.91%;
+  ascent-override: 93.22%;
+  descent-override: 24.31%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia Italic"), local("Georgia-Italic");
+  font-style: italic;
+  font-weight: 100 349;
+  size-adjust: 89.2%;
+  ascent-override: 109.64%;
+  descent-override: 28.59%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia Italic"), local("Georgia-Italic");
+  font-style: italic;
+  font-weight: 350 900;
+  size-adjust: 96.69%;
+  ascent-override: 101.15%;
+  descent-override: 26.37%;
+  line-gap-override: 0%;
+}
+
+/* ---------- Manrope → Arial ---------- */
+
+/* body (400) and anything below the label weight */
+@font-face {
+  font-family: "Manrope Fallback";
+  src: local("Arial"), local("ArialMT");
+  font-style: normal;
+  font-weight: 100 549;
+  size-adjust: 102.34%;
+  ascent-override: 104.16%;
+  descent-override: 29.31%;
+  line-gap-override: 0%;
+}
+
+/* labels and buttons (600) */
+@font-face {
+  font-family: "Manrope Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-style: normal;
+  font-weight: 550 900;
+  size-adjust: 98.37%;
+  ascent-override: 108.37%;
+  descent-override: 30.5%;
+  line-gap-override: 0%;
+}

@@ -1,0 +1,109 @@
+/* ============================================
+   IN-ARCH design tokens
+   --------------------------------------------
+   Every value of the design contract, as `--ia-*` custom properties on
+   :root. Custom properties do nothing until something reads them, so this
+   file is inert for the legacy pages and the admin; only markup inside an
+   `.ia` scope (see base.css) or a CSS Module that opts in uses them.
+
+   Never rename a token: later prompts and the token test
+   (src/styles/inarch/__tests__/tokens.test.js) depend on these names.
+   ============================================ */
+
+:root {
+  /* ---------- Light surfaces ---------- */
+  --ia-ivory: #F4EFE7;   /* page canvas — the logo's ivory */
+  --ia-paper: #FAF7F2;   /* raised surfaces, fields */
+  --ia-sand: #E9E3D8;    /* alternate band */
+  --ia-stone: #DAD3C6;   /* placeholders only — never put ink-3 on it */
+
+  /* ---------- Dark surfaces ---------- */
+  --ia-forest: #161E19;
+  --ia-forest-2: #1E2823;
+  --ia-forest-3: #28342E; /* never put mist-2 on it */
+
+  /* ---------- Ink ---------- */
+  --ia-espresso: #231B15; /* text on light — the logo's ink */
+  --ia-ink-2: #4F453D;
+  --ia-ink-3: #6B6058;
+  --ia-mist: #B9BDB6;     /* secondary text on dark */
+  --ia-mist-2: #8E958D;   /* tertiary text on dark */
+
+  /* ---------- Accent (never a section background, ≤ ~10% of a viewport) ---------- */
+  --ia-terracotta-700: #8F4A2B; /* small text, links, button fill on light */
+  --ia-terracotta-500: #B5653F; /* display text ≥ 24px and decoration on light */
+  --ia-terracotta-300: #DDA27F; /* every accent on dark */
+
+  /* ---------- Lines ---------- */
+  --ia-hairline: #D8D0C3;
+  --ia-border: #8A7F74;       /* control border on light (≥ 3:1) */
+  --ia-hairline-dark: #28342E;
+  --ia-border-dark: #8E958D;  /* control border on dark (≥ 3:1) */
+
+  /* ---------- Feedback ---------- */
+  --ia-success: #3F6B4F;
+  --ia-success-dark: #8FBF9F;
+  --ia-error: #A4372A;
+  --ia-error-dark: #F0A090;
+
+  /* ---------- Fonts ----------
+     The three web-font faces are declared in public/index.html
+     (<style id="ia-fonts">); the two metric-matched fallbacks in fonts.css. */
+  --ia-font-serif: "Fraunces", "Fraunces Fallback", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --ia-font-sans: "Manrope", "Manrope Fallback", "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  /* ---------- Type scale (fluid; 360 px → upper clamp) ---------- */
+  --ia-fs-display-2xl: clamp(2.75rem, 1.2rem + 7.2vw, 8.5rem);      /* 45 → 136 */
+  --ia-fs-display-xl: clamp(2.5rem, 1.35rem + 5.2vw, 6.5rem);       /* 40 → 104 */
+  --ia-fs-display-lg: clamp(2rem, 1.3rem + 3.2vw, 4.5rem);          /* 32 → 72 */
+  --ia-fs-display-md: clamp(1.625rem, 1.25rem + 1.7vw, 2.75rem);    /* 26 → 44 */
+  --ia-fs-display-sm: clamp(1.375rem, 1.2rem + 0.8vw, 1.875rem);    /* 22 → 30 */
+  --ia-fs-body-lg: clamp(1.0625rem, 0.98rem + 0.38vw, 1.3125rem);   /* 17 → 21 */
+  --ia-fs-body: clamp(1rem, 0.97rem + 0.14vw, 1.0625rem);           /* 16 → 17 */
+  --ia-fs-small: 0.875rem;   /* 14 */
+  --ia-fs-caption: 0.8125rem; /* 13 */
+  --ia-fs-label: 0.75rem;    /* 12, uppercase, 600, 0.18em */
+
+  /* ---------- Space (4 px base) ---------- */
+  --ia-space-1: 0.25rem;  /* 4 */
+  --ia-space-2: 0.5rem;   /* 8 */
+  --ia-space-3: 0.75rem;  /* 12 */
+  --ia-space-4: 1rem;     /* 16 */
+  --ia-space-5: 1.25rem;  /* 20 */
+  --ia-space-6: 1.5rem;   /* 24 */
+  --ia-space-8: 2rem;     /* 32 */
+  --ia-space-10: 2.5rem;  /* 40 */
+  --ia-space-12: 3rem;    /* 48 */
+  --ia-space-16: 4rem;    /* 64 */
+  --ia-space-20: 5rem;    /* 80 */
+  --ia-space-24: 6rem;    /* 96 */
+  --ia-space-32: 8rem;    /* 128 */
+  --ia-space-40: 10rem;   /* 160 */
+  --ia-space-48: 12rem;   /* 192 */
+
+  /* ---------- Layout ---------- */
+  --ia-section-y: clamp(5rem, 3rem + 9vw, 12rem);          /* 80 → 192 */
+  --ia-section-y-sm: clamp(3.5rem, 2.5rem + 4.5vw, 7.5rem); /* 56 → 120 */
+  --ia-gutter: clamp(1.25rem, 0.5rem + 3.4vw, 5rem);       /* 20 at 360, 57 at 1440 */
+  --ia-max: 105rem;        /* 1680 px */
+  --ia-measure: 68ch;
+  --ia-radius: 2px;        /* buttons, fields, the dock — imagery and sections stay square */
+  --ia-dock-clearance: 6rem;
+
+  /* ---------- Motion ---------- */
+  --ia-dur-1: 150ms;  /* press */
+  --ia-dur-2: 240ms;  /* colour */
+  --ia-dur-3: 400ms;  /* wipes and UI */
+  --ia-dur-4: 700ms;  /* reveals */
+  --ia-dur-5: 1000ms; /* headlines and image shutters */
+  --ia-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ia-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ia-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ---------- Elevation / layers ---------- */
+  --ia-shadow-overlay: 0 24px 60px rgba(22, 30, 25, 0.18); /* overlays only */
+  --ia-z-dock: 80;
+  --ia-z-overlay: 120;
+  --ia-z-modal: 200;
+  --ia-z-curtain: 300;
+}

@@ -25,6 +25,7 @@ import './styles/dulcey.css';
 
 // App Component
 import App from './App';
+import './styles/inarch/index.css';
 
 // Performance monitoring
 import reportWebVitals from './reportWebVitals';
