@@ -176,3 +176,202 @@ Owner decisions live in [`00_INDEX.md` §12](00_INDEX.md#12-owner-decisions). Th
 6. When you run parity, follow `scripts/qa/README.md`: calibrate first (baseline against baseline), then compare. The baseline worktree was removed after this session; recreate it with the README's commands.
 7. **Prompt 13 (Contact):** the legacy `/contact` card labels fail WCAG contrast (axe serious `color-contrast`). This is pre-existing and left alone here because existing pages must stay identical. Until the page is rebuilt, `public-check` on the legacy `/contact` will report it.
 8. Prompt 14 retires the legacy `.glow` elements. Once they are gone, the public suite's default `.glow` mask matches nothing; keep or drop it then.
+
+---
+
+## 2026-11-27 — Prompt 02: Brand assets, content model and image pipeline
+
+**Branch:** `claude/epic-galileo-8w83en`, from `17b1a78` (prompt 01 merged). **Baseline:** `cc2fc52d90987adcf62a5c286c4eb87d155fc3f3`, served from `../inarch-baseline` on port 8081 for parity.
+
+**Starting state, confirmed:**
+- Prompt 01's files all exist: `tokens.css`, `useMotionScope.js`, `LabPage.jsx`, `dev-router.php`, `public-check.js`, `parity.js` and this log.
+- `src/data/` held only the four legacy modules.
+- Owner decisions read from `00_INDEX.md` §12. None conflicts with this prompt's defaults, so no data needed reconciling first:
+  - D-03, D-04 and D-05 are still open, so email, PIN code and site URL stay empty.
+  - D-06 and D-07: the seven services and the seven projects, unverified.
+  - D-10: the tagline.
+  - D-12: no social links.
+  - D-13: no Icons8 licence.
+  - D-14: "From 10:00 AM".
+  - D-16: name-based map search.
+  - D-21: the dummy's project names are not used.
+  - D-23: Zenith has no dates.
+
+### Files
+
+**Created**
+
+| Area | Files |
+|---|---|
+| Brand | `scripts/build-brand-assets.js`; `public/images/brand/` (8 PNGs) |
+| Photographs | `scripts/image-specs.js`, `scripts/build-images.js`; `public/images/inarch/<key>-<width>.{avif,webp,jpg}` (50 keys, 501 files, 27 MB); `src/data/imageManifest.json`; `src/lab/imageReport.json` (per-key hash, crop and byte sizes; Lab only) |
+| Icons | `scripts/build-icons.js`; `public/images/inarch/icons/*.svg` (15); `public/images/inarch/lottie/*.json` (8) |
+| Illustrations | `scripts/recolour-illustrations.js`; `public/images/inarch/illustrations/{not-found,enquiry-sent,nothing-here,something-broke}.svg` |
+| Credits | `public/images/inarch/CREDITS.md`; `src/data/credits.js` |
+| Content | `src/data/services.js`, `process.js`, `faqs.js`, `studioContent.js`, `interiors.js`, `projects.js`, `images.js` |
+| Tests | `src/data/__tests__/content.test.js` (25 tests) |
+| Lab | `src/lab/sections/AssetsSection.jsx`, `AssetsContent.jsx`, `AssetsSection.module.css` |
+
+**Changed**
+
+- `src/data/siteConfig.js`: additions only (115 lines, 0 removed). `studio`, `siteConfig.studio = studio`, and the helpers `studioTelHref`, `studioWhatsAppHref`, `studioMailHref`, `studioMapsHref`, `studioAddressLines`, `studioHoursLabel` and `studioUrl`.
+- `src/lab/registry.js`: one import and one entry.
+- `package.json` / `package-lock.json`: the scripts `build:brand`, `build:images` and `build:icons`, and the dependency `lottie-web` ^5.13.0.
+- `CHANGELOG.md`: the prompt 02 entry.
+- `prompts/00_INDEX.md` §13: two photographs that need a retake (see Open items).
+
+**Deleted:** nothing.
+
+### Decisions
+
+1. **Brand files: only the alpha channel is resampled; the colour is the supplied ink.**
+   - Measured with sharp, the geometry matches the brief: lockup x 226–4572, y 338–1219; wordmark band y 338–870, x 226–3910; descriptor band y 1090–1219 at alpha 209; monogram x 123–388, y 161–350. Column 4573 holds two pixels at alpha ≤ 6, so the 4347-px extract is correct.
+   - Lanczos resampling through premultiplied alpha shifted opaque edge pixels by up to 53 levels (overshoot). For the lockups and wordmarks the script therefore resamples alpha alone and fills RGB with the logo's own ink. Every opaque pixel is now exactly `#231B15` or `#F4EFE7`.
+   - Side effect: the source's descriptor line, stored one level off (`#221B15` / `#F4EFE8`), comes out as the exact ink. Nothing is redrawn or recoloured.
+   - The monogram is a byte-for-byte extract. Its antialiased fringe (alpha < 255) keeps the source's own values.
+2. **Brand verification: "corner alpha 0" cannot hold for a tight crop.**
+   - The "I" and the descriptor's first "A" sit in the image corners; the corner alpha is 42–112 on the lockups and 81–95 on the monogram.
+   - The script instead checks that every non-ink pixel is fully transparent, that at least 40 % of pixels have alpha 0 (actual 73–85 %), that all four edges carry artwork, and the size.
+3. **The source photographs, checked:**
+   - The repeats are not byte-identical (different MD5), but the mean grey difference is 0.0–1.6 / 255 against `.jpg2`, `.jpg6` and `.jpg3`, so they are visual repeats. Nothing derives from them (the content test checks this).
+   - "No EXIF" is nearly true: each file carries an empty 22-byte EXIF header. The pipeline strips all metadata anyway.
+   - `.jpg9` and `.jpg10` are 3840 × 2161.
+4. **Exclusions the brief did not list, found at full resolution:**
+   - **ph02:** the photographer's silhouette is reflected in the black wall unit at x 75–78.5 %, y 38–49 %. The loose hose reaches x 17 %, not 12 %. Every ph02 crop stays inside x 17.5–74.5 %.
+   - **ph05:** the hanging cable is at x 44–45.6 % (from a socket at y 51 %), not x 34 %. There is also a remote on the console at x 37–40 %, y 69 %.
+   - **ph06:** a coiled loose cable hangs under a switch plate at x 21.5–23 %, y 52–56 %.
+   - **ph09:** a storage box sits on top of the unit (to y 15.9 %), as well as the air-conditioner (to y 14.2 %).
+   - **ph10:** packaging sits on the open shelf (x ≤ 10 %, y 78–82 %), and the tap begins at x 66.5 %, not 70 %.
+   - **ph04:** the carton carries a readable beverage brand.
+5. **Crop changes, with their final numbers.** All are recorded in `scripts/image-specs.js` (`deviation` / `review` per key).
+   - `studio-detail` / `g-ph05`: box 34, 0, 41.5, 50.5 (ceiling, fan and the upper media wall; no cable, no doorway).
+   - `interiors-inset`: 4:5 inside x 0–66.
+   - `interiors-kitchen`, `pr-black-cover-*`: inside x 17.5–74.5. `g-ph02` is a square inside the same window.
+   - `interiors-detail-b`, `g-ph09`, `pr-pooja-cover-*`: from y ≥ 16.5. The tall cover is the inner unit (x 31.2–68.8), and the wide cover keeps both doors.
+   - `pr-ivory-cover-tall`: focal 76 / 50, so the cover avoids the carton.
+   - `pr-panelled-cover-wide` and `g-ph06`: from x ≥ 25.5 (`g-ph06` is 4:3).
+   - `g-ph10`: box 10, 20, 56, 66.4.
+   - `g-ph12b`: 4:5 below y 26.
+   - Swatches:
+     - `sw-fluted` comes from ph14 (the green fluted arch). The brief's ph08 box is mostly the veined panel, and no fluted strip in ph08 is wider than about 230 px.
+     - `sw-stone`, `sw-lattice` and `sw-tufting` ship at 320 and 480 px instead of 640: the clean texture is only about 500 px square, and the script never upscales.
+6. **Accepted residuals, listed so the owner can overrule them:**
+   - The ph04 carton stays in the frontal 16:9 and 3:2 cuts (`interiors-detail-c`, `pr-ivory-cover-wide`, `g-ph04`), as the brief allows ("if the crop allows"). It is small; its label is unreadable below 1440 px.
+   - The ph14 frames show, through the shelving, the next room's mirror with its power lead: about 25 px at 1440. Removing it would cut the arched partition in half.
+   - No photograph was retouched.
+7. **Pipeline mechanics:**
+   - The cap is per output width. No width exceeds the source's "sharp to" value or the crop's own pixel width, and the script fails if a spec asks for one.
+   - Every key is skipped when its hash is unchanged. The hash covers the source bytes, the crop, the widths and the pipeline settings, and lives in `src/lab/imageReport.json`. The manifest therefore stays exactly the schema the brief gives.
+   - It refuses to overwrite an existing file with different bytes unless `--recut` is passed (`/images/**` is immutable). It supports `rev` for re-cuts after deployment, and it deletes orphan files.
+   - The encoders are deterministic, which I checked by encoding the same image three times.
+8. **Icons were drawn in-house.** icons8.com answered with a Cloudflare 403, so its licence was unreadable, and `img.icons8.com` refuses SVG (403; SVG is a paid format). Following the brief's fallback:
+   - `scripts/build-icons.js` draws the 14 icons from one geometry source, plus `status-done`, the static fallback of the "sent / done" tick.
+   - They are drawn on the 24-px grid in a 48 viewBox, with round caps and joins and `vector-effect: non-scaling-stroke`, so the stroke is 1.5 px at every size (measured 1.5 px at 24, 32 and 48).
+   - Strokes are `currentColor`. The accent is `var(--ia-accent-display, currentColor)`, so the file holds no hard-coded colour, and as an `<img>` it degrades to one colour.
+   - Measured in Chromium, `var()` in an SVG presentation attribute resolves per tone: terracotta-500 on light, terracotta-300 on dark.
+9. **The animated icons are generated from the same geometry.**
+   - Each is a draw-on with trim paths: ink first, accent last, about 1.1 s at 60 fps, 1.7–4.1 KB.
+   - The JSON colours are espresso and terracotta-500. The layers carry `cl` classes (`ia-l-ink`, `ia-l-accent`), which lottie-web's SVG renderer writes onto the layer `<g>`, so CSS re-tints them per tone. This was measured on forest: ivory and terracotta-300.
+   - They play once at half visibility. Under reduced motion the static SVG is shown and the Lottie never loads.
+   - `lottie-web` 5.13.0 (MIT) is a dependency. Only the Lab imports it so far, through a dynamic import of `lottie_light`.
+10. **unDraw licence, as read.** It allows free commercial use and modification without attribution. Its sentence about "automated and non-automated … download" extends the ban on compiling a competing service or redistributing packs, so it does not forbid fetching four illustrations for one site; it covers non-automated downloads too, so it cannot mean "no downloading". The four were fetched one by one.
+11. **unDraw recolouring went beyond the brief's list:**
+    - unDraw white becomes paper `#FAF7F2`, a brand colour.
+    - Translucent black overlays (20 % and 10 %, no fill) become opaque stone, so only five brand colours remain.
+    - The illustrations with no people were chosen, which avoids recolouring skin tones.
+12. **The open-licence photographs (`expertise-atmosphere`, `expertise-drawing`) were skipped.** unsplash.com serves a bot challenge and pexels.com a Cloudflare 403, so neither the licence nor a search could be read. Both images were optional (index §10). They are listed under pending assets.
+13. **`footerCredits` is empty.** No Icons8 asset ships, so the free licence's link is not owed. `ICONS8_CREDIT` is ready in `credits.js` if Icons8 icons are adopted without a paid licence (D-13).
+14. **Data shape:**
+    - `studio.logos` has six roles (`lockupOnLight`, `lockupOnDark`, `wordmarkOnLight`, `wordmarkOnDark`, `markOnLight`, `markOnDark`), each `{ src, width, height }`. The lockups also carry `variants` (800 and 1600) for `srcset`.
+    - `studioContent.js` also holds, verbatim, the §1 positioning, the §6 lead, and the §9–§10 home, contact and CTA lines. The index (§11) assigns them to the data layer, and later prompts need them.
+    - Project `scope` and `focus` keep the PDF's words without the trailing full stop (they are labels).
+    - Each project `summary` is two sentences of what is visible.
+    - Category ids are kebab-case titles.
+15. **The main bundle grows by 1,781 B** (460,122 → 461,903 B). That is `studio` on `siteConfig`, which the main bundle already carries and which the brief requires to be attached. None of the new data modules, the manifest or lottie-web is in any production chunk. There are still 22 chunks, the same as the baseline, and none contains `__lab`.
+
+### Deviations from the prompt
+
+- **Extra files:**
+  - `scripts/build-icons.js` (`npm run build:icons`) and `scripts/recolour-illustrations.js` make the icon and illustration work repeatable.
+  - `src/lab/imageReport.json` holds the hashes and byte sizes outside the runtime manifest.
+  - `src/lab/sections/AssetsContent.jsx` is the content dump.
+  - A 15th static icon, `status-done`, exists because the "sent / done" Lottie needs a static fallback.
+- **Icons are in-house and the open-licence photographs are skipped,** both because the source hosts were blocked (Decisions 8 and 12). Everything is listed under pending third-party assets below.
+- **Crops differ from the brief's table** wherever the brief's numbers would have kept an exclusion in frame (Decisions 4–6). Three swatches ship at 480 px instead of 640.
+- **Brand verification** replaces "corner alpha 0" with a stricter background test (Decision 2). The descriptor's one-level ink rounding is normalised (Decision 1).
+- **The regression pass was driven with Playwright** rather than by hand, as in prompt 01. The script was kept in the session scratchpad, not committed; prompt 05 owns `scripts/qa/lead-flow.js`. I read the request bodies from the intercepted requests.
+  - Test names must be letters only: the legacy name validator rejects digits.
+  - The admin's MUI selects have no accessible name. This is pre-existing and frozen, so they were driven by position.
+
+### Pending third-party assets
+
+| Wanted | Why missing | Substitute |
+|---|---|---|
+| Icons8: 14 static icons, 8 animated | icons8.com: Cloudflare 403; SVG refused (403) | In-house icons (Decision 8) |
+| `os-light` → `expertise-atmosphere` | unsplash.com: bot challenge; pexels.com: Cloudflare 403 | None (Expertise page is typographic there) |
+| `os-drawing` → `expertise-drawing` | as above | None |
+
+### Evidence
+
+- **`npm test -- --watchAll=false`:** 3 suites, 115 tests, all passing (prompt 01's 90 plus 25 content tests).
+- **`npm run build`:** "Compiled successfully.", no warnings.
+  - Main JS is 461,903 B, against 460,122 B after prompt 01 (+1,781 B: `studio`).
+  - Main CSS is 68,825 B, with nothing new in it.
+  - There are 22 chunks, the same as the baseline. No production `.js` contains the new data modules, the manifest, lottie-web or `__lab`.
+- **Brand files:** all 8 pass the script's own check: stated pixel size; every opaque pixel exactly the ink; 73–85 % fully transparent; artwork on all four edges. A second run writes nothing. They were looked at on ivory and forest, and in the Lab on all four tones at 24 / 32 / 44 / 96 px.
+- **Photographs:**
+  - There are 50 keys and 501 files (27 MB).
+  - Largest AVIF at ≤ 1080 px: 95.3 KB (`interiors-detail-a-1080`; limit 140 KB). Largest file: `g-ph02-1920.jpg` at 402.1 KB (limit 420 KB).
+  - Placeholders are 143–303 B.
+  - The manifest's width and height match the largest file for every key.
+  - A fresh build takes 10 min 34 s. A second run takes 0.14 s with 0 encodes, 0 writes, and the manifest and report byte-identical. `--check` passes.
+  - Nothing derives from `.jpg13`, `.jpg15` or `.jpg16`, or from the PDF.
+  - Reviewed by eye three times: 900-px previews of every crop, full-resolution zooms of every suspect region, and contact sheets of the real smallest JPEG derivatives. The Lab was also checked at 390 and 1440.
+- **Icons and animations:**
+  - The stroke measures 1.5 px at 24, 32 and 48.
+  - Ink and accent per tone: light, sand and paper `#231B15` / `#B5653F`; dark `#F4EFE7` / `#DDA27F`. That holds for the inline SVGs (`var()` in a presentation attribute) and for the Lottie layers.
+  - Each Lottie plays once and stops. Under emulated reduced motion all 16 Lab instances show the static SVG, no Lottie loads, and Replay is disabled.
+  - The illustrations contain only the five brand colours.
+- **Lab, "Assets & content":**
+  - Checked at 360, 390, 768, 1024, 1280, 1440 and 1920 px, plus an 844 × 390 landscape phone: no horizontal overflow, 102 images all decoded, one `h1`, no console errors, no failed requests.
+  - `public-check --base http://localhost:3000 --routes /__lab`: 9/9 clean. That covers the seven widths plus reduced motion at 390 and 1440: zero serious or critical axe violations, every target ≥ 44 × 44.
+  - Keyboard: 28 focus stops in the section, each with the 2 px ring at 3 px offset in the tone's focus colour. Enter and Space activate Replay.
+- **`public-check` (production build on PHP, every route × 7 widths, plus reduced motion):** 54/63 clean. The 9 failures are the pre-existing legacy `/contact` contrast issue (prompt 01, Open item 7), identical to before.
+- **Parity:**
+  - Calibration, baseline against baseline: admin 34/34, public 21/21 identical.
+  - **Baseline against this branch: admin 34/34, public 21/21 identical**, with 0 pixels differing and 0 digest differences in every capture.
+- **Regression pass** (production build on PHP, Playwright; 50/50 checks):
+  - The six routes at 390 and 1440 have the right titles and robots (`noindex` on the 404), with no console errors. `/expertise#e03` opens and scrolls.
+  - The modal opens from `header-cta`, `home-hero` and `expertise-e01`. Focus is trapped and scroll is locked; it closes on Escape, the button, the backdrop and Back, and focus returns to the opener.
+  - An enquiry through the modal sends exactly the 21 frozen keys (`source: home-hero`, `state` empty, `status: new`), and the success state shows the first name.
+  - The same mobile number through `/contact` returns `duplicate: true`, and the "Already received!" dialog shows.
+  - Admin:
+    - `/admin` redirects to login; the dashboard shows the new lead; the Iconify icons render.
+    - Leads page: search, all four filters (the "Interested In" list still shows the old titles plus "Something else"), sorting and pagination work.
+    - Inline status change, bulk select, CSV export and import (0 imported, 4 duplicates skipped), and the delete dialog (cancelled) all work.
+    - The lead detail shows the name, mobile, email, interest, message, source and page URL; adding a note and changing the status both work.
+    - The Guidelines gate opens its 4 tabs, and logout works.
+  - All test leads, including the parity seeds, were deleted afterwards: both stores are empty.
+- **Admin-frozen check:** `git diff --stat cc2fc52… -- src/admin src/theme … .env .env.example` prints nothing.
+  - `expertiseData.js`, `industriesData.js`, `navigation.js`, `public/index.html`, every page and component, `App.jsx`, `index.js`, `logos/`, `in-arch images/` and the PDF show no diff.
+  - `siteConfig.js` is +115 / −0.
+
+### Open items
+
+1. **Retakes (index §13):**
+   - `.jpg2`: the photographer is reflected in the wall units, which costs the kitchen its right quarter.
+   - `.jpg4`: a branded carton sits in a glazed unit, still visible in the full-frame 16:9 and 3:2 cuts.
+   - An owner-approved retouch would also do. Until then, prompts 10–12 should prefer `pr-ivory-cover-tall` over the full-frame ph04 cuts where they can.
+2. **Prompt 03 / 16:**
+   - The animated icons scale their stroke with their box: 1.5 px at 48, 2 px at 64. Render them at 48 px, or ask for a re-generation at the chosen size.
+   - At 24 px the densest icons (`service-e04-commercial`, `service-e06-site`) are legible but busy. Prefer 32 px or more for those.
+3. **Prompt 03 owns the `Picture` primitive.** The manifest gives `sources.{avif,webp,jpg}[{ w, src }]`, `width`, `height`, `ratio` and `placeholder`; `images.js` gives `image(key)` (with `alt`) and `srcSet(entry, format)`.
+4. **Prompt 04:**
+   - `og-source` (1200 × 630) is ready for the Open Graph composition.
+   - `credits.footerCredits` is empty, so no Icons8 link is needed.
+   - The brand files and their roles are in `studio.logos`.
+5. **The illustrations are coloured for light surfaces** (espresso shapes). Place them on ivory, sand or paper.
+6. **If the owner later supplies an Icons8 licence or wants Icons8,** download the family by hand, replace the in-house files under the same names, and add `ICONS8_CREDIT` to `footerCredits` unless the licence is paid.
+7. No screen reader was available again; the accessibility-tree check is automated (axe, heading order, names).
+8. **The admin's MUI filter and status selects have no accessible name.** This was found while driving them. It is pre-existing; the admin is frozen, so it goes on the final report's list (prompt 20), not into a fix.
+9. The baseline worktree `../inarch-baseline` was removed after this session's parity runs. Recreate it with `scripts/qa/README.md`.

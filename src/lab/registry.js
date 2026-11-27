@@ -13,6 +13,7 @@ import FontsSection from './sections/FontsSection';
 import SpaceSection from './sections/SpaceSection';
 import GridSection from './sections/GridSection';
 import MotionSection from './sections/MotionSection';
+import AssetsSection from './sections/AssetsSection';
 
 export const LAB_SECTIONS = [
   { id: 'colour', title: 'Colour and contrast', Component: ColourSection },
@@ -21,4 +22,5 @@ export const LAB_SECTIONS = [
   { id: 'space', title: 'Space and layout tokens', Component: SpaceSection },
   { id: 'grid', title: 'Grid', Component: GridSection },
   { id: 'motion', title: 'Motion', Component: MotionSection },
+  { id: 'assets', title: 'Assets & content', Component: AssetsSection },
 ];

@@ -114,6 +114,121 @@ export const absoluteUrl = (pathOrUrl) =>
     ? pathOrUrl
     : `${siteConfig.siteUrl}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`;
 
+/* ============================================
+   studio — IN-ARCH's facts (prompt 02)
+   --------------------------------------------
+   The new public site reads every business fact from `studio`, never from
+   the legacy keys above: those still feed the old pages and the admin
+   (`brandName`, `legalName`, `logo` and `LOGO_SIZE` stay as they are until
+   prompt 15). Source: `details of in-arch.pdf` §1, §3, §9, read against the
+   owner decisions in prompts/00_INDEX.md §12.
+
+   Empty string = not supplied by the client. Every surface renders nothing
+   for an empty value: no blank row, no dead link.
+   ============================================ */
+
+const brandFile = (name, width, height) => ({ src: `/images/brand/${name}`, width, height });
+
+export const studio = {
+  name: 'IN-ARCH',
+  fullName: 'In-Arch Architects & Interior Designer',
+  descriptor: 'Architects & Interior Designer',
+  // The PDF's "suggested tagline" (§1), adopted by owner decision D-10.
+  tagline: 'Designing Spaces. Shaping Experiences.',
+  // PDF §10 F, the footer line.
+  blurb: 'Thoughtful architectural and interior design solutions from Patna, Bihar.',
+  // No portrait supplied (D-11): a typographic plate stands in.
+  principal: { name: 'Ar. Mohammad Hassanuddin', role: 'Principal Architect & Founder', portrait: null },
+  phone: '+917292831128',
+  phoneDisplay: '+91 72928 31128',
+  whatsapp: '917292831128',
+  // Not supplied (D-03). The address on the dummy site is unconfirmed and not used.
+  email: '',
+  // The PDF's address as it stands (D-04); building, floor and PIN code still needed.
+  address: { line1: 'Boring Road', city: 'Patna', region: 'Bihar', country: 'India', postalCode: '' },
+  // "10:00 AM onwards" (PDF §9); days and closing time not supplied (D-14).
+  hours: { opensAt: '10:00 AM', note: '' },
+  // Not supplied (D-05): run-time URLs use the current origin until it is.
+  siteUrl: '',
+  // Hidden until supplied (D-12). Ratings are never hard-coded.
+  social: { instagram: '', facebook: '', linkedin: '', googleBusiness: '' },
+  // Name-based search until an exact location is supplied (D-16); prompt 13 verifies it.
+  map: {
+    query: 'In-Arch Architects & Interior Designer, Boring Road, Patna, Bihar',
+    embedUrl: '',
+    lat: null,
+    lng: null,
+  },
+  // Cut from logos/ by scripts/build-brand-assets.js. Below 44 px tall use a
+  // wordmark (the descriptor line is illegible there); from 44 px the lockup.
+  // Keep clear space equal to the cap height of the "I" on every side.
+  logos: {
+    lockupOnLight: {
+      ...brandFile('inarch-lockup-on-light-1600.png', 1600, 325),
+      variants: [
+        brandFile('inarch-lockup-on-light-800.png', 800, 162),
+        brandFile('inarch-lockup-on-light-1600.png', 1600, 325),
+      ],
+    },
+    lockupOnDark: {
+      ...brandFile('inarch-lockup-on-dark-1600.png', 1600, 325),
+      variants: [
+        brandFile('inarch-lockup-on-dark-800.png', 800, 162),
+        brandFile('inarch-lockup-on-dark-1600.png', 1600, 325),
+      ],
+    },
+    wordmarkOnLight: brandFile('inarch-wordmark-on-light-1383.png', 1383, 200),
+    wordmarkOnDark: brandFile('inarch-wordmark-on-dark-1383.png', 1383, 200),
+    markOnLight: brandFile('inarch-mark-on-light-266.png', 266, 190),
+    markOnDark: brandFile('inarch-mark-on-dark-266.png', 266, 190),
+  },
+};
+
+siteConfig.studio = studio;
+
+/** `tel:` href for the studio phone. */
+export const studioTelHref = `tel:${studio.phone}`;
+
+/**
+ * WhatsApp chat link, optionally with a pre-filled message.
+ *
+ * @example studioWhatsAppHref('Hello') // https://wa.me/917292831128?text=Hello
+ */
+export const studioWhatsAppHref = (text = '') =>
+  `https://wa.me/${studio.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ''}`;
+
+/** `mailto:` href, or `null` while no email address is supplied (render nothing). */
+export const studioMailHref = studio.email ? `mailto:${studio.email}` : null;
+
+/** Google Maps search for the studio (name-based until D-16 supplies a pin). */
+export const studioMapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(studio.map.query)}`;
+
+/** The address as display lines, empty parts dropped: ['Boring Road', 'Patna, Bihar', 'India']. */
+export const studioAddressLines = [
+  studio.address.line1,
+  [studio.address.city, [studio.address.region, studio.address.postalCode].filter(Boolean).join(' ')]
+    .filter(Boolean)
+    .join(', '),
+  studio.address.country,
+].filter(Boolean);
+
+/** Opening hours as one line ("From 10:00 AM"), or '' when nothing is known. */
+export const studioHoursLabel = [studio.hours.opensAt && `From ${studio.hours.opensAt}`, studio.hours.note]
+  .filter(Boolean)
+  .join(' · ');
+
+/**
+ * Absolute URL on the studio's own site. Uses `studio.siteUrl` once the
+ * domain is known (D-05) and the current origin until then.
+ *
+ * @example studioUrl('/portfolio') // https://<origin>/portfolio
+ */
+export const studioUrl = (path = '/') => {
+  const base = studio.siteUrl || (typeof window !== 'undefined' ? window.location.origin : '');
+  if (/^https?:\/\//i.test(path)) return path;
+  return `${base.replace(/\/$/, '')}${path.startsWith('/') ? '' : '/'}${path}`;
+};
+
 /**
  * Display URL for a Cloudinary asset, capped to the size that surface
  * actually renders (Prompt 12).
