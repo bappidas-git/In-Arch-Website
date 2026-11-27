@@ -1,0 +1,5 @@
+.area {
+  resize: none;
+  overflow-y: hidden;
+  line-height: 1.5;
+}

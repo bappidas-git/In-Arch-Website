@@ -1,0 +1,66 @@
+.box {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  overflow: hidden;
+}
+
+.first,
+.second {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--ia-dur-3) var(--ia-ease-expo);
+}
+
+.second {
+  transform: translate(calc(var(--ia-swap-x, 0%) * -1), calc(var(--ia-swap-y, 0%) * -1));
+}
+
+/* The host's keyboard focus always swaps; its hover only with a fine pointer,
+   so a tap on a touch screen never leaves the arrow stuck mid-swap. */
+:global([data-ia-swap]:focus-visible) .travels .first {
+  transform: translate(var(--ia-swap-x), var(--ia-swap-y));
+}
+
+:global([data-ia-swap]:focus-visible) .travels .second {
+  transform: translate(0, 0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :global([data-ia-swap]:hover) .travels .first {
+    transform: translate(var(--ia-swap-x), var(--ia-swap-y));
+  }
+
+  :global([data-ia-swap]:hover) .travels .second {
+    transform: translate(0, 0);
+  }
+}
+
+/* A disabled host does not respond. */
+:global([data-ia-swap][aria-disabled='true']) .travels .first,
+:global([data-ia-swap]:disabled) .travels .first {
+  transform: none;
+}
+
+:global([data-ia-swap][aria-disabled='true']) .travels .second,
+:global([data-ia-swap]:disabled) .travels .second {
+  transform: translate(calc(var(--ia-swap-x, 0%) * -1), calc(var(--ia-swap-y, 0%) * -1));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .first,
+  .second {
+    transition: none;
+  }
+
+  .travels .first {
+    transform: none !important;
+  }
+
+  .second {
+    display: none;
+  }
+}

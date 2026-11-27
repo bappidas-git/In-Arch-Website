@@ -1,0 +1,101 @@
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ia-space-2);
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The real radio covers the chip, invisible: clicks and taps land on it,
+   and its focus is shown on the face beside it. */
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.face {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ia-space-2);
+  min-height: 44px;
+  max-width: 100%;
+  padding: var(--ia-space-2) var(--ia-space-4);
+  border: 1px solid var(--ia-line-strong);
+  border-radius: var(--ia-radius);
+  background: transparent;
+  color: var(--ia-fg);
+  font-family: var(--ia-font-sans);
+  font-size: var(--ia-fs-small);
+  font-weight: 600;
+  line-height: 1.3;
+  scale: 1;
+  transition:
+    background-color var(--ia-dur-2) var(--ia-ease-out),
+    color var(--ia-dur-2) var(--ia-ease-out),
+    border-color var(--ia-dur-2) var(--ia-ease-out),
+    scale var(--ia-dur-1) var(--ia-ease-out);
+}
+
+/* The tick holds its space only when chosen. */
+.tick {
+  display: none;
+}
+
+.input:checked + .face {
+  border-color: var(--ia-fg);
+  background: var(--ia-fg);
+  color: var(--ia-bg);
+}
+
+.input:checked + .face .tick {
+  display: inline-block;
+}
+
+.input:focus-visible + .face {
+  outline: 2px solid var(--ia-focus);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .input:not(:disabled):not(:checked):hover + .face {
+    border-color: var(--ia-fg);
+  }
+}
+
+.input:not(:disabled):active + .face {
+  scale: 0.98;
+}
+
+.invalid .face {
+  border-color: var(--ia-feedback-error);
+}
+
+.invalid .input:checked + .face {
+  border-color: var(--ia-fg);
+}
+
+.off {
+  cursor: not-allowed;
+}
+
+.input:disabled + .face {
+  border-color: var(--ia-line);
+  color: var(--ia-fg-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input:not(:disabled):active + .face {
+    scale: none;
+  }
+}

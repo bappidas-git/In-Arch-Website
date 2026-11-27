@@ -1,0 +1,47 @@
+.lottie {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  color: var(--ia-fg);
+  line-height: 0;
+}
+
+.still,
+.player {
+  position: absolute;
+  inset: 0;
+}
+
+.player {
+  visibility: hidden;
+}
+
+.lottie[data-playing] .player {
+  visibility: visible;
+}
+
+.lottie[data-playing] .still {
+  visibility: hidden;
+}
+
+.player svg {
+  display: block;
+}
+
+/* The files carry espresso and terracotta-500; these follow the tone
+   (lottie-web writes each layer's `cl` onto its <g>). */
+.player :global(.ia-l-ink) path[stroke] {
+  stroke: currentColor;
+}
+
+.player :global(.ia-l-ink) path[fill]:not([fill-opacity='0']) {
+  fill: currentColor;
+}
+
+.player :global(.ia-l-accent) path[stroke] {
+  stroke: var(--ia-accent-display);
+}
+
+.player :global(.ia-l-accent) path[fill]:not([fill-opacity='0']) {
+  fill: var(--ia-accent-display);
+}

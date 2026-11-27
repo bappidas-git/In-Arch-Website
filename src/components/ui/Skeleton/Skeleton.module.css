@@ -1,0 +1,8 @@
+/* Not named `.skeleton`: the legacy stylesheet defines that class. */
+.block {
+  display: block;
+  width: 100%;
+  height: 1em;
+  max-width: 100%;
+  background: var(--ia-placeholder);
+}

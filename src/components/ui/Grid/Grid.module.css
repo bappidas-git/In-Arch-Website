@@ -1,0 +1,39 @@
+/* Col: each breakpoint falls back to the level below it. */
+.col {
+  min-width: 0;
+  grid-column: var(--ia-col, 1 / -1);
+}
+
+@media (min-width: 768px) {
+  .col {
+    grid-column: var(--ia-col-md, var(--ia-col, 1 / -1));
+  }
+}
+
+@media (min-width: 1024px) {
+  .col {
+    grid-column: var(--ia-col-lg, var(--ia-col-md, var(--ia-col, 1 / -1)));
+  }
+}
+
+@media (min-width: 1280px) {
+  .col {
+    grid-column: var(--ia-col-xl, var(--ia-col-lg, var(--ia-col-md, var(--ia-col, 1 / -1))));
+  }
+}
+
+.align-start {
+  align-self: start;
+}
+
+.align-center {
+  align-self: center;
+}
+
+.align-end {
+  align-self: end;
+}
+
+.align-stretch {
+  align-self: stretch;
+}

@@ -1,0 +1,39 @@
+.facts {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.pair {
+  display: grid;
+  gap: var(--ia-space-1);
+  padding-block: var(--ia-space-4);
+  border-top: 1px solid var(--ia-line);
+}
+
+.pair:last-child {
+  border-bottom: 1px solid var(--ia-line);
+}
+
+.term {
+  color: var(--ia-fg-2);
+}
+
+.value {
+  margin: 0;
+  min-width: 0;
+  color: var(--ia-fg);
+  overflow-wrap: anywhere;
+}
+
+.line {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .row .pair {
+    grid-template-columns: minmax(8rem, 1fr) minmax(0, 2fr);
+    align-items: baseline;
+    gap: var(--ia-space-6);
+  }
+}

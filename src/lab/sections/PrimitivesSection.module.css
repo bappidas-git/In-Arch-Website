@@ -1,0 +1,435 @@
+/* ============================================
+   Design Lab — "Primitives" (development only)
+   Tokens and tone variables only; no legacy names.
+   ============================================ */
+
+.primitives {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ia-space-16);
+  margin-top: var(--ia-space-6);
+}
+
+.block {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ia-space-6);
+  min-width: 0;
+}
+
+.blockHead {
+  display: grid;
+  gap: var(--ia-space-3);
+}
+
+.note {
+  max-width: var(--ia-measure);
+  color: var(--ia-fg-2);
+}
+
+.toneStack {
+  display: grid;
+  gap: var(--ia-space-4);
+}
+
+.tonePanel {
+  min-width: 0;
+  padding: var(--ia-space-6) var(--ia-space-4);
+  border: 1px solid var(--ia-line);
+}
+
+@media (min-width: 768px) {
+  .tonePanel {
+    padding: var(--ia-space-8) var(--ia-space-6);
+  }
+}
+
+.toneGrid {
+  display: grid;
+  gap: var(--ia-space-4);
+}
+
+@media (min-width: 1024px) {
+  .toneGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.panelTitle {
+  margin-bottom: var(--ia-space-6);
+  color: var(--ia-fg-2);
+}
+
+/* ---------- State matrix ---------- */
+.matrix {
+  display: grid;
+  gap: var(--ia-space-8);
+}
+
+.row {
+  display: grid;
+  gap: var(--ia-space-3);
+  min-width: 0;
+}
+
+.rowLabel {
+  color: var(--ia-fg);
+}
+
+.cells {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--ia-space-5) var(--ia-space-6);
+}
+
+.cell {
+  display: grid;
+  justify-items: start;
+  gap: var(--ia-space-2);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.cellCaption {
+  color: var(--ia-fg-2);
+}
+
+/* ---------- Over a photograph ---------- */
+.photoPanel {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--ia-forest);
+}
+
+.photoBack {
+  position: absolute;
+  inset: 0;
+}
+
+.photoBack img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photoBack::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(22, 30, 25, 0.62) 0%, rgba(22, 30, 25, 0.78) 100%);
+}
+
+.photoContent {
+  position: relative;
+  padding: var(--ia-space-8) var(--ia-space-4);
+  color: var(--ia-ivory);
+}
+
+@media (min-width: 768px) {
+  .photoContent {
+    padding: var(--ia-space-12) var(--ia-space-8);
+  }
+}
+
+.photoContent .cellCaption,
+.photoContent .rowLabel {
+  color: var(--ia-ivory);
+}
+
+/* ---------- Icons ---------- */
+.iconList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr));
+  gap: var(--ia-space-4);
+}
+
+.iconItem {
+  display: grid;
+  gap: var(--ia-space-2);
+  justify-items: start;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.iconSizes {
+  display: flex;
+  align-items: center;
+  gap: var(--ia-space-3);
+  color: var(--ia-fg);
+}
+
+/* ---------- Layout and type ---------- */
+.gridDemo {
+  row-gap: var(--ia-space-4);
+}
+
+.gridCell {
+  min-height: 5rem;
+  padding: var(--ia-space-3);
+  background: var(--ia-sand);
+  border: 1px solid var(--ia-line);
+  color: var(--ia-espresso);
+}
+
+.typeList {
+  display: grid;
+  gap: var(--ia-space-6);
+}
+
+.typeRow {
+  display: grid;
+  gap: var(--ia-space-2);
+  padding-bottom: var(--ia-space-6);
+  border-bottom: 1px solid var(--ia-line);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Forms ---------- */
+.fieldGrid {
+  display: grid;
+  gap: var(--ia-space-6);
+}
+
+@media (min-width: 768px) {
+  .fieldGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.formPanel {
+  min-width: 0;
+  padding: var(--ia-space-6) var(--ia-space-4);
+}
+
+@media (min-width: 768px) {
+  .formPanel {
+    padding: var(--ia-space-10) var(--ia-space-8);
+  }
+}
+
+.form {
+  display: grid;
+  gap: var(--ia-space-6);
+  max-width: 44rem;
+}
+
+.formRow {
+  display: grid;
+  gap: var(--ia-space-6);
+}
+
+@media (min-width: 768px) {
+  .formRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ia-space-4) var(--ia-space-6);
+}
+
+/* ---------- Media ---------- */
+.logoRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--ia-space-6) var(--ia-space-8);
+}
+
+.frameGrid {
+  display: grid;
+  gap: var(--ia-space-8);
+}
+
+@media (min-width: 768px) {
+  .frameGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+@media (min-width: 1280px) {
+  .frameGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.illustrations {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: var(--ia-space-8);
+  align-items: end;
+}
+
+/* ---------- Content ---------- */
+.tileRow {
+  display: grid;
+  gap: var(--ia-space-10) var(--ia-space-6);
+}
+
+@media (min-width: 768px) {
+  .tileRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .tileRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ia-space-2);
+}
+
+.skeletonDemo {
+  display: grid;
+  gap: var(--ia-space-3);
+  max-width: 24rem;
+}
+
+.marqueeBand {
+  padding-block: var(--ia-space-8);
+  border-block: 1px solid var(--ia-line);
+}
+
+/* ---------- Overlay demo ---------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ia-z-modal);
+  display: grid;
+  place-items: end center;
+  padding: var(--ia-space-4);
+  background: rgba(22, 30, 25, 0.55);
+}
+
+@media (min-width: 768px) {
+  .backdrop {
+    place-items: center;
+  }
+}
+
+.dialog {
+  display: grid;
+  gap: var(--ia-space-5);
+  width: 100%;
+  max-width: 32rem;
+  max-height: calc(100svh - 2rem);
+  overflow: auto;
+  padding: var(--ia-space-8) var(--ia-space-6);
+  background: var(--ia-bg);
+  color: var(--ia-fg);
+  box-shadow: var(--ia-shadow-overlay);
+}
+
+.dialogHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ia-space-4);
+}
+
+/* ---------- Keyboard strip ---------- */
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--ia-space-6) var(--ia-space-8);
+}
+
+.stop {
+  display: grid;
+  gap: var(--ia-space-2);
+  justify-items: start;
+  min-width: 0;
+}
+
+.stopNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding-inline: var(--ia-space-2);
+  border-radius: 999px;
+  background: var(--ia-fg);
+  color: var(--ia-bg);
+  font-size: var(--ia-fs-label);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.stripWide {
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+
+/* ---------- Frames ---------- */
+.frames {
+  display: grid;
+  gap: var(--ia-space-6);
+  align-items: start;
+}
+
+@media (min-width: 1280px) {
+  .frames {
+    grid-template-columns: 390px minmax(0, 1fr);
+  }
+}
+
+.framePhone,
+.frameDesktop {
+  display: grid;
+  gap: var(--ia-space-2);
+  min-width: 0;
+}
+
+.framePhone iframe {
+  display: block;
+  box-sizing: content-box; /* a 390 px viewport inside the 1 px border */
+  width: 390px;
+  max-width: 100%;
+  height: 760px;
+  border: 1px solid var(--ia-line-strong);
+  background: var(--ia-ivory);
+}
+
+.desktopViewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--ia-line-strong);
+  background: var(--ia-ivory);
+}
+
+.desktopViewport iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 1280px;
+  height: 800px;
+  border: 0;
+  transform-origin: 0 0;
+}
+
+/* Frame view: the section alone. It scrolls with the window (the motion
+   hook's ScrollTriggers watch the window), below the legacy fixed header
+   that prompt 04 replaces. */
+.frameView {
+  padding: 7rem 0 var(--ia-space-16);
+}

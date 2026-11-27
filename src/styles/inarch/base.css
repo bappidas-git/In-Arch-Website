@@ -41,10 +41,16 @@
 
 /* ---------- Tones ----------
    `.ia` itself is light. Any `[data-tone]` on or inside the scope switches
-   all nine variables, so tones nest (a paper card inside a dark band reads
+   all the tone variables, so tones nest (a paper card inside a dark band reads
    as light again). Order matters: every tone rule has the same (zero)
    weight, so the later rule wins on an element that is both `.ia` and
-   `[data-tone]`. */
+   `[data-tone]`.
+
+   The nine contract variables (--ia-bg … --ia-focus) come first. Prompt 03
+   added four more that the primitives need and that also flip by tone:
+   --ia-field-bg (paper on light tones, forest-2 on dark), --ia-placeholder
+   (stone / forest-3: disabled fills and skeletons), --ia-feedback-error and
+   --ia-feedback-success (the light or dark feedback colour). */
 :where(.ia),
 :where(.ia[data-tone="light"], .ia [data-tone="light"]) {
   --ia-bg: var(--ia-ivory);
@@ -56,6 +62,10 @@
   --ia-line: var(--ia-hairline);
   --ia-line-strong: var(--ia-border);
   --ia-focus: var(--ia-terracotta-700);
+  --ia-field-bg: var(--ia-paper);
+  --ia-placeholder: var(--ia-stone);
+  --ia-feedback-error: var(--ia-error);
+  --ia-feedback-success: var(--ia-success);
 }
 
 :where(.ia[data-tone="sand"], .ia [data-tone="sand"]) {
@@ -68,6 +78,10 @@
   --ia-line: var(--ia-hairline);
   --ia-line-strong: var(--ia-border);
   --ia-focus: var(--ia-terracotta-700);
+  --ia-field-bg: var(--ia-paper);
+  --ia-placeholder: var(--ia-stone);
+  --ia-feedback-error: var(--ia-error);
+  --ia-feedback-success: var(--ia-success);
 }
 
 :where(.ia[data-tone="paper"], .ia [data-tone="paper"]) {
@@ -80,6 +94,10 @@
   --ia-line: var(--ia-hairline);
   --ia-line-strong: var(--ia-border);
   --ia-focus: var(--ia-terracotta-700);
+  --ia-field-bg: var(--ia-paper);
+  --ia-placeholder: var(--ia-stone);
+  --ia-feedback-error: var(--ia-error);
+  --ia-feedback-success: var(--ia-success);
 }
 
 :where(.ia[data-tone="dark"], .ia [data-tone="dark"]) {
@@ -92,6 +110,10 @@
   --ia-line: var(--ia-hairline-dark);
   --ia-line-strong: var(--ia-border-dark);
   --ia-focus: var(--ia-terracotta-300);
+  --ia-field-bg: var(--ia-forest-2);
+  --ia-placeholder: var(--ia-forest-3);
+  --ia-feedback-error: var(--ia-error-dark);
+  --ia-feedback-success: var(--ia-success-dark);
 }
 
 /* An element that names a tone also paints it. */

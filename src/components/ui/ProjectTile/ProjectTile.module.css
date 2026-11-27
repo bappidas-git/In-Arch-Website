@@ -1,0 +1,129 @@
+.tile {
+  --ia-focus-radius: 0;
+  display: grid;
+  gap: var(--ia-space-3);
+  min-width: 0;
+  color: var(--ia-fg);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  scale: 1;
+  transition: scale var(--ia-dur-1) var(--ia-ease-out);
+}
+
+.frame {
+  margin-bottom: var(--ia-space-1);
+}
+
+/* Picture's own opacity fade is kept; the zoom is added. */
+.frame img {
+  transition:
+    opacity var(--ia-dur-3) var(--ia-ease-out),
+    transform var(--ia-dur-4) var(--ia-ease-out);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ia-space-1) var(--ia-space-4);
+  color: var(--ia-fg-2);
+}
+
+.index {
+  color: var(--ia-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ia-space-4);
+}
+
+.title {
+  min-width: 0;
+  color: var(--ia-fg);
+}
+
+.titleText {
+  position: relative;
+}
+
+/* The TextLink underline, drawn from the left on hover / focus. */
+.titleText::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.08em;
+  height: 1px;
+  background: var(--ia-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--ia-dur-3) var(--ia-ease-expo);
+}
+
+.arrow {
+  margin-top: 0.3em;
+}
+
+.tile:focus-visible img {
+  transform: scale(1.04);
+}
+
+.tile:focus-visible .titleText::after {
+  transform: scaleX(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover img {
+    transform: scale(1.04);
+  }
+
+  .tile:hover .titleText::after {
+    transform: scaleX(1);
+  }
+}
+
+.tile:active {
+  scale: 0.99;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    transition: none;
+  }
+
+  .tile:active {
+    scale: none;
+  }
+
+  .frame img,
+  .tile:focus-visible img {
+    transform: none;
+    transition: none;
+  }
+
+  .titleText::after,
+  .tile:focus-visible .titleText::after {
+    transform: none;
+    opacity: 0;
+    transition: opacity var(--ia-dur-2) linear;
+  }
+
+  .tile:focus-visible .titleText::after {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .tile:hover img {
+    transform: none;
+  }
+
+  .tile:hover .titleText::after {
+    transform: none;
+    opacity: 1;
+  }
+}

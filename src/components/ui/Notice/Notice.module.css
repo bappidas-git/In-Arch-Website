@@ -1,0 +1,69 @@
+.notice {
+  --notice-colour: var(--ia-fg);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--ia-space-3);
+  padding: var(--ia-space-4);
+  border: 1px solid var(--notice-colour);
+  background: var(--ia-field-bg);
+  color: var(--ia-fg);
+}
+
+@media (min-width: 768px) {
+  .notice {
+    padding: var(--ia-space-5) var(--ia-space-6);
+  }
+}
+
+.info {
+  --notice-colour: var(--ia-line-strong);
+}
+
+.success {
+  --notice-colour: var(--ia-feedback-success);
+}
+
+.error {
+  --notice-colour: var(--ia-feedback-error);
+}
+
+.icon {
+  margin-top: 0.1em;
+  color: var(--ia-fg);
+}
+
+.success .icon {
+  color: var(--ia-feedback-success);
+}
+
+.error .icon {
+  color: var(--ia-feedback-error);
+}
+
+.body {
+  display: grid;
+  gap: var(--ia-space-2);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--ia-fs-body);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.message {
+  max-width: var(--ia-measure);
+  color: var(--ia-fg-2);
+  font-size: var(--ia-fs-small);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ia-space-2) var(--ia-space-4);
+  margin-top: var(--ia-space-2);
+}

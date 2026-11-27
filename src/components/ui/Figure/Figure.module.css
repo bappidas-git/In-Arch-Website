@@ -1,0 +1,11 @@
+.figure {
+  display: grid;
+  gap: var(--ia-space-3);
+  min-width: 0;
+  margin: 0;
+}
+
+.caption {
+  max-width: var(--ia-measure);
+  color: var(--ia-fg-2);
+}

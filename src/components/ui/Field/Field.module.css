@@ -1,0 +1,67 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ia-space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* <fieldset> keeps a min-content width unless told otherwise. */
+.group {
+  min-inline-size: 0;
+}
+
+.label {
+  display: block;
+  padding: 0;
+  color: var(--ia-fg);
+  font-family: var(--ia-font-sans);
+  font-size: var(--ia-fs-caption); /* 13 px */
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+/* A <legend> does not take part in the flex gap; space it explicitly. */
+.group > .label {
+  margin-bottom: var(--ia-space-2);
+}
+
+.asterisk {
+  margin-inline-start: 0.2em;
+  color: var(--ia-accent);
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--ia-fg-2);
+}
+
+.hint {
+  margin: 0;
+  color: var(--ia-fg-2);
+  font-size: var(--ia-fs-caption);
+  line-height: 1.5;
+  max-width: var(--ia-measure);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ia-space-2);
+  margin: 0;
+  color: var(--ia-feedback-error);
+  font-size: var(--ia-fs-caption);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.error[hidden] {
+  display: none;
+}
+
+.errorIcon {
+  margin-top: 0.1em;
+}
