@@ -711,3 +711,101 @@ Owner decisions live in [`00_INDEX.md` §12](00_INDEX.md#12-owner-decisions). Th
 8. The legacy `/contact` contrast failure (prompt 01 Open item 7) remains until prompt 13.
 9. No VoiceOver or NVDA in this session: landmarks, names, heading order and the live region were checked through the accessibility tree and axe.
 10. `npm audit` advisories in CRA 5's tree are unchanged.
+
+---
+
+## 2026-11-28 — Prompt 05: Unified lead form and modal
+
+**Branch:** `claude/beautiful-babbage-1qty05`, from `4579023` (prompt 04 merged). **Baseline:** `cc2fc52d90987adcf62a5c286c4eb87d155fc3f3`, served from `../inarch-baseline` on port 8081 for parity (removed afterwards).
+
+**Starting state, confirmed:**
+- Prompts 01–04 are done: tokens and motion, `studio` with `studioTelHref` / `studioWhatsAppHref` / `studioMailHref`, `serviceTitles` and `SOMETHING_ELSE`, the `enquiry-sent` illustration and the "done" Lottie, the kit (`Button`, `TextLink`, `IconButton`, `Field`, `TextInput`, `TextArea`, `SelectInput`, `Notice`, `Portal`, `useFocusTrap`, `useScrollLock`), and the shell whose dock, overlay and footer call `openLeadModal('dock-cta' | 'footer-cta')`.
+- Owner decisions read from `00_INDEX.md` §12. None conflicts with the data in `src/data/`, so nothing needed reconciling. Applied here: D-08 (phone required, email optional), D-09 (the default budget ranges, optional), D-19 (duplicates stay unstored; the brief goes to WhatsApp), D-03 (no email address: the form's Email link stays hidden), D-06 (the seven services as listed).
+
+### Files
+
+**Created**
+
+| Area | Files |
+|---|---|
+| Payload | `src/utils/leadPayload.js` |
+| Data | `src/data/enquiry.js` (service options, budget ranges) |
+| QA | `scripts/qa/lead-flow.js` |
+| Tests | `src/utils/__tests__/leadPayload.test.js`, `src/utils/__tests__/validators.test.js`, `src/components/common/UnifiedLeadForm/__tests__/UnifiedLeadForm.test.jsx`, `src/components/common/LeadModal/__tests__/LeadModal.test.jsx` |
+
+**Rewritten in place** (same paths, same default exports): `src/components/common/UnifiedLeadForm/UnifiedLeadForm.jsx` + `.module.css`; `src/components/common/LeadModal/LeadModal.jsx` + `.module.css`.
+
+**Changed**
+
+- `src/utils/validators.js`: the name pattern is `[\p{L}\p{M}\s.'-]` with the `u` flag; adds `getRequiredMobileErrorMessage`, `getOptionalEmailErrorMessage` and `normalizeMobile`. The four original exports keep their behaviour and messages.
+- `src/utils/webhookSubmit.js`: `CONTACT_PHONE = studio.phoneDisplay` (the import and that line; nothing else).
+- `src/context/ModalContext.jsx`: comments only (the context contract). `src/App.jsx`: `context={modalConfig.context}` on `LeadModal`.
+- `package.json`: `"qa:leads"`. `scripts/qa/README.md`: the lead-flow section. `CHANGELOG.md`.
+
+**Deleted:** nothing. `src/utils/swalHelper.js` stays for prompt 14; nothing imports it any more, so no chunk ships sweetalert2.
+
+**Admin-frozen check:** `git diff --stat cc2fc52… -- src/admin src/theme … public/api .env .env.example` prints nothing. The admin-bound values (`brandName`, `legalName`, `logo`, `LOGO_SIZE`, `expertiseTitles`, `pages.admin`, `getConfig()`) are unchanged; `siteConfig.js`, `expertiseData.js` and `seo.js` have no diff.
+
+### Decisions
+
+1. **The draft records what the visitor typed, not what a CTA prefilled.** It is written only after a change event. Without this, opening the sheet from "Discuss Interior Design" and closing it untouched made the next, unrelated CTA open with that service selected (the first form test caught it). A CTA's valid prefill wins over a draft's service.
+2. **A blur error is held while a button or link in the form is pressed** (`pointerdown` in the capture phase, released after the click), then shown. Found by reading the accessibility tree: with an invalid phone focused, a mouse press on "Send enquiry" made the phone error appear on mousedown, which pushed the button down 28 px, and the release landed off it — the click was lost. The old form had the same flaw. Keyboard and touch never hit it; nothing else changes.
+3. **Sending:** the fields sit in a `<fieldset disabled>` (parity: controls disabled while sending); the submit button is not disabled but `loading` (`aria-busy`, "Sending…", presses swallowed), so it keeps focus. If disabling the fields dropped focus (Enter pressed in a field), it is put back when the result arrives.
+4. **Duplicate and failure notices sit above the fields** ("above the untouched form") and are scrolled into view with `block: 'nearest'`; focus stays on the control that was used. Each new result remounts the notice, so a repeated failure is announced again. "Try again" lives in the error notice and keeps the notice (busy) until the next result.
+5. **Honeypot** (`company_website`, visually hidden, `tabindex="-1"`, `autocomplete="off"`, inside an `aria-hidden` wrapper, last in the form so the dock's "Write to us" still focuses "Your name"). One addition: a value the browser's own autofill put there (`:autofill`) is not treated as a bot, so a person whose autofill profile has a company is never silently dropped.
+6. **"+91"** is a visual prefix inside the field (`aria-hidden`), and the label carries a visually hidden "(+91)": the field reads "Phone (+91), required". Putting the prefix in `aria-describedby` read it after the error.
+7. **Budget** uses an enabled empty first option, "Select a range", so the optional choice can be undone; the kit's `placeholder` option is disabled by design (right for the required service select).
+8. **The message has no `maxLength`**: a paste longer than 500 characters is not truncated silently; the counter (from 400, `aria-describedby`, "412 of 500 characters used" for assistive technology) turns to the error colour and validation says "Please keep your message under 500 characters". Location and area are capped at 120 characters, the name at 50.
+9. **Name messages** come from the form ("Please enter your name", "Please enter at least 2 letters", …) on top of `getNameErrorMessage`, whose own strings are unchanged. `getRequiredMobileErrorMessage` forgives spaces, dashes, "+91" and a trunk "0"; another country code is refused.
+10. **`composeMessage`** ends with one full stop: "Area: 2,500 sq. ft." is not doubled.
+11. **One greeting:** the form imports `WHATSAPP_GREETING` from `Dock.jsx` rather than repeating the sentence. The WhatsApp brief (duplicate / failure) is the greeting, "Name: …", "Service: …" and the composed message, one per line.
+12. **Modal mechanics.**
+    - It stays mounted for the 350 ms exit (`present` state, derived during render so the opening render already contains the dialog — the focus trap needs it in that commit); each opening remounts the form (`key`), so a new CTA's source and prefill always apply.
+    - The animation runs in a layout effect, so the sheet never flashes in place before rising. Reopening mid-exit resumes from where it is.
+    - The header is a fixed band above a scrolling body rather than `position: sticky` inside it: it looks the same, and `scrollIntoView` of a notice or a focused field is then never hidden under it.
+    - `visualViewport` sets `--ia-kb` (the keyboard's height, 0 when pinch-zoomed), which lifts the sheet above an on-screen keyboard and shortens it.
+    - `data-shell-float` is on the modal root, so the dock's tone sampling looks through the backdrop while the sheet leaves.
+    - Focus opens on the heading (`tabindex="-1"`); the trap returns focus to the opener; `useScrollLock` restores the offset only on the same route and calls `scheduleRefresh()` on both edges.
+13. **Success** shows the `enquiry-sent` illustration (120 px, decorative), an `h3` "Thank you, {first name}." (the dialog's heading is the `h2`; the old Contact panel's is an `h2` too), the number in the studio's grouping kept on one line, "Message us on WhatsApp" and, in the sheet, "Close" (`onClose`).
+14. **Bundle.** Main JS 518,611 B (174,763 B gzip), against 501,272 / 169,379 after prompt 04 (+17.3 KB raw / +5.4 KB gzip): the form, the sheet and the kit's form fields, notice, heading and illustration are in the main bundle because `LeadModal` is rendered at the root, as before. The lazy sweetalert2 chunk is gone (23 JS files, against 24). No chunk contains `__lab`, SplitText or lottie-web in main.
+
+### Deviations from the prompt
+
+1. **Extra files and exports.** `src/data/enquiry.js` holds the service options and the D-09 ranges (prompt 03's log put the ranges in the data layer). `leadPayload.js` also exports `composeWhatsAppBrief`, `formatMobile`, `firstName`, `EMPTY_VALUES` and the key lists; `validators.js` also exports `normalizeMobile` (the old form's private helper, now tested); the form exports `DRAFT_KEY` and `MESSAGE_MAX`. A `LeadModal` test was added.
+2. **One extra prop, `onClose`,** on `UnifiedLeadForm`: it shows "Close" in the success state (the sheet passes it; the Contact page does not).
+3. **The sheet's header is fixed above the scroll region, not sticky inside it** (Decision 12).
+4. **`lead-flow.js` does a little more than specified:** it also checks Escape, focus return and the scroll lock; it uses a second fresh number for the failure, so "Try again" ends in a stored lead rather than a duplicate; it selects "Residential Architecture" so the "Interested In" assertion proves a title the old Dulcey list never had; it deletes the test leads through the API with the admin key from `.env` (also when a step fails) rather than through the admin's delete dialog — the regression pass exercises that dialog.
+5. **The regression pass, the modal checks and the accessibility-tree read were driven with Playwright** (as in prompts 01–04); those scripts stayed in the session scratchpad.
+
+### Evidence
+
+- **`npm test -- --watchAll=false`:** 19 suites, **251 tests, all passing** (204 before), no console output.
+- **`npm run build`:** "Compiled successfully.", no warnings (sizes in Decision 14).
+- **`node scripts/qa/lead-flow.js`:** **37/37** at 390 px (bottom sheet) and **37/37** at 1440 px (side panel), on the final build. The intercepted `?action=create` body had exactly the 21 frozen keys plus `project_location`, `project_area`, `budget_range`; `status: "new"`, `notes: []`, `activity[0].action: "Lead created"`, `organization: ""`, `state: ""`, `source: "dock-cta"`, the message "A three-bedroom flat … monsoon. — Project details: Location: Boring Road, Patna; Area: 1,850 sq. ft.; Budget: ₹25 – 50 lakh". The admin listed it with name, mobile and source, its detail page showed the interested-in value and the composed message, and "Interested In" offered "Residential Architecture". Duplicate on `/contact`: the notice, the WhatsApp brief and every value intact. Forced failure (`internetdisconnected`): the error notice with "+91 72928 31128", values intact, "Try again" stored the lead (`contact-page`).
+- **`public-check` (production build on PHP, 10 routes × 7 widths + reduced motion): 81/90 clean.** The 9 failures are the pre-existing legacy `/contact` card-label contrast issue (prompt 01 Open item 7), the same as prompts 01–04; nothing from the new form. Re-run on `/` and `/contact` after the last change: the same.
+- **The sheet at 360, 390, 768, 1024, 1280, 1440, 1920 and 844 × 390** (details open): no horizontal overflow, every control ≥ 44 × 44, smallest text 12 px (labels), sheet 92 % tall on phones (718 / 776 px) and a 520 / 560 px full-height panel from 768 / 1280. **Axe (wcag2a/aa, 21aa, 22aa) on the dialog: zero serious or critical** at every size, idle and with errors, and in the duplicate, failure and success states (API mocked, nothing stored) at 390 and 1440.
+- **States:** duplicate and failure keep focus on the button and bring the notice into view; success moves focus to its heading.
+- **Keyboard** (390, 1440): from the heading, Tab runs Close → name → phone → service → message → "Add project details" → Send enquiry → WhatsApp → Call → back to Close; it never leaves the dialog; every stop shows the 2 px solid ring. Escape, the close button and a backdrop click all close it and return focus to "Start a project".
+- **Scroll lock:** opened at 1800 px, the body is fixed at −1800 px and the page does not move under the wheel; closed, it is back at exactly 1800, at 390 and 1440.
+- **Reduced motion:** the sheet appears untransformed with the backdrop at full opacity, and Escape removes it at once.
+- **Short viewport (390 × 420, a keyboard that resizes the page):** each focused field and the submit button are scrolled into the sheet's visible area.
+- **On `/contact` (old page, new form):** tabbing through every field at 390 (touch) and 1440, no focused control is under the visible dock (on touch the dock slides away for a text field).
+- **Accessibility tree:** the dialog is named "Tell us about your space."; each field is named with "required" or "optional"; an invalid field is `invalid` and described by its error ("Mobile numbers start with 6, 7, 8 or 9"); the notices are `status` / `alert` regions. Chromium does not surface `aria-required` on a native `<select>` as a property, but its name includes "required" (the kit's visually hidden marker).
+- **Context:** an enquiry from the old Expertise accordion was recorded as `expertise-e02` (the old Dulcey title it passes was ignored by the prefill, as designed) and the dock's as `dock-cta`; both were confirmed in the admin.
+- **Regression pass** (production build on PHP, Playwright; **54/54**, run again on the final build):
+  - nine routes at 390 and 1440: one `h1`, `main` / `nav` / `footer`, `index, follow` on the old pages, `noindex` on the pending routes and the 404, no overflow, no console errors;
+  - the modal from `home-hero` (old Home), `footer-cta`, `dock-cta` and `expertise-e03` (old accordion) at both widths: opens, focus inside, Escape closes, focus back on the opener;
+  - admin: redirect to login, login, dashboard (the new lead in the recent table, stat cards, the 14-day trend, CSV export), search, all four filters (Status, Interested In, Source, Date Range), sorting, pagination, inline status change (saved), bulk select ("Delete Selected"), CSV export (contains the lead) and import ("Imported … duplicates skipped"), the delete dialog (cancelled, lead kept), the detail page (name, mobile, email, interested-in, message, source, page URL), a note added and the status changed (both saved), the Guidelines gate and its four tabs, logout; no page errors.
+- **Admin parity, baseline against this branch: 34/34 identical**, 0 pixels and 0 digest differences; calibration (baseline against itself) 34/34.
+- Every test lead and the parity seeds were deleted: both stores ended empty.
+
+### Open items
+
+1. **Prompt 13 (Contact):** place the `full` form in the new page and give its section `id="enquiry"`. Until then the form paints its own paper ground inside the old grey panel.
+2. **Prompt 14:** delete `src/utils/swalHelper.js` and the `sweetalert2` package (nothing imports them now).
+3. **Prompt 15:** the admin's fixed "Interested In" list (D-02). The new titles already appear there as stored values.
+4. **Prompt 17:** check the sheet with a real on-screen keyboard on iOS Safari and Android Chrome (the `visualViewport` lift cannot be emulated headless) and the safe-area padding on a phone with a home indicator.
+5. **Prompts 06–14 and 19:** every new CTA calls `openLeadModal('<page>-<place>', { service_interest, context: { label } })` with the names in the prompt's contract; nothing passes a `context` yet. `context.ref` is accepted and not stored (left for the measurement hook, D-18).
+6. **Prompt 18:** a real screen-reader pass (none was available; checked through the accessibility tree and axe). Decide whether the kit's controls should also carry the native `required` (harmless under `noValidate`) so `<select>` exposes the required state as a property. Consider lazy-loading the sheet's body if the main-bundle budget needs the 5.4 KB gzip back.
+7. The honeypot is the only bot measure; the create endpoint has no rate limiting (index §13).
+8. No VoiceOver or NVDA in this session. `npm audit` advisories in CRA 5's tree are unchanged.

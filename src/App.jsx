@@ -433,6 +433,7 @@ const LeadModalWrapper = () => {
       onClose={closeLeadModal}
       source={modalConfig.source}
       serviceInterest={modalConfig.service_interest}
+      context={modalConfig.context}
     />
   );
 };

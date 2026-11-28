@@ -1,175 +1,204 @@
 /* ============================================
-   UnifiedLeadForm — values ported verbatim from
-   `mockup/styles.css` (.lead-form, .form-success). The form renders
-   identically wherever it is used (Contact panel + enquiry modal), so
-   everything here is context-free: the surrounding panel owns its own
-   chrome.
-
-   The submit button reuses the global `.btn .btn--primary` primitive
-   (src/styles/dulcey.css) — only the mockup's in-form size override
-   lives here.
+   UnifiedLeadForm — IN-ARCH (prompt 05)
+   The root carries class="ia" and data-tone="paper", so it paints paper
+   and reads the tone variables wherever it is placed (the modal sheet, the
+   Contact page, the old Contact panel until prompt 13). No outer padding:
+   the host decides the margins.
    ============================================ */
+
+.root {
+  min-width: 0;
+  text-align: start;
+}
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--ia-space-6);
 }
 
-/* Name/email and phone/organization pairs — collapse to one column
-   below ~200px of available track width, exactly as the mockup. */
-.row2 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
-  gap: 16px;
-}
-
-.label {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: #3d3d42;
-}
-
-.input,
-.select,
-.textarea {
-  border: 1px solid #dedee2;
-  border-radius: 12px;
-  padding: 13px 15px;
-  font-size: 15px;
-  background: #fff;
-  color: var(--ink);
-  font-family: inherit;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 96px;
-}
-
-.select {
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8"><path d="M1 1l5 5 5-5" stroke="%230B0B0C" stroke-width="1.6" fill="none"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-}
-
-.input:focus,
-.select:focus,
-.textarea:focus {
-  outline: none;
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(213, 25, 46, 0.12);
-}
-
-.input:disabled,
-.select:disabled,
-.textarea:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Invalid state — the mockup has no error styling, so this stays in its
-   visual language: the focus ring's red border, nothing louder. */
-.invalid,
-.invalid:focus {
-  border-color: var(--red);
-}
-
-.error {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--red);
-}
-
-/* Mockup: `.lead-form .btn{width:100%;padding:16px 30px;font-size:15.5px;}` */
-.submit {
-  width: 100%;
-  padding: 16px 30px;
-  font-size: 15.5px;
-}
-
-.submit:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.alt {
+.fields {
+  min-inline-size: 0;
   margin: 0;
-  font-size: 12.5px;
-  line-height: normal;
-  /* Was `--grey-4` (#8B8B92) — 3.38:1 against the modal's white panel,
-     under AA for 12.5px text. `--grey-3` (#6B6B70) reaches 5.30:1, and
-     4.95:1 on the Contact page's #F5F5F6 panel (Prompt 12). */
-  color: var(--grey-3);
-  text-align: center;
+  padding: 0;
+  border: 0;
 }
 
-.alt a {
-  color: var(--red);
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ia-space-5);
+}
+
+.cell {
+  min-width: 0;
+}
+
+/* Full: two columns from 768 px — name / phone, service / email,
+   location / area, budget alone, message full width. */
+@media (min-width: 768px) {
+  .full .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--ia-space-6);
+    row-gap: var(--ia-space-6);
+  }
+
+  .full .budget {
+    grid-column: 1;
+  }
+
+  .full .wide {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Phone: a fixed "+91" inside the field ---------- */
+.phone {
+  position: relative;
+  display: block;
+}
+
+.prefix {
+  position: absolute;
+  inset-block: 1px;
+  inset-inline-start: 1px;
+  display: flex;
+  align-items: center;
+  padding-inline: 16px 12px;
+  border-inline-end: 1px solid var(--ia-line);
+  color: var(--ia-fg-2);
+  font-size: 1rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* (0,2,0): beats the kit's control padding whatever the stylesheet order. */
+.phone .phoneInput {
+  padding-inline-start: 72px;
+}
+
+/* ---------- Counter ---------- */
+.counter {
+  margin: 0;
+  color: var(--ia-fg-2);
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.over {
+  color: var(--ia-feedback-error);
   font-weight: 600;
 }
 
-/* ========== Inline success state (.form-success) ==========
-   Replaces the form in place — there is no thank-you redirect. */
+/* ---------- Compact: the details disclosure ---------- */
+.disclosure {
+  margin-top: var(--ia-space-3);
+}
+
+.details {
+  margin-top: var(--ia-space-3);
+}
+
+/* `.grid` sets display, which would otherwise beat the hidden attribute. */
+.details[hidden] {
+  display: none;
+}
+
+.details:not([hidden]) {
+  animation: ia-form-details var(--ia-dur-3) var(--ia-ease-out) both;
+}
+
+@keyframes ia-form-details {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .details:not([hidden]) {
+    animation: none;
+  }
+}
+
+/* ---------- Submit, privacy line, quick contact ---------- */
+.submit {
+  display: flex;
+}
+
+.privacy {
+  margin: calc(var(--ia-space-2) * -1) 0 0;
+  color: var(--ia-fg-2);
+  max-width: var(--ia-measure);
+}
+
+.quick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--ia-space-5);
+  row-gap: 0;
+  padding-top: var(--ia-space-4);
+  border-top: 1px solid var(--ia-line);
+}
+
+.quickLead {
+  margin: 0;
+  flex-basis: 100%;
+  color: var(--ia-fg-2);
+}
+
+@media (min-width: 768px) {
+  .full .quickLead {
+    flex-basis: auto;
+    margin-inline-end: var(--ia-space-1);
+  }
+}
+
+/* ---------- Notices ---------- */
+.notice {
+  /* Keeps the whole notice clear of a sticky edge when scrolled into view. */
+  scroll-margin-block: var(--ia-space-6);
+}
+
+/* ---------- Success ---------- */
 .success {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  text-align: center;
-  padding: 40px 20px;
+  align-items: flex-start;
+  gap: var(--ia-space-4);
+  padding-block: var(--ia-space-4);
 }
 
-.success i {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--grad);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 28px;
-  box-shadow: 0 12px 30px rgba(213, 25, 46, 0.3);
-  font-style: normal;
+.successArt {
+  display: block;
+  height: auto;
+  margin-bottom: var(--ia-space-2);
 }
 
+/* Focus (programmatic, tabindex -1) follows the base layer: a ring only
+   for keyboard users. */
 .successHead {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .successBody {
   margin: 0;
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--grey-3);
-  max-width: 360px;
+  max-width: 52ch;
+  color: var(--ia-fg-2);
+  text-wrap: pretty;
 }
 
-.successMail {
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--red);
+.nowrap {
+  white-space: nowrap;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .input,
-  .select,
-  .textarea {
-    transition: none;
-  }
+.successActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ia-space-4) var(--ia-space-6);
+  margin-top: var(--ia-space-2);
 }

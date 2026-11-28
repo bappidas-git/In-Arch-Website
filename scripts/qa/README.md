@@ -1,8 +1,8 @@
 # QA tools
 
-Three tools and a router for checking the site the way it runs in production: the built React app, the PHP lead API and the admin, all on one origin.
+Four tools and a router for checking the site the way it runs in production: the built React app, the PHP lead API and the admin, all on one origin.
 
-The two scripts use the Playwright already installed in the session (`require('playwright')`). It is deliberately **not** a project dependency. If it cannot be resolved, the scripts say so and stop. Output goes to `qa-artifacts/`, which git ignores.
+The scripts use the Playwright already installed in the session (`require('playwright')`). It is deliberately **not** a project dependency. If it cannot be resolved, the scripts say so and stop. Output goes to `qa-artifacts/`, which git ignores.
 
 ## Serve a build with the lead API
 
@@ -116,6 +116,22 @@ When you are done, remove the worktree:
 ```bash
 git worktree remove ../inarch-baseline
 ```
+
+## `lead-flow.js`: form → API → admin
+
+```bash
+node scripts/qa/lead-flow.js
+```
+
+| Option | Default |
+|---|---|
+| `--base` | `http://127.0.0.1:8080` |
+| `--width` | `390` (the bottom sheet); `1440` drives the side panel |
+| `--keep` | off: the test leads are deleted at the end |
+
+Run it against the production build served by PHP (above). Each run uses two fresh random mobile numbers. It opens the enquiry sheet from the dock, checks focus, Escape and the scroll lock, submits empty (three errors, focus on "Your name"), then fills every field and checks the intercepted `?action=create` request: the 21 frozen lead keys plus only the four additive ones, `status`, `notes`, `activity`, the empty `organization` and `state`, the service label, `source` and the composed message. It then checks the success state; the duplicate notice on `/contact` for the same number, with its WhatsApp brief and the values intact; a forced network failure and a working "Try again"; and, in the admin (credentials read from `.env`, never printed), the listed lead, its detail page and the "Interested In" option. The test leads are deleted through the API with `REACT_APP_LEADS_ADMIN_KEY`, also when a step fails. Exit code 1 on any failed check; failure screenshots go to `qa-artifacts/lead-flow/`.
+
+`npm run qa:leads` runs it with its defaults.
 
 ## Unit tests
 

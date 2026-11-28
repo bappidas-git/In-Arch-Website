@@ -42,7 +42,8 @@
     "build:images": "node scripts/build-images.js",
     "build:icons": "node scripts/build-icons.js",
     "qa:public": "node scripts/qa/public-check.js",
-    "qa:parity": "node scripts/qa/parity.js"
+    "qa:parity": "node scripts/qa/parity.js",
+    "qa:leads": "node scripts/qa/lead-flow.js"
   },
   "eslintConfig": {
     "extends": [

@@ -11,7 +11,7 @@
    authoritative and the admin reads straight from it.
    ============================================ */
 
-import { siteConfig } from "../data/siteConfig";
+import { studio } from "../data/siteConfig";
 
 // =============================================
 // CONFIGURATION
@@ -23,8 +23,9 @@ import { siteConfig } from "../data/siteConfig";
 const LEADS_API_URL = process.env.REACT_APP_LEADS_API_URL || "/api/leads.php";
 
 // Phone number surfaced in user-facing fallback messages when a submission
-// cannot be saved. Sourced from siteConfig (single source of business truth).
-const CONTACT_PHONE = siteConfig.phoneDisplay;
+// cannot be saved. Sourced from the studio's facts in siteConfig (single
+// source of business truth; prompt 05).
+const CONTACT_PHONE = studio.phoneDisplay;
 
 /**
  * Generate a UUID v4

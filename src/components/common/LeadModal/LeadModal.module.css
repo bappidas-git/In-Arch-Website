@@ -1,113 +1,110 @@
 /* ============================================
-   LeadModal — values ported verbatim from
-   `mockup/styles.css` (.modal, .modal__box, .modal__close, and the
-   heading rules `.modal__box h2` / `.modal__box .sub`), plus the
-   `modalIn` / `fadeIn` keyframes.
+   LeadModal — the enquiry sheet (prompt 05)
+   The Portal container carries class="ia" and data-tone="paper".
+   GSAP moves the sheet (transform) and fades the backdrop (opacity);
+   nothing else animates.
    ============================================ */
 
-.overlay {
+.root {
   position: fixed;
   inset: 0;
-  z-index: 200;
-  background: rgba(10, 10, 12, 0.55);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(12px, 3vw, 32px);
-  animation: fadeIn 0.25s ease;
+  z-index: var(--ia-z-modal);
 }
 
-.box {
-  background: #fff;
-  border-radius: 24px;
-  max-width: 640px;
-  width: 100%;
-  max-height: calc(100vh - 48px);
-  overflow: auto;
-  padding: clamp(24px, 4vw, 40px);
-  position: relative;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-  animation: modalIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+/* While it leaves, the page behind is already live again. */
+.root:not([data-open]) {
+  pointer-events: none;
 }
 
-.close {
+.backdrop {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  background: #fff;
-  cursor: pointer;
-  font-size: 16px;
-  color: var(--ink);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-  font-family: inherit;
-  padding: 0;
+  inset: 0;
+  background: rgba(22, 30, 25, 0.55);
 }
 
-.close:hover {
-  background: var(--bg-grey);
+/* ---------- Phones: a bottom sheet ---------- */
+.sheet {
+  position: absolute;
+  inset-inline: 0;
+  bottom: var(--ia-kb, 0px);
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+  max-height: min(92svh, calc(100% - var(--ia-kb, 0px)));
+  background: var(--ia-bg);
+  color: var(--ia-fg);
+  box-shadow: var(--ia-shadow-overlay);
+  outline: none;
+}
+
+.header {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ia-space-4);
+  padding: var(--ia-space-5) var(--ia-gutter) var(--ia-space-4);
+  border-bottom: 1px solid var(--ia-line);
+  background: var(--ia-bg);
+}
+
+.titles {
+  display: grid;
+  gap: var(--ia-space-2);
+  min-width: 0;
+  padding-top: var(--ia-space-1);
 }
 
 .eyebrow {
-  margin-bottom: 4px;
+  margin: 0;
 }
 
-.head {
-  margin: 0 0 6px;
-  font-size: clamp(22px, 4vw, 30px);
-  font-weight: 750;
-  letter-spacing: -0.02em;
-  /* The global reset gives headings a tighter line-height token; the
-     mockup leaves this inherited. */
-  line-height: normal;
-  /* Keep the heading clear of the 38px close button. */
-  padding-right: 46px;
+.heading {
+  text-wrap: balance;
 }
 
-.sub {
-  margin: 0 0 24px;
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: var(--grey-3);
+.context {
+  margin: 0;
+  color: var(--ia-fg-2);
+  overflow-wrap: anywhere;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+.close {
+  flex: none;
+}
+
+/* The sheet's own scroll; the header stays put above it. */
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--ia-space-6) var(--ia-gutter) calc(var(--ia-space-8) + env(safe-area-inset-bottom, 0px));
+  scroll-padding-block: var(--ia-space-6);
+}
+
+/* ---------- From 768 px: a right-hand panel ---------- */
+@media (min-width: 768px) {
+  .sheet {
+    inset-inline: auto 0;
+    top: 0;
+    width: 520px;
+    max-width: 100%;
+    max-height: none;
   }
 
-  to {
-    opacity: 1;
+  .header {
+    padding: var(--ia-space-8) var(--ia-space-10) var(--ia-space-6);
+  }
+
+  .body {
+    padding: var(--ia-space-8) var(--ia-space-10) var(--ia-space-12);
   }
 }
 
-@keyframes modalIn {
-  from {
-    opacity: 0;
-    transform: translateY(24px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .overlay,
-  .box {
-    animation: none;
-  }
-
-  .close {
-    transition: none;
+@media (min-width: 1280px) {
+  .sheet {
+    width: 560px;
   }
 }

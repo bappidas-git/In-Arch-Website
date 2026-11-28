@@ -129,6 +129,29 @@ The site now navigates like IN-ARCH while the old page bodies are replaced one b
 - `src/components/common/Header/`, `MobileMenu/` and `Footer/`.
 - The static JSON-LD blocks, canonical link and `og:url` / `twitter:url` in `public/index.html` (they named the previous domain; `SEOHead` creates them at run time, and prompt 18 restores a static copy).
 
+### Prompt 05 — Unified lead form and modal (2026-11-28)
+
+The site's one enquiry form and its sheet are rebuilt in the IN-ARCH design. **The submit path and the lead contract are unchanged** — every enquiry still goes through `submitLeadToWebhook` → `POST /api/leads.php?action=create` with the 21 frozen keys — and **every admin screen is unchanged** (`scripts/qa/parity.js --suite admin`: 34/34 identical to `cc2fc52`).
+
+#### Added
+
+- `src/utils/leadPayload.js`: `buildLeadPayload(values, { source, context })` and `composeMessage(values)` (plus `composeWhatsAppBrief`, `formatMobile`, `firstName`), pure functions. Four additive keys are sent only when filled: `project_location`, `project_area`, `budget_range`, `context_label`; the details are also written into `message` as one line ("… — Project details: Location: …; Area: …; Budget: ….") so the admin shows them.
+- `src/data/enquiry.js`: the form's service options (the seven services + "Something else") and the D-09 budget ranges.
+- `scripts/qa/lead-flow.js` (`npm run qa:leads`): dock → sheet → payload → success → duplicate on `/contact` → forced failure and "Try again" → admin listing, detail and "Interested In" option; deletes its test leads.
+- **Tests:** `leadPayload`, `validators`, `UnifiedLeadForm` (required errors, blur, prefill, disclosure, loading, success, duplicate, failure, draft, honeypot, counter) and `LeadModal` (251 in all).
+
+#### Changed
+
+- `UnifiedLeadForm` (same path and export): one component in two variants — `full` on the Contact page (all eight fields, two columns from 768 px) and `compact` in the sheet (name, phone with a fixed "+91", service, message, and "Add project details (optional)" for email, location, area and budget). Phone required, email optional (D-08). Inline, specific errors with an icon; first-invalid focus; "Sending…" with `aria-busy`; success, duplicate and failure shown inline (no pop-up), never losing what was typed, with the brief offered on WhatsApp. A `sessionStorage` draft and a honeypot. The CTA's service and context travel into the form and onto the lead.
+- `LeadModal` (same path and props, plus `context`): built on `Portal`, `useFocusTrap` and `useScrollLock`; a bottom sheet below 768 px (rises 500 ms, its own scroll, header with a 48 px close button), a right-hand panel from 768 px (520 / 560 px); focus opens on its heading; it sits above an on-screen keyboard; reduced motion simply shows it.
+- `ModalContext` documents the context contract `openLeadModal(source, { service_interest, context: { label, ref } })`; `App.jsx` passes `context` through.
+- `src/utils/validators.js`: names accept letters of any script; adds `getRequiredMobileErrorMessage`, `getOptionalEmailErrorMessage` and `normalizeMobile`. The four original exports keep their behaviour.
+- `src/utils/webhookSubmit.js`: the fallback phone number in its error messages is the studio's (`studio.phoneDisplay`).
+
+#### Removed
+
+- The form's use of `swalHelper` / `sweetalert2` (the files stay until prompt 14); no chunk ships sweetalert2 any more.
+
 ## [2.31.0] — 2026-08-20 — Who We Serve hero: the right edge dissolves too
 
 `[2.30.0]` drew the frame at the section's full width, which put the
