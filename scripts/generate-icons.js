@@ -1,165 +1,139 @@
 /* ============================================
-   generate-icons.js — Favicons & PWA icons
+   generate-icons.js — favicons and PWA icons (IN-ARCH, prompt 04)
    --------------------------------------------
-   Regenerates the site's favicon / PWA / Apple-touch icons from the "DLS"
-   mark (`public/images/logo/dls-mark-860.png`) — the same self-hosted,
-   full-alpha artwork `siteConfig.logoMark` points at. The source is already
-   trimmed to its own glyphs, so there is no white plate or dead padding to
-   crop; we still `.trim()` defensively in case a future re-cut carries some.
+   The ivory "IA" monogram on a solid espresso #231B15 tile, so the icon reads
+   on light and dark browser chrome alike.
 
-   **Every output is transparent.** The mark ships as full-alpha `#ED1C24`
-   glyphs on nothing, and the generator preserves that end to end — no
-   `flatten()`, and every canvas is created at `alpha: 0`. The `.trim()` above
-   is what makes this safe: it removes the transparent margin, so `WIDTH_PCT`
-   measures the *visible* mark rather than the mark plus its padding.
+   Source: logos/in-arch-favicon-dark-transparent.png — the client's own
+   monogram file for dark backgrounds (ivory #F4EFE7 ink on transparency,
+   512 × 512, the mark itself 266 × 190). Read at build time only; nothing
+   loads from logos/ at run time. Only the mark's ALPHA is used: the ink is
+   filled with the logo's own ivory, so no edge pixel drifts in colour when
+   it is resampled (the same rule as scripts/build-brand-assets.js).
 
-   Two surfaces are transparent by explicit request, against platform advice —
-   if either ever needs to go back to an opaque plate, give it `WHITE` below
-   instead of `TRANSPARENT` and nothing else has to change:
-     - apple-touch-icon: iOS does not honour alpha on home-screen icons and
-       composites the transparent area onto **black**, so the mark reads red
-       on black rather than red on white.
-     - maskable-*: the maskable spec assumes an opaque bleed, since the
-       launcher crops to its own shape; with alpha the result depends on what
-       the launcher paints behind it.
+   The strokes are hairlines (about 7.5 % of the mark's width: 1 px at
+   16 px). For the 16 – 48 px sizes the alpha is thickened — blurred slightly
+   at 4× the output size, then steepened — so "IA" stays legible in a tab,
+   without changing its proportions. From 180 px the mark is drawn as cut.
 
-   The mark is 860×460 — **1.87:1, not square** — so every size below is
-   driven by a *width* fraction and letterboxes vertically. Do not reuse the
-   old "D"-mark percentages: at 0.92 width a square mark filled the frame,
-   whereas this one is only ~0.53 as tall as it is wide.
+   Outputs (public/, file names fixed: public/.htaccess and the manifest
+   depend on them):
+     favicon.ico            16 + 32 + 48 (thickened)
+     favicon.png            32 (thickened)
+     apple-touch-icon.png   180, opaque (iOS rounds the corners itself)
+     logo192.png, logo512.png        manifest purpose "any"
+     maskable-192.png, maskable-512.png   purpose "maskable": opaque, the mark
+                                          inside the central 80 % safe circle
 
-   Outputs (into public/):
-     - favicon.png            32×32
-     - favicon.ico            16 + 32 + 48 (multi-resolution, 32-bit RGBA)
-     - apple-touch-icon.png   180×180 (padded)
-     - logo192.png            192×192 ("any" — mark near full width)
-     - logo512.png            512×512 ("any")
-     - maskable-192.png       192×192 (mark inside the 80% safe circle)
-     - maskable-512.png       512×512 (ditto)
+   Today's (Dulcey) favicon.ico, favicon.png and apple-touch-icon.png were
+   copied byte for byte to public/legacy-icons/ before this first ran; the
+   admin surface points at those until prompt 15 (public/index.html).
 
-   Why "any" and "maskable" are separate files: a maskable icon must keep its
-   artwork inside a centred circle of 80% the canvas diameter, which for a
-   1.87:1 mark caps it at ~0.70 width. Declaring one file `"any maskable"`
-   would force that padding on the un-masked surfaces too (Chrome's install
-   prompt, the tab-strip PWA icon), shrinking the mark for no reason.
-
-   Usage:  node scripts/generate-icons.js  (npm run generate:icons)
+   Usage:  node scripts/generate-icons.js   (npm run generate:icons)
    Requires dev deps: sharp, png-to-ico
    ============================================ */
 
-const fs = require("fs");
-const path = require("path");
-const sharp = require("sharp");
-const pngToIco = require("png-to-ico").default || require("png-to-ico");
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
+const pngToIco = require('png-to-ico').default || require('png-to-ico');
 
-const PUBLIC_DIR = path.resolve(__dirname, "..", "public");
+const ROOT = path.resolve(__dirname, '..');
+const PUBLIC_DIR = path.join(ROOT, 'public');
+const MARK_FILE = path.join(ROOT, 'logos', 'in-arch-favicon-dark-transparent.png');
 
-// The "DLS" mark — keep in sync with siteConfig.logoMark in
-// src/data/siteConfig.js. `/images/**` is immutable-cached, so a re-cut ships
-// under a new `-<width>` filename; update this path in the same pass.
-const MARK_FILE = path.join(PUBLIC_DIR, "images", "logo", "dls-mark-860.png");
+const ESPRESSO = { r: 0x23, g: 0x1b, b: 0x15 }; // the logo's ink — the tile
+const IVORY = { r: 0xf4, g: 0xef, b: 0xe7 }; // the logo's ivory — the mark
 
-// Canvas backgrounds. WHITE is unused at present — kept as the documented
-// escape hatch for the apple-touch / maskable note in the header above.
-const TRANSPARENT = { r: 0, g: 0, b: 0, alpha: 0 };
-// eslint-disable-next-line no-unused-vars
-const WHITE = { r: 255, g: 255, b: 255, alpha: 1 };
-
-// Fraction of the canvas *width* the mark spans, per surface.
+// Fraction of the tile's WIDTH the mark spans (it is 1.4 : 1, wider than tall).
 const WIDTH_PCT = {
-  favicon: 0.94, // 16–48px: every pixel counts, corners are unused anyway
-  apple: 0.84, // iOS rounds the corners and adds its own gloss-era inset
-  any: 0.88, // un-masked PWA / install-prompt icon
-  maskable: 0.7, // ~0.705 is the 80%-safe-circle cap at 1.87:1; round down
+  favicon: 0.8, // 16–48 px: every pixel counts
+  apple: 0.6, // iOS rounds the corners
+  any: 0.64, // install prompt, tab strip
+  // The mark's corners must sit inside a centred circle of 80 % of the
+  // tile: half-diagonal = w/2 · √(1 + (190/266)²) ≤ 0.4 → w ≤ 0.65. 0.52
+  // leaves a margin for launchers that crop tighter than the spec.
+  maskable: 0.52,
 };
 
-// Trim the transparent padding down to the bounding box of the mark. Alpha is
-// preserved — `WIDTH_PCT` is meant to measure the glyphs, not the margin.
-async function extractMark() {
-  return sharp(MARK_FILE).trim({ threshold: 10 }).png().toBuffer();
+// Thickening for the small sizes: Gaussian σ (in output pixels) and the
+// steepening applied to the blurred alpha (a' = gain · a + offset, clamped).
+const THICKEN = { sigma: 0.55, gain: 2.6, offset: -30 };
+const SUPERSAMPLE = 4;
+
+/** The mark's alpha channel, trimmed to the artwork (266 × 190). */
+async function markAlpha() {
+  const trimmed = await sharp(MARK_FILE).trim({ threshold: 10 }).png().toBuffer();
+  return sharp(trimmed).extractChannel(3).png().toBuffer();
 }
 
-// Place the mark, scaled to `widthPct` of the canvas, centered on a square.
-// The mark is wider than it is tall, so `fit: inside` against a square box
-// always binds on width — `widthPct` is literally the width fraction.
-async function squareIcon(markBuf, size, widthPct, background) {
-  const inner = Math.max(1, Math.round(size * widthPct));
-  const resized = await sharp(markBuf)
-    .resize({
-      width: inner,
-      height: inner,
-      fit: "inside",
-      withoutEnlargement: false,
-      background: TRANSPARENT,
-    })
+/**
+ * The mark at `width` px wide as an RGBA PNG: ivory ink, the source's alpha
+ * (thickened when asked).
+ */
+async function renderMark(alpha, width, thicken) {
+  const meta = await sharp(alpha).metadata();
+  const height = Math.max(1, Math.round((width * meta.height) / meta.width));
+  let mask;
+  if (thicken) {
+    const big = await sharp(alpha)
+      .resize({ width: width * SUPERSAMPLE, height: height * SUPERSAMPLE, kernel: 'lanczos3' })
+      .blur(Math.max(0.3, thicken.sigma * SUPERSAMPLE))
+      .linear(thicken.gain, thicken.offset)
+      .toColourspace('b-w')
+      .png()
+      .toBuffer();
+    mask = await sharp(big).resize({ width, height, kernel: 'lanczos3' }).toColourspace('b-w').raw().toBuffer();
+  } else {
+    mask = await sharp(alpha).resize({ width, height, kernel: 'lanczos3' }).toColourspace('b-w').raw().toBuffer();
+  }
+  const ink = await sharp({ create: { width, height, channels: 3, background: IVORY } })
+    .raw()
+    .toBuffer();
+  return sharp(ink, { raw: { width, height, channels: 3 } })
+    .joinChannel(mask, { raw: { width, height, channels: 1 } })
     .png()
     .toBuffer();
-  return sharp({
-    create: { width: size, height: size, channels: 4, background },
-  })
-    .composite([{ input: resized, gravity: "center" }])
+}
+
+/** An opaque espresso square with the mark centred at `widthPct` of its width. */
+async function tile(alpha, size, widthPct, thicken = null) {
+  const mark = await renderMark(alpha, Math.max(1, Math.round(size * widthPct)), thicken);
+  const composed = await sharp({ create: { width: size, height: size, channels: 3, background: ESPRESSO } })
+    .composite([{ input: mark, gravity: 'center' }])
     .png()
     .toBuffer();
+  // sharp composites last in its pipeline, so drop the alpha channel in a
+  // second pass: every icon is a fully opaque RGB file.
+  return sharp(composed).removeAlpha().png({ compressionLevel: 9 }).toBuffer();
 }
 
 async function main() {
-  console.log(`Reading ${path.relative(process.cwd(), MARK_FILE)}…`);
-  const mark = await extractMark();
-  const m = await sharp(mark).metadata();
-  console.log(`Mark trimmed to ${m.width}×${m.height} (alpha: ${m.hasAlpha})`);
+  console.log(`Reading ${path.relative(ROOT, MARK_FILE)}…`);
+  const alpha = await markAlpha();
+  const m = await sharp(alpha).metadata();
+  console.log(`Mark trimmed to ${m.width}×${m.height}`);
 
   const out = (name) => path.join(PUBLIC_DIR, name);
+  const write = async (name, buffer) => {
+    fs.writeFileSync(out(name), buffer);
+    const meta = await sharp(buffer).metadata();
+    console.log(`  ${name.padEnd(22)} ${meta.width}×${meta.height}  ${(buffer.length / 1024).toFixed(1)} KB`);
+  };
 
-  // favicon.png (32) — maximise the mark.
-  await sharp(await squareIcon(mark, 32, WIDTH_PCT.favicon, TRANSPARENT)).toFile(
-    out("favicon.png"),
-  );
+  // favicon.png (32) and favicon.ico (16 / 32 / 48), thickened.
+  await write('favicon.png', await tile(alpha, 32, WIDTH_PCT.favicon, THICKEN));
+  const icoPngs = await Promise.all([16, 32, 48].map((s) => tile(alpha, s, WIDTH_PCT.favicon, THICKEN)));
+  fs.writeFileSync(out('favicon.ico'), await pngToIco(icoPngs));
+  console.log(`  ${'favicon.ico'.padEnd(22)} 16 + 32 + 48  ${(fs.statSync(out('favicon.ico')).size / 1024).toFixed(1)} KB`);
 
-  // favicon.ico — 16/32/48 multi-resolution. png-to-ico embeds each PNG
-  // whole, so the 32-bit RGBA alpha survives into the .ico.
-  const icoPngs = await Promise.all(
-    [16, 32, 48].map((s) => squareIcon(mark, s, WIDTH_PCT.favicon, TRANSPARENT)),
-  );
-  fs.writeFileSync(out("favicon.ico"), await pngToIco(icoPngs));
+  await write('apple-touch-icon.png', await tile(alpha, 180, WIDTH_PCT.apple));
+  await write('logo192.png', await tile(alpha, 192, WIDTH_PCT.any));
+  await write('logo512.png', await tile(alpha, 512, WIDTH_PCT.any));
+  await write('maskable-192.png', await tile(alpha, 192, WIDTH_PCT.maskable));
+  await write('maskable-512.png', await tile(alpha, 512, WIDTH_PCT.maskable));
 
-  // apple-touch-icon (180) — padded because iOS rounds the corners.
-  await sharp(await squareIcon(mark, 180, WIDTH_PCT.apple, TRANSPARENT)).toFile(
-    out("apple-touch-icon.png"),
-  );
-
-  // logo192 / logo512 — manifest `purpose: "any"`.
-  await sharp(await squareIcon(mark, 192, WIDTH_PCT.any, TRANSPARENT)).toFile(
-    out("logo192.png"),
-  );
-  await sharp(await squareIcon(mark, 512, WIDTH_PCT.any, TRANSPARENT)).toFile(
-    out("logo512.png"),
-  );
-
-  // maskable-192 / maskable-512 — manifest `purpose: "maskable"`; the mark
-  // must survive Android cropping it to a circle/squircle.
-  await sharp(await squareIcon(mark, 192, WIDTH_PCT.maskable, TRANSPARENT)).toFile(
-    out("maskable-192.png"),
-  );
-  await sharp(await squareIcon(mark, 512, WIDTH_PCT.maskable, TRANSPARENT)).toFile(
-    out("maskable-512.png"),
-  );
-
-  // Clean up any leftover exotic Apple icons / Safari pinned tab from an
-  // earlier build (no longer referenced by index.html).
-  for (const stale of [
-    "apple-touch-icon-152x152.png",
-    "apple-touch-icon-167x167.png",
-    "apple-touch-icon-180x180.png",
-    "safari-pinned-tab.svg",
-  ]) {
-    const p = out(stale);
-    if (fs.existsSync(p)) {
-      fs.unlinkSync(p);
-      console.log(`Removed stale ${stale}`);
-    }
-  }
-
-  console.log("Icons written to public/.");
+  console.log('Icons written to public/.');
 }
 
 main().catch((err) => {

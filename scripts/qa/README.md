@@ -29,7 +29,7 @@ node scripts/qa/public-check.js
 | Option | Default |
 |---|---|
 | `--base` | `http://127.0.0.1:8080` |
-| `--routes` | every public path in the `<Route>` table of `src/App.jsx`; the `*` catch-all is tested as `/__qa-not-found` |
+| `--routes` | every public path in the `<Route>` table of `src/App.jsx`; `/portfolio/:slug` is tested with the first slug in `src/data/projects.js`, and the `*` catch-all as `/__qa-not-found` |
 | `--widths` | `360,390,768,1024,1280,1440,1920` |
 
 For each route and width, the script loads the page, waits for network idle and fonts, then scrolls to the bottom and back so lazy content mounts. A run fails on any of these:
@@ -83,7 +83,7 @@ What each suite captures:
 Each capture is compared in two ways:
 
 1. The two full-page PNGs, pixel by pixel, using `sharp`. When they differ, `-a`, `-b` and `-diff` images are written to `qa-artifacts/parity/<suite>/`. Masked regions are left out of this comparison. A masked region is the union of the element's boxes in both captures, padded by 4 px so a transformed layer's anti-aliased edge is covered; it is shown pale blue in the diff image. Masked elements stay in the digest.
-2. A digest of every element under `#root` and in body-level portals (MUI menus and dialogs). It records the tag, class list, bounding box and these computed styles: `font-family`, `font-size`, `font-weight`, `line-height`, `color`, `background-color`, `border`, `padding`, `margin`, `display`, `position`. The first twenty differences are printed.
+2. A digest of every element under `#root` and in body-level portals (MUI menus and dialogs). The one exception is `#ia-initial-loader`, the IN-ARCH splash added in prompt 04: it is skipped while it is `display: none` (always, on the admin), and digested like everything else if it ever renders. It records the tag, class list, bounding box and these computed styles: `font-family`, `font-size`, `font-weight`, `line-height`, `color`, `background-color`, `border`, `padding`, `margin`, `display`, `position`. The first twenty differences are printed.
 
 The script also fails if the candidate requests any `/fonts/*.woff2`, because the IN-ARCH faces must stay inert on these pages. The exit code is non-zero if any unmasked pixel or digest entry differs.
 

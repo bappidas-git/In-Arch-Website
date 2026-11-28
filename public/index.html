@@ -43,14 +43,16 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"
     />
+    <!-- Forest #161E19 on the public surface. The admin surface is set back
+         to today's #0B0B0C by the surface script at the end of <head>. -->
     <meta
       name="theme-color"
-      content="#0B0B0C"
+      content="#161E19"
       media="(prefers-color-scheme: dark)"
     />
     <meta
       name="theme-color"
-      content="#0B0B0C"
+      content="#161E19"
       media="(prefers-color-scheme: light)"
     />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -59,7 +61,7 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <meta name="apple-mobile-web-app-title" content="Dulcey Lead Services" />
+    <meta name="apple-mobile-web-app-title" content="IN-ARCH" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-TileColor" content="#0B0B0C" />
     <meta name="msapplication-tap-highlight" content="no" />
@@ -67,19 +69,24 @@
     <!-- =========================================
          SEO Meta Tags — home page (static fallback)
          --------------------------------------------
-         SEOHead rewrites these per route at runtime; the values here must
-         match seoConfig.pages.home in src/config/seo.js so a crawler that
-         never runs JS sees exactly what a browser does.
+         SEOHead rewrites these per route at run time. Title and description
+         are the client document's (details of in-arch.pdf §12), the same as
+         seoConfig.defaultTitle / defaultDescription in src/config/seo.js.
+         The canonical link, og:url / twitter:url and the static JSON-LD
+         blocks were removed in prompt 04 (they named the previous domain);
+         SEOHead creates them at run time, and prompt 18 restores a static
+         copy once the domain is known (owner decision D-05). Until then the
+         absolute image URLs carry the D-05 placeholder domain.
          ========================================= -->
     <meta
       name="description"
-      content="Dulcey Lead Services works with businesses, institutions and entrepreneurs to navigate complexity, strengthen organizational capability and grow sustainably."
+      content="In-Arch Architects &amp; Interior Designer, led by Ar. Mohammad Hassanuddin, offers architectural design, residential planning, interior design, 3D visualisation and project consultancy in Patna, Bihar."
     />
     <meta
       name="keywords"
-      content="Dulcey Lead Services, Beyond Business Support, business solutions, people &amp; organization, corporate services, leadership &amp; capability building"
+      content="In-Arch Architects &amp; Interior Designer, Architects in Patna, Best architects in Patna, Architecture firms in Patna, Interior designers in Patna, Residential architects in Patna, Commercial architects in Bihar, House design in Patna, Interior design consultancy in Patna, Architectural 3D visualisation, Modular kitchen design in Patna, Building planning and design in Patna"
     />
-    <meta name="author" content="Dulcey Lead Services" />
+    <meta name="author" content="In-Arch Architects &amp; Interior Designer" />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
 
@@ -87,44 +94,37 @@
          Open Graph / Facebook
          ========================================= -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.dulceyleadservices.com/" />
     <meta
       property="og:title"
-      content="Dulcey Lead Services — Beyond Business Support"
+      content="In-Arch Architects &amp; Interior Designer | Architects in Patna, Bihar"
     />
     <meta
       property="og:description"
-      content="Dulcey Lead Services works with businesses, institutions and entrepreneurs to navigate complexity, strengthen organizational capability and grow sustainably."
+      content="In-Arch Architects &amp; Interior Designer, led by Ar. Mohammad Hassanuddin, offers architectural design, residential planning, interior design, 3D visualisation and project consultancy in Patna, Bihar."
     />
-    <meta property="og:image" content="https://www.dulceyleadservices.com/og-image.png" />
+    <meta property="og:image" content="https://SITE-URL-NOT-SET.invalid/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Dulcey Lead Services — Beyond Business Support"
+      content="In-Arch Architects &amp; Interior Designer"
     />
-    <meta property="og:site_name" content="Dulcey Lead Services" />
+    <meta property="og:site_name" content="In-Arch Architects &amp; Interior Designer" />
     <meta property="og:locale" content="en_IN" />
 
     <!-- =========================================
          Twitter Card
          ========================================= -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://www.dulceyleadservices.com/" />
     <meta
       name="twitter:title"
-      content="Dulcey Lead Services — Beyond Business Support"
+      content="In-Arch Architects &amp; Interior Designer | Architects in Patna, Bihar"
     />
     <meta
       name="twitter:description"
-      content="Dulcey Lead Services works with businesses, institutions and entrepreneurs to navigate complexity, strengthen organizational capability and grow sustainably."
+      content="In-Arch Architects &amp; Interior Designer, led by Ar. Mohammad Hassanuddin, offers architectural design, residential planning, interior design, 3D visualisation and project consultancy in Patna, Bihar."
     />
-    <meta name="twitter:image" content="https://www.dulceyleadservices.com/og-image.png" />
-
-    <!-- =========================================
-         Canonical URL
-         ========================================= -->
-    <link rel="canonical" href="https://www.dulceyleadservices.com/" />
+    <meta name="twitter:image" content="https://SITE-URL-NOT-SET.invalid/og-image.png" />
 
     <!-- =========================================
          PWA Manifest & Icons
@@ -242,275 +242,7 @@
     <!-- =========================================
          Page Title
          ========================================= -->
-    <title>Dulcey Lead Services — Beyond Business Support</title>
-
-    <!-- =========================================
-         Structured Data / JSON-LD for SEO
-         ========================================= -->
-
-    <!-- These static schemas serve as fallbacks; the SEOHead component injects dynamic versions at runtime (matching element ids) from src/config/seo.js -->
-
-    <!-- Schema: Organization — mirrors generateOrganizationSchema() -->
-    <script type="application/ld+json" id="schema-organization">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Dulcey Lead Services",
-        "legalName": "Dulcey Lead Services",
-        "url": "https://www.dulceyleadservices.com",
-        "logo": "https://www.dulceyleadservices.com/images/logo/dulcey-wordmark-1351.png",
-        "description": "A professional business support and consulting organization — helping businesses, institutions, entrepreneurs, and professionals build for sustainable growth.",
-        "slogan": "Beyond Business Support",
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+91-70990-02522",
-          "contactType": "customer service",
-          "email": "dulceyleadservices@gmail.com"
-        },
-        "knowsAbout": [
-          "HR & People Management",
-          "Administration & Business Operations",
-          "Business Analytics & Intelligence",
-          "Pharmaceutical Business & Healthcare",
-          "Corporate, Legal & Intellectual Property",
-          "Leadership & Organizational Development",
-          "Soft Skills & Professional Development",
-          "Academic & Institutional Engagement",
-          "Business Management & Coaching",
-          "Corporate Branding & Graphics"
-        ]
-      }
-    </script>
-
-    <!-- Schema: WebSite — mirrors generateWebSiteSchema() -->
-    <script type="application/ld+json" id="schema-website">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Dulcey Lead Services",
-        "url": "https://www.dulceyleadservices.com",
-        "inLanguage": "en",
-        "publisher": {
-          "@type": "Organization",
-          "name": "Dulcey Lead Services",
-          "url": "https://www.dulceyleadservices.com"
-        }
-      }
-    </script>
-
-    <!-- Schema: WebPage (home) — SEOHead re-injects this per route -->
-    <script type="application/ld+json" id="schema-webpage">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "Dulcey Lead Services — Beyond Business Support",
-        "description": "Dulcey Lead Services works with businesses, institutions and entrepreneurs to navigate complexity, strengthen organizational capability and grow sustainably.",
-        "url": "https://www.dulceyleadservices.com/",
-        "inLanguage": "en",
-        "isPartOf": {
-          "@type": "WebSite",
-          "name": "Dulcey Lead Services",
-          "url": "https://www.dulceyleadservices.com"
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "Dulcey Lead Services",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://www.dulceyleadservices.com/images/logo/dulcey-wordmark-1351.png"
-          }
-        }
-      }
-    </script>
-
-    <!-- Schema: BreadcrumbList (home only) — SEOHead appends the current page -->
-    <script type="application/ld+json" id="schema-breadcrumb">
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://www.dulceyleadservices.com/"
-          }
-        ]
-      }
-    </script>
-
-    <!-- Schema: ItemList of Service — mirrors src/data/expertiseData.js.
-         Regenerate whenever an expertise title or description changes so
-         the static and runtime layers stay identical. -->
-    <script type="application/ld+json" id="schema-services">
-      {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "name": "Areas of Experience",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "item": {
-              "@type": "Service",
-              "name": "HR & People Management",
-              "description": "People are at the centre of every successful organization. We bring practical experience in helping organizations establish structured, professional, and effective people practices that support performance, accountability, and organizational growth.",
-              "serviceType": "HR & People Management",
-              "url": "https://www.dulceyleadservices.com/expertise#e01",
-              "provider": {
-                "@type": "Organization",
-                "name": "Dulcey Lead Services",
-                "url": "https://www.dulceyleadservices.com"
-              }
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "item": {
-              "@type": "Service",
-              "name": "Administration & Business Operations",
-              "description": "Behind every well-run organization is a disciplined operating structure. We bring experience in helping businesses create greater clarity, coordination, and control across their administrative and operational functions.",
-              "serviceType": "Administration & Business Operations",
-              "url": "https://www.dulceyleadservices.com/expertise#e02",
-              "provider": {
-                "@type": "Organization",
-                "name": "Dulcey Lead Services",
-                "url": "https://www.dulceyleadservices.com"
-              }
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "item": {
-              "@type": "Service",
-              "name": "Business Analytics & Intelligence",
-              "description": "Data is valuable only when it leads to better understanding and better decisions. We look beyond surface-level reporting to identify patterns, inconsistencies, performance deviations, process gaps, and areas that may require management attention.",
-              "serviceType": "Business Analytics & Intelligence",
-              "url": "https://www.dulceyleadservices.com/expertise#e03",
-              "provider": {
-                "@type": "Organization",
-                "name": "Dulcey Lead Services",
-                "url": "https://www.dulceyleadservices.com"
-              }
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 4,
-            "item": {
-              "@type": "Service",
-              "name": "Pharmaceutical Business & Healthcare",
-              "description": "Pharmaceutical and healthcare business is a specialized area of our experience. We understand the interconnected nature of people, field operations, sales and marketing, product knowledge, business analytics, performance management, administration, and operational discipline.",
-              "serviceType": "Pharmaceutical Business & Healthcare",
-              "url": "https://www.dulceyleadservices.com/expertise#e04",
-              "provider": {
-                "@type": "Organization",
-                "name": "Dulcey Lead Services",
-                "url": "https://www.dulceyleadservices.com"
-              }
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 5,
-            "item": {
-              "@type": "Service",
-              "name": "Corporate, Legal & Intellectual Property",
-              "description": "A successful business is built on more than vision — it is built on a strong legal foundation. We help businesses establish the right corporate structure, safeguard intellectual property, and implement legally sound documentation that protects both the organisation and its people.",
-              "serviceType": "Corporate, Legal & Intellectual Property",
-              "url": "https://www.dulceyleadservices.com/expertise#e05",
-              "provider": {
-                "@type": "Organization",
-                "name": "Dulcey Lead Services",
-                "url": "https://www.dulceyleadservices.com"
-              }
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 6,
-            "item": {
-              "@type": "Service",
-              "name": "Leadership & Organizational Development",
-              "description": "Leadership capability is a strategic organizational asset. We design customized leadership and organizational development programs for businesses and institutions seeking to strengthen managerial effectiveness, accountability, and performance.",
-              "serviceType": "Leadership & Organizational Development",
-              "url": "https://www.dulceyleadservices.com/expertise#e06",
-              "provider": {
-                "@type": "Organization",
-                "name": "Dulcey Lead Services",
-                "url": "https://www.dulceyleadservices.com"
-              }
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 7,
-            "item": {
-              "@type": "Service",
-              "name": "Soft Skills & Professional Development",
-              "description": "Professional excellence is shaped not only by technical knowledge, but by the ability to communicate, collaborate, lead, and adapt.",
-              "serviceType": "Soft Skills & Professional Development",
-              "url": "https://www.dulceyleadservices.com/expertise#e07",
-              "provider": {
-                "@type": "Organization",
-                "name": "Dulcey Lead Services",
-                "url": "https://www.dulceyleadservices.com"
-              }
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 8,
-            "item": {
-              "@type": "Service",
-              "name": "Academic & Institutional Engagement",
-              "description": "The transition from education to professional life requires more than academic knowledge. It requires perspective, confidence, communication, and an understanding of how organizations actually work.",
-              "serviceType": "Academic & Institutional Engagement",
-              "url": "https://www.dulceyleadservices.com/expertise#e08",
-              "provider": {
-                "@type": "Organization",
-                "name": "Dulcey Lead Services",
-                "url": "https://www.dulceyleadservices.com"
-              }
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 9,
-            "item": {
-              "@type": "Service",
-              "name": "Business Management & Coaching",
-              "description": "Every business journey presents different questions. How should the business be structured? Where are the gaps? What needs attention? What should happen next?",
-              "serviceType": "Business Management & Coaching",
-              "url": "https://www.dulceyleadservices.com/expertise#e09",
-              "provider": {
-                "@type": "Organization",
-                "name": "Dulcey Lead Services",
-                "url": "https://www.dulceyleadservices.com"
-              }
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 10,
-            "item": {
-              "@type": "Service",
-              "name": "Corporate Branding & Graphics",
-              "description": "Your business identity is expressed through every interaction. We help businesses communicate their identity, ideas, capabilities, and vision with greater clarity, consistency, and professionalism.",
-              "serviceType": "Corporate Branding & Graphics",
-              "url": "https://www.dulceyleadservices.com/expertise#e10",
-              "provider": {
-                "@type": "Organization",
-                "name": "Dulcey Lead Services",
-                "url": "https://www.dulceyleadservices.com"
-              }
-            }
-          }
-        ]
-      }
-    </script>
+    <title>In-Arch Architects &amp; Interior Designer | Architects in Patna, Bihar</title>
 
     <style id="ia-fonts">
       /* IN-ARCH web fonts (SIL OFL; licences in /fonts/). Self-hosted, Latin
@@ -844,7 +576,155 @@
           display: none !important;
         }
       }
+
+      /* ============================================
+         Public surface (IN-ARCH, prompt 04)
+         --------------------------------------------
+         Scoped to html[data-surface="public"], set by the first inline
+         script, so the admin keeps today's splash and nothing above changes
+         for it. The IN-ARCH splash shows only on the public surface: hidden
+         on the admin, and hidden when JavaScript is off (no surface
+         attribute), where the legacy rules above still apply.
+         ============================================ */
+      html[data-surface="public"] .initial-loader {
+        display: none;
+      }
+
+      .ia-initial-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        background: #161e19;
+        transition:
+          opacity 0.4s ease,
+          visibility 0.4s ease;
+      }
+
+      html[data-surface="public"] .ia-initial-loader {
+        display: flex;
+      }
+
+      html[data-surface="admin"] .ia-initial-loader {
+        display: none;
+      }
+
+      .ia-initial-loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      /* The ivory "IA" monogram, 56 px tall (266 × 190 source). */
+      .ia-loader-mark {
+        display: block;
+        width: auto;
+        height: 56px;
+        aspect-ratio: 266 / 190;
+      }
+
+      /* A 120 px hairline that fills left to right. */
+      .ia-loader-line {
+        position: relative;
+        display: block;
+        width: 120px;
+        height: 1px;
+        overflow: hidden;
+        background: #28342e;
+      }
+
+      .ia-loader-fill {
+        position: absolute;
+        inset: 0;
+        display: block;
+        background: #dda27f;
+        transform: scaleX(0);
+        transform-origin: 0 50%;
+        animation: iaLoaderFill 2s 0.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      }
+
+      @keyframes iaLoaderFill {
+        from {
+          transform: scaleX(0);
+        }
+        to {
+          transform: scaleX(0.92);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ia-loader-fill {
+          animation: none;
+          transform: scaleX(1);
+        }
+      }
+
+      @media print {
+        .ia-initial-loader {
+          display: none !important;
+        }
+      }
     </style>
+
+    <!-- =========================================
+         Surface script — runs last in <head>
+         --------------------------------------------
+         The first inline script sets data-surface before these tags exist,
+         so the per-surface head changes happen here, once they do.
+         - admin: the tab icons go back to today's files (public/legacy-icons/,
+           byte copies of the Dulcey icons), both theme-color metas back to
+           #0B0B0C, and the boot-time title back to today's — the admin's
+           document chrome is unchanged until prompt 15.
+         - public: preload the two IN-ARCH faces the shell uses on every page
+           (crossorigin, or the font is fetched twice) and the splash mark.
+           Never static tags: /admin must not request the new fonts.
+         ========================================= -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var head = document.head;
+        var i;
+
+        if (root.getAttribute("data-surface") === "admin") {
+          var icons = head.querySelectorAll('link[rel="icon"], link[rel="apple-touch-icon"]');
+          for (i = 0; i < icons.length; i += 1) {
+            icons[i].setAttribute(
+              "href",
+              icons[i]
+                .getAttribute("href")
+                .replace(/\/(favicon\.ico|favicon\.png|apple-touch-icon\.png)$/, "/legacy-icons/$1"),
+            );
+          }
+          var colours = head.querySelectorAll('meta[name="theme-color"]');
+          for (i = 0; i < colours.length; i += 1) colours[i].setAttribute("content", "#0B0B0C");
+          document.title = "Dulcey Lead Services — Beyond Business Support";
+          return;
+        }
+
+        var fonts = ["manrope-v1-latin.woff2", "fraunces-v1-latin.woff2"];
+        for (i = 0; i < fonts.length; i += 1) {
+          var font = document.createElement("link");
+          font.rel = "preload";
+          font.as = "font";
+          font.type = "font/woff2";
+          font.crossOrigin = "anonymous";
+          font.href = "%PUBLIC_URL%/fonts/" + fonts[i];
+          head.appendChild(font);
+        }
+
+        var mark = document.createElement("link");
+        mark.rel = "preload";
+        mark.as = "image";
+        mark.type = "image/png";
+        mark.href = "%PUBLIC_URL%/images/brand/inarch-mark-on-dark-266.png";
+        mark.setAttribute("fetchpriority", "high");
+        head.appendChild(mark);
+      })();
+    </script>
   </head>
   <body>
     <!-- Noscript fallback -->
@@ -904,6 +784,29 @@
       </div>
     </div>
 
+    <!-- IN-ARCH splash (public surface only; see the critical CSS). The mark
+         is lazy so a hidden splash — on the admin — never requests it; on the
+         public surface the surface script preloads it. -->
+    <div
+      class="ia-initial-loader"
+      id="ia-initial-loader"
+      role="progressbar"
+      aria-label="Loading In-Arch Architects &amp; Interior Designer"
+    >
+      <img
+        src="%PUBLIC_URL%/images/brand/inarch-mark-on-dark-266.png"
+        alt=""
+        class="ia-loader-mark"
+        width="266"
+        height="190"
+        loading="lazy"
+        decoding="async"
+      />
+      <span class="ia-loader-line" aria-hidden="true"
+        ><span class="ia-loader-fill"></span
+      ></span>
+    </div>
+
     <!-- React Root -->
     <div id="root"></div>
 
@@ -940,6 +843,15 @@
                 }
               }, 400);
             }
+
+            // The IN-ARCH splash, the same way.
+            var iaLoader = document.getElementById("ia-initial-loader");
+            if (iaLoader) {
+              iaLoader.classList.add("hidden");
+              setTimeout(function () {
+                iaLoader.style.display = "none";
+              }, 400);
+            }
           }, 200);
         });
 
@@ -950,6 +862,15 @@
             loader.classList.add("hidden");
             setTimeout(function () {
               loader.style.display = "none";
+            }, 400);
+          }
+
+          // The IN-ARCH splash, the same way.
+          var iaLoader = document.getElementById("ia-initial-loader");
+          if (iaLoader && !iaLoader.classList.contains("hidden")) {
+            iaLoader.classList.add("hidden");
+            setTimeout(function () {
+              iaLoader.style.display = "none";
             }, 400);
           }
         }, 5000);

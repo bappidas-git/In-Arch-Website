@@ -1,0 +1,33 @@
+/* ============================================
+   Curtain — rests hidden; GSAP sets visibility and yPercent.
+   No transform here: GSAP must start from a clean matrix.
+   ============================================ */
+
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ia-z-curtain);
+  display: grid;
+  place-items: center;
+  background: var(--ia-forest);
+  visibility: hidden;
+  will-change: transform;
+  contain: strict;
+}
+
+.mark {
+  height: 40px;
+  width: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain {
+    display: none;
+  }
+}
+
+@media print {
+  .curtain {
+    display: none;
+  }
+}

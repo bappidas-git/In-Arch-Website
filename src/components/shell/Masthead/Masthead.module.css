@@ -1,0 +1,95 @@
+/* ============================================
+   Masthead — absolute over the first section; no background of its own.
+   ============================================ */
+
+.masthead {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 60; /* above the page's own positioned layers, below the dock (80) */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ia-space-4);
+  height: 72px;
+  padding-inline: var(--ia-gutter);
+  /* The tone sets the ink; the section beneath supplies the ground. */
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Over an old page body (no [data-tone]): a translucent ivory ground. */
+.masthead[data-legacy] {
+  background: var(--ia-bg);
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .masthead[data-legacy] {
+    background: color-mix(in srgb, var(--ia-bg) 86%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+  }
+}
+
+.masthead > * {
+  pointer-events: auto;
+}
+
+.home {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  min-width: 48px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+}
+
+/* Phones and tablets: the call button. */
+.line {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .masthead {
+    height: 88px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masthead {
+    height: 104px;
+  }
+
+  .call {
+    display: none;
+  }
+
+  .line {
+    display: flex;
+    align-items: center;
+    gap: var(--ia-space-3);
+    margin: 0;
+    color: var(--ia-fg-2);
+  }
+
+  .sep {
+    color: var(--ia-fg-3);
+  }
+
+  .tel {
+    color: var(--ia-fg);
+    letter-spacing: inherit;
+  }
+}
+
+@media print {
+  .masthead {
+    position: static;
+  }
+
+  .meta {
+    display: none;
+  }
+}

@@ -21,6 +21,9 @@ export const DUR = {
 export const DUR_NAMED = {
   rule: 0.9, // rule draw
   shutterImage: 1.4, // image settle inside a shutter
+  overlayIn: 0.5, // index overlay (and lead sheet) rising in
+  overlayOut: 0.35, // … and leaving
+  curtainLift: 0.55, // the page curtain leaving upward (it covers in DUR.ui)
 };
 
 export const EASE = {

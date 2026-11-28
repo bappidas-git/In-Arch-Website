@@ -1,17 +1,25 @@
 /* ============================================
-   App Component — Dulcey Lead Services
+   App Component
    --------------------------------------------
-   Five-route public site (Home · About · Expertise · Who We Serve ·
-   Contact) sharing one shell via `PublicLayout`, plus the `/admin/*`
-   routes and a branded `*` catch-all. `/thank-you` was retired in
-   Prompt 07 — the enquiry form now confirms inline.
+   The public site shares one shell, `PublicLayout` (IN-ARCH, prompt 04:
+   masthead, Index Dock, index overlay, footer, page transitions), plus the
+   `/admin/*` routes and a `*` catch-all.
 
-   The only floating UI is the burger → full-screen overlay menu
-   (`MobileMenu`) and the global enquiry modal (`LeadModal`).
+   Public routes: / · /about · /expertise · /interior-design · /portfolio ·
+   /portfolio/:slug · /industries (still reachable by URL; out of the
+   navigation, forwarded by prompt 11) · /contact · *. The old page bodies
+   render inside the new shell until their prompts replace them;
+   /interior-design and /portfolio(/:slug) render the interim PendingPage.
+
+   The public routes sit inside TransitionProvider (the page curtain) and
+   the kit's LinkProvider, which renders every kit link as the
+   transition-aware TLink. Every lazy route has a `preload()` handle, which
+   TLink calls on hover / focus / touch so the chunk is usually ready
+   before the curtain has covered.
    ============================================ */
 
 import React, { Suspense, lazy, useEffect, useLayoutEffect, memo } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, matchPath } from 'react-router-dom';
 import { CircularProgress, Skeleton, Box } from '@mui/material';
 
 // App Styles
@@ -27,29 +35,76 @@ import HomePage from './pages/Home/HomePage';
 import LeadModal from './components/common/LeadModal/LeadModal';
 import SEOHead from './components/common/SEO/SEOHead';
 import SurfaceManager from './surfaces/SurfaceManager';
+import TransitionProvider from './components/shell/transition/TransitionProvider';
+import TLink from './components/shell/transition/TLink';
+import { RouteMounted } from './components/shell/transition/usePageReady';
+import { LinkProvider } from './components/ui/LinkProvider/LinkProvider';
 
 // Shared #hash → scroll helper (also used by the /expertise accordion)
 import { hashToId, scrollToHash } from './utils/hashScroll';
 
+/**
+ * `React.lazy` with a `preload()` handle. The import runs once: preloading
+ * and rendering share the same promise, so a warmed chunk is never fetched
+ * twice.
+ */
+const lazyWithPreload = (factory) => {
+  let pending = null;
+  const load = () => {
+    if (!pending) {
+      pending = factory().catch((error) => {
+        pending = null; // a failed chunk may be retried (ErrorBoundary)
+        throw error;
+      });
+    }
+    return pending;
+  };
+  const Component = lazy(load);
+  Component.preload = load;
+  return Component;
+};
+
 // Pages (Lazy loaded)
-const AboutPage = lazy(() => import('./pages/About/AboutPage'));
-const ExpertisePage = lazy(() => import('./pages/Expertise/ExpertisePage'));
-const IndustriesPage = lazy(() => import('./pages/Industries/IndustriesPage'));
-const ContactPage = lazy(() => import('./pages/Contact/ContactPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFound/NotFoundPage'));
+const AboutPage = lazyWithPreload(() => import('./pages/About/AboutPage'));
+const ExpertisePage = lazyWithPreload(() => import('./pages/Expertise/ExpertisePage'));
+const IndustriesPage = lazyWithPreload(() => import('./pages/Industries/IndustriesPage'));
+const ContactPage = lazyWithPreload(() => import('./pages/Contact/ContactPage'));
+const NotFoundPage = lazyWithPreload(() => import('./pages/NotFound/NotFoundPage'));
+// The interim page for the routes built by prompts 10–12.
+const PendingPage = lazyWithPreload(() => import('./pages/Pending/PendingPage'));
 
 // IN-ARCH Design Lab — development only. In a production build the condition
 // is a constant `false`, so webpack drops the import and emits no Lab chunk.
-const LabPage = process.env.NODE_ENV === 'development' ? lazy(() => import('./lab/LabPage')) : null;
+const LabPage =
+  process.env.NODE_ENV === 'development' ? lazyWithPreload(() => import('./lab/LabPage')) : null;
 
 // Admin — lazy, so nothing under /admin ships in the public bundle
 // (Prompt 12). The auth provider is pulled in through this same boundary
 // by `AdminGate` below rather than imported at module scope.
-const AdminLayout = lazy(() => import('./admin/components/AdminLayout'));
-const AdminLoginRoute = lazy(() => import('./admin/components/AdminLoginRoute'));
-const AdminProtectedShell = lazy(() =>
+const AdminLayout = lazyWithPreload(() => import('./admin/components/AdminLayout'));
+const AdminLoginRoute = lazyWithPreload(() => import('./admin/components/AdminLoginRoute'));
+const AdminProtectedShell = lazyWithPreload(() =>
   import('./admin/components/AdminProtectedShell')
 );
+
+// Public path → its chunk's preload(), for TLink's warm-up. Home is eager.
+// Keep in step with the <Route> table below.
+const ROUTE_PRELOADS = [
+  { path: '/about', preload: AboutPage.preload },
+  { path: '/expertise', preload: ExpertisePage.preload },
+  { path: '/interior-design', preload: PendingPage.preload },
+  { path: '/portfolio', preload: PendingPage.preload },
+  { path: '/portfolio/:slug', preload: PendingPage.preload },
+  { path: '/industries', preload: IndustriesPage.preload },
+  { path: '/contact', preload: ContactPage.preload },
+];
+
+/** Preload the chunk for a public pathname; unknown paths get the 404's. */
+const preloadRoute = (pathname) => {
+  if (pathname === '/') return undefined;
+  const hit = ROUTE_PRELOADS.find((route) => matchPath(route.path, pathname));
+  return (hit ? hit.preload : NotFoundPage.preload)();
+};
 
 // ===========================================
 // Error Boundary Component
@@ -178,10 +233,33 @@ SectionLoader.displayName = 'SectionLoader';
 const PageFallback = () => <SectionLoader height={520} variant="skeleton" />;
 
 // Wraps a lazy route element in the shared ErrorBoundary + Suspense pattern.
+// `RouteMounted` sits inside the boundary, so it only commits once the
+// route's chunk has resolved — the page transition's "this route is on
+// screen" signal for pages that do not call usePageReady().
 const lazyRoute = (element) => (
   <ErrorBoundary>
-    <Suspense fallback={<PageFallback />}>{element}</Suspense>
+    <Suspense fallback={<PageFallback />}>
+      {element}
+      <RouteMounted />
+    </Suspense>
   </ErrorBoundary>
+);
+
+// The eager Home route gets the same signal.
+const eagerRoute = (element) => (
+  <>
+    {element}
+    <RouteMounted />
+  </>
+);
+
+// The public shell: page transitions, and every kit link rendered as TLink.
+const publicShell = (
+  <TransitionProvider preload={preloadRoute}>
+    <LinkProvider component={TLink}>
+      <PublicLayout />
+    </LinkProvider>
+  </TransitionProvider>
 );
 
 // ===========================================
@@ -372,6 +450,15 @@ const App = () => {
         initialLoader.style.display = 'none';
       }, 400); // matches the CSS transition duration
     }
+
+    // The IN-ARCH splash (public surface), the same way.
+    const iaLoader = document.getElementById('ia-initial-loader');
+    if (iaLoader) {
+      iaLoader.classList.add('hidden');
+      setTimeout(() => {
+        iaLoader.style.display = 'none';
+      }, 400);
+    }
   }, []);
 
   // Scroll restoration is manual — ScrollManager owns route scrolling, first
@@ -397,13 +484,22 @@ const App = () => {
             <SurfaceManager />
 
             <Routes>
-              {/* Public site — one shared Dulcey shell */}
-              <Route element={<PublicLayout />}>
-                <Route path="/" element={<HomePage />} />
+              {/* Public site — one shared IN-ARCH shell */}
+              <Route element={publicShell}>
+                <Route path="/" element={eagerRoute(<HomePage />)} />
                 <Route path="/about" element={lazyRoute(<AboutPage />)} />
                 <Route
                   path="/expertise"
                   element={lazyRoute(<ExpertisePage />)}
+                />
+                <Route
+                  path="/interior-design"
+                  element={lazyRoute(<PendingPage />)}
+                />
+                <Route path="/portfolio" element={lazyRoute(<PendingPage />)} />
+                <Route
+                  path="/portfolio/:slug"
+                  element={lazyRoute(<PendingPage />)}
                 />
                 <Route
                   path="/industries"

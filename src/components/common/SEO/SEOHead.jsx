@@ -30,9 +30,18 @@ const ROUTE_MAP = {
   '/': pages.home,
   '/about': pages.about,
   '/expertise': pages.expertise,
+  '/interior-design': pages.interiors,
+  '/portfolio': pages.portfolio,
   '/industries': pages.industries,
   '/contact': pages.contact,
 };
+
+// Routes that still render the interim PendingPage (prompt 04). They resolve
+// to `pages.pending` (noindex, no schemas) until their own prompt ships the
+// page and removes them from here: /interior-design (10), /portfolio (11),
+// /portfolio/:slug (12).
+const PENDING_PATHS = ['/interior-design', '/portfolio'];
+const PENDING_PREFIXES = ['/portfolio/'];
 
 /**
  * Resolve a pathname to its page config. Trailing slashes are normalised
@@ -43,7 +52,13 @@ const ROUTE_MAP = {
 export function resolvePage(pathname) {
   const path = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
   if (path.startsWith('/admin')) return pages.admin;
-  return ROUTE_MAP[path] || pages.notFound;
+  if (PENDING_PATHS.includes(path) || PENDING_PREFIXES.some((prefix) => path.startsWith(prefix))) {
+    return pages.pending;
+  }
+  if (ROUTE_MAP[path]) return ROUTE_MAP[path];
+  // A case study: /portfolio/<slug> (one segment).
+  if (/^\/portfolio\/[^/]+$/.test(path)) return { ...pages.project, path };
+  return pages.notFound;
 }
 
 const SEOHead = () => {

@@ -299,7 +299,16 @@ const scrollThrough = async (page) => {
 function digest() {
   const PROPS = ['font-family', 'font-size', 'font-weight', 'line-height', 'color', 'background-color', 'padding', 'margin', 'display', 'position'];
   const r2 = (n) => Math.round(n * 100) / 100;
-  const roots = Array.from(document.body.children).filter((el) => !/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE|LINK)$/.test(el.tagName));
+  // Document-level elements that belong to the other surface (prompt 04's
+  // IN-ARCH splash, #ia-initial-loader) are skipped while they are
+  // display: none — they do not render. If one ever renders, it is digested
+  // like everything else and the comparison fails.
+  const OTHER_SURFACE_IDS = ['ia-initial-loader'];
+  const roots = Array.from(document.body.children).filter(
+    (el) =>
+      !/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE|LINK)$/.test(el.tagName) &&
+      !(OTHER_SURFACE_IDS.includes(el.id) && getComputedStyle(el).display === 'none')
+  );
   const out = [];
   roots.forEach((root) => {
     [root, ...root.querySelectorAll('*')].forEach((el) => {

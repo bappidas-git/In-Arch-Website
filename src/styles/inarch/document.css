@@ -1,0 +1,37 @@
+/* ============================================
+   IN-ARCH — document-level rules for the public surface (prompt 04)
+   --------------------------------------------
+   Everything is prefixed html[data-surface="public"] (set by the first
+   inline script in public/index.html and kept in step by SurfaceManager),
+   so the admin never matches. Imported last by index.css.
+
+   - The legacy `overflow-x: hidden` on html, body and .app turns body and
+     .app into scroll containers, which silently breaks `position: sticky`
+     (later pages need it). `overflow-x: clip` on the root still stops any
+     horizontal scroll (it is applied to the viewport) without creating one.
+   - The legacy `touch-action: pan-y` on .app interferes with horizontal
+     swipe rows.
+   - The legacy smooth scroll-behaviour animated every programmatic jump;
+     smooth scrolling is asked for explicitly where it is wanted.
+   - The dock is fixed to the bottom edge, so focused controls and the last
+     line of a page are kept clear of it (WCAG 2.2 "Focus Not Obscured").
+   - The legacy background, colour and font-family on body are left alone
+     until no old page depends on them (prompt 14).
+   ============================================ */
+
+html[data-surface="public"] {
+  overflow-x: clip;
+  scroll-behavior: auto;
+  scroll-padding-bottom: var(--ia-dock-clearance);
+  scrollbar-color: var(--ia-border) var(--ia-ivory);
+}
+
+html[data-surface="public"] body {
+  overflow: visible;
+}
+
+html[data-surface="public"] .app {
+  overflow: visible;
+  touch-action: auto;
+  padding-top: 0;
+}

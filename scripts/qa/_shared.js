@@ -42,9 +42,29 @@ const requirePlaywright = () => {
 /** Placeholder path used to exercise the `*` (404) route. */
 const NOT_FOUND_PATH = '/__qa-not-found';
 
+/** The first project slug in src/data/projects.js (a real /portfolio/:slug value). */
+const firstProjectSlug = () => {
+  try {
+    const src = fs.readFileSync(path.join(ROOT, 'src', 'data', 'projects.js'), 'utf8');
+    const m = src.match(/\bslug:\s*'([^']+)'/);
+    return m ? m[1] : null;
+  } catch (err) {
+    return null;
+  }
+};
+
+/** Concrete values for parameterised routes (prompt 04 added /portfolio/:slug). */
+const PARAM_SAMPLES = {
+  '/portfolio/:slug': () => {
+    const slug = firstProjectSlug();
+    return slug ? `/portfolio/${slug}` : null;
+  },
+};
+
 /**
- * Every public route in the <Route> table of src/App.jsx: literal paths,
- * minus /admin*, with the `*` catch-all mapped to a nonsense URL.
+ * Every public route in the <Route> table of src/App.jsx, minus /admin*:
+ * literal paths, each parameterised path with a concrete sample value, and
+ * the `*` catch-all mapped to a nonsense URL.
  */
 const publicRoutes = () => {
   const src = fs.readFileSync(path.join(ROOT, 'src', 'App.jsx'), 'utf8');
@@ -52,8 +72,11 @@ const publicRoutes = () => {
   const routes = [];
   paths.forEach((p) => {
     if (p === '/admin' || p.startsWith('/admin/')) return;
-    const route = p === '*' ? NOT_FOUND_PATH : p;
-    if (route.includes(':')) return; // parameterised routes need a concrete value
+    let route = p === '*' ? NOT_FOUND_PATH : p;
+    if (route.includes(':')) {
+      route = PARAM_SAMPLES[route] ? PARAM_SAMPLES[route]() : null;
+      if (!route) return; // no concrete value known: skip it
+    }
     if (!routes.includes(route)) routes.push(route);
   });
   return routes;

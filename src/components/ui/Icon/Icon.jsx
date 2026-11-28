@@ -37,6 +37,7 @@ export const GLYPHS = {
   'arrow-right': [p('M4.5 12H19.5'), p('M13.5 6L19.5 12L13.5 18')],
   'arrow-left': [p('M19.5 12H4.5'), p('M10.5 6L4.5 12L10.5 18')],
   'arrow-down': [p('M12 4.5V19.5'), p('M6 13.5L12 19.5L18 13.5')],
+  'arrow-up': [p('M12 19.5V4.5'), p('M6 10.5L12 4.5L18 10.5')],
   'chevron-down': [p('M6.5 9.5L12 15L17.5 9.5')],
   plus: [p('M12 5V19'), p('M5 12H19')],
   minus: [p('M5 12H19')],
@@ -84,6 +85,7 @@ export const swapVector = (name) =>
     'arrow-right': [1, 0],
     'arrow-left': [-1, 0],
     'arrow-down': [0, 1],
+    'arrow-up': [0, -1],
   }[name] || null);
 
 const Shape = ({ shape }) => {
