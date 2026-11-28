@@ -7,6 +7,13 @@
   background: var(--ia-placeholder);
 }
 
+/* `ratioLg`: another ratio from 1024 px. */
+@media (min-width: 1024px) {
+  .frame {
+    aspect-ratio: var(--frame-ratio-lg, var(--frame-ratio, 4 / 5));
+  }
+}
+
 .media {
   position: absolute;
   inset: 0;

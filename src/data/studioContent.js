@@ -171,6 +171,31 @@ export const homeStatement = {
   accent: 'the way they interact with their surroundings.',
 };
 
+/**
+ * §10 B — the Home belief band: "every space tells a story", the first
+ * homepage-introduction sentence's own clause, set as one sentence.
+ * `accent` is the headline's one italic phrase. `scope` is the second
+ * sentence's "residential, commercial and interior design projects" as
+ * three words.
+ */
+export const homeBelief = {
+  lead: 'Every space',
+  accent: 'tells a story.',
+  scope: ['Residential', 'Commercial', 'Interiors'],
+};
+
+/**
+ * §3 — the three credential lines the Home trust block shows: the
+ * registrations and the degree, each as label and value. Nothing else
+ * about the principal is shown there (no portrait, quotation, registration
+ * number or years — owner decision D-11).
+ */
+export const homeCredentials = [
+  { key: 'coa', label: 'Registered Architect', value: 'Council of Architecture, India' },
+  { key: 'municipal', label: 'Registered Architect', value: 'Patna Municipal Corporation and Gaya Municipal Corporation' },
+  { key: 'degree', label: 'B.Arch', value: 'Piloo Mody College of Architecture, Cuttack' },
+];
+
 /** §9 — the contact invitation. */
 export const contactInvitation = {
   title: "Let's Create Something Meaningful Together.",
@@ -182,6 +207,12 @@ export const closingCta = {
   title: 'Have a Project in Mind?',
   text: "Let's discuss your ideas and explore how thoughtful architectural and interior design can transform your space.",
   action: 'Start a Conversation With Us.',
+};
+
+/** §10 E — the Home closing headline: `closingCta.title` in sentence case, its last words the accent. */
+export const homeClosing = {
+  lead: 'Have a project',
+  accent: 'in mind?',
 };
 
 /** §9 — the CTA labels the PDF suggests. */
@@ -205,8 +236,11 @@ const studioContent = {
   heroLine,
   heroDisciplines,
   homeStatement,
+  homeBelief,
+  homeCredentials,
   contactInvitation,
   closingCta,
+  homeClosing,
   ctaLabels,
 };
 

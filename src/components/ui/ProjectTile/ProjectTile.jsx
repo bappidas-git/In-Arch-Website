@@ -21,6 +21,14 @@
    link, and a long alt text would be read before it. `headingLevel` sets
    the title's element (default h3). `reveal` passes the shutter to the
    Frame. The ref and unknown props go to the link.
+
+   Responsive tiles: `ratioLg` gives the frame another ratio from 1024 px,
+   and `art` ([{ media, image }], as on Picture) supplies the matching
+   crop, e.g. a 4:5 tile that becomes 3:2 on desktop:
+     ratio="4/5" ratioLg="3/2" image={cover.tall}
+     art={[{ media: '(min-width: 1024px)', image: cover.wide }]}
+   `rise` marks the caption (meta row and title row) data-m="rise", so it
+   rises under the shutter inside a useMotionScope section.
    ============================================ */
 
 import React, { forwardRef } from 'react';
@@ -38,6 +46,8 @@ const ProjectTile = forwardRef(function ProjectTile(
     href,
     image,
     ratio = '4/5',
+    ratioLg,
+    art,
     index,
     category,
     title,
@@ -45,6 +55,7 @@ const ProjectTile = forwardRef(function ProjectTile(
     alt = '',
     priority = false,
     reveal = false,
+    rise = false,
     headingLevel = 'h3',
     className,
     ...rest
@@ -56,19 +67,20 @@ const ProjectTile = forwardRef(function ProjectTile(
   const target = to !== undefined ? { to } : { href };
   const Title = ['h2', 'h3', 'h4'].includes(headingLevel) ? headingLevel : 'h3';
   const hasIndex = index !== undefined && index !== null && index !== '';
+  const riseAttr = rise ? { 'data-m': 'rise' } : null;
 
   return (
     <Tag ref={ref} className={cx(styles.tile, className)} data-ia-swap="" {...target} {...rest}>
-      <Frame ratio={ratio} reveal={reveal} className={styles.frame}>
-        <Picture image={image} sizes={sizes} alt={alt} priority={priority} />
+      <Frame ratio={ratio} ratioLg={ratioLg} reveal={reveal} className={styles.frame}>
+        <Picture image={image} art={art} sizes={sizes} alt={alt} priority={priority} />
       </Frame>
       {(hasIndex || category) && (
-        <span className={cx('ia-t-label', styles.meta)}>
+        <span className={cx('ia-t-label', styles.meta)} {...riseAttr}>
           {hasIndex && <span className={styles.index}>{padIndex(index)}</span>}
           {category && <span>{category}</span>}
         </span>
       )}
-      <span className={styles.titleRow}>
+      <span className={styles.titleRow} {...riseAttr}>
         <Title className={cx('ia-t-display-sm', styles.title)}>
           <span className={styles.titleText}>{title}</span>
         </Title>

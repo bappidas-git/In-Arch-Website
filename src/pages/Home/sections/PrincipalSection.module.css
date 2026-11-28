@@ -1,0 +1,68 @@
+/* ============================================
+   Home / Who leads the work
+   Phones first (360–767), then 768, then 1024 and up.
+   ============================================ */
+
+.principal .grid {
+  row-gap: 0;
+}
+
+.eyebrow {
+  margin-bottom: var(--ia-space-6);
+}
+
+/* "Ar. Mohammad / Hassanuddin." — the surname may not break. */
+.name {
+  max-width: 12ch;
+  overflow-wrap: normal;
+}
+
+.role {
+  margin: var(--ia-space-5) 0 0;
+  color: var(--ia-fg-2);
+}
+
+.factsCol {
+  margin-top: var(--ia-space-12);
+}
+
+.facts {
+  max-width: 34rem;
+}
+
+.more {
+  margin-top: var(--ia-space-6);
+}
+
+/* ---------- Tablet (768–1023) ---------- */
+@media (min-width: 768px) {
+  .eyebrow {
+    margin-bottom: var(--ia-space-8);
+  }
+
+  .role {
+    margin-top: var(--ia-space-6);
+  }
+
+  .factsCol {
+    margin-top: var(--ia-space-16);
+  }
+}
+
+/* ---------- Desktop (1024 and up) ----------
+   The name across columns 1–7; the facts in 8–12, their first rule level
+   with the top of the name (the eyebrow's line, 12 × 1.4 px, plus its
+   32 px margin). */
+@media (min-width: 1024px) {
+  .name {
+    max-width: none;
+  }
+
+  .factsCol {
+    margin-top: calc(var(--ia-fs-label) * 1.4 + var(--ia-space-8));
+  }
+
+  .facts {
+    max-width: none;
+  }
+}

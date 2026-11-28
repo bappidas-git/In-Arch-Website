@@ -1,0 +1,68 @@
+/* ============================================
+   Home / The invitation
+   Phones first (360–767), then 768, then 1024 and up.
+   A minimum height instead of extra padding; the copy sits at the foot of
+   the band. The bottom padding never drops below the dock's clearance
+   plus 24 px, so the last links are never under the floating dock when
+   the band's foot reaches the bottom of the screen.
+   ============================================ */
+
+.closing {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 70svh;
+  padding-bottom: max(
+    var(--ia-section-y),
+    calc(var(--ia-dock-clearance) + var(--ia-space-6) + env(safe-area-inset-bottom, 0px))
+  );
+}
+
+.inner {
+  width: 100%;
+}
+
+.title {
+  max-width: 12ch;
+}
+
+.lede {
+  margin-top: var(--ia-space-6);
+  color: var(--ia-fg-2);
+}
+
+.action {
+  margin-top: var(--ia-space-10);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--ia-space-8);
+  margin: var(--ia-space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .lede {
+    margin-top: var(--ia-space-8);
+  }
+
+  .action {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: var(--ia-space-12);
+  }
+
+  .links {
+    margin-top: var(--ia-space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .title {
+    max-width: none;
+  }
+}

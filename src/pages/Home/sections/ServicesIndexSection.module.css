@@ -1,0 +1,237 @@
+/* ============================================
+   Home / What we do — the services ledger
+   Phones first (360–767), then 768, then 1024 and up.
+   ============================================ */
+
+.services .grid {
+  row-gap: 0;
+}
+
+.eyebrow {
+  margin-bottom: var(--ia-space-6);
+}
+
+.lede {
+  margin-top: var(--ia-space-6);
+  color: var(--ia-fg-2);
+}
+
+/* ---------- The ledger ---------- */
+.ledger {
+  margin: var(--ia-space-12) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  border-top: 1px solid var(--ia-line);
+}
+
+.item:last-child {
+  border-bottom: 1px solid var(--ia-line);
+}
+
+/* One link per row: number · title and tagline · arrow. */
+.row {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) 20px;
+  align-items: start;
+  column-gap: var(--ia-space-3);
+  min-height: 72px;
+  padding-block: var(--ia-space-5);
+  color: var(--ia-fg);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* The label sits on the title's first line. */
+.num {
+  padding-top: 0.45em;
+  color: var(--ia-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.text {
+  display: grid;
+  gap: var(--ia-space-1);
+  min-width: 0;
+}
+
+.ledger .title {
+  margin: 0;
+  color: var(--ia-fg);
+  text-wrap: balance;
+  transition: transform var(--ia-dur-3) var(--ia-ease-expo);
+}
+
+.tagline {
+  color: var(--ia-fg-2);
+  text-wrap: pretty;
+}
+
+.arrow {
+  margin-top: 0.2em;
+  color: var(--ia-fg-2);
+  transition: color var(--ia-dur-2) var(--ia-ease-out);
+}
+
+.row:focus-visible .title {
+  transform: translateX(8px);
+}
+
+.row:focus-visible .arrow {
+  color: var(--ia-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .row:hover .title {
+    transform: translateX(8px);
+  }
+
+  .row:hover .arrow {
+    color: var(--ia-accent);
+  }
+}
+
+.row:active {
+  opacity: 0.7;
+}
+
+/* The preview slot exists from 1024 px only. */
+.slotCol {
+  display: none;
+}
+
+.pointer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--ia-space-4);
+  margin-top: var(--ia-space-10);
+}
+
+.pointerText {
+  margin: 0;
+  color: var(--ia-fg-2);
+}
+
+/* ---------- Tablet (768–1023) ---------- */
+@media (min-width: 768px) {
+  .eyebrow {
+    margin-bottom: var(--ia-space-8);
+  }
+
+  .ledger {
+    margin-top: var(--ia-space-16);
+  }
+
+  .row {
+    grid-template-columns: 3rem minmax(0, 1fr) 20px;
+    column-gap: var(--ia-space-6);
+    padding-block: var(--ia-space-6);
+  }
+}
+
+/* ---------- Desktop (1024 and up) ----------
+   Titles at display-md (weight 300 from 1177 px, as in the type table);
+   the tagline beside the title on wide screens. */
+@media (min-width: 1024px) {
+  .ledger .title {
+    font-size: var(--ia-fs-display-md);
+    line-height: 1.15;
+  }
+
+  .row {
+    grid-template-columns: 4rem minmax(0, 1fr) 20px;
+    padding-block: var(--ia-space-8);
+  }
+
+  .num {
+    padding-top: 0.9em;
+  }
+
+  .arrow {
+    margin-top: 0.6em;
+  }
+
+  /* Columns 10–12, beside the ledger; the slot travels with the page
+     while the ledger passes, and its icons never take up layout. */
+  .slotCol {
+    display: block;
+    margin-top: var(--ia-space-16);
+  }
+
+  .slot {
+    position: sticky;
+    top: calc(50svh - 80px);
+    width: 160px;
+    height: 160px;
+    margin-inline: auto;
+    color: var(--ia-fg);
+  }
+
+  .preview {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--ia-dur-2) var(--ia-ease-out);
+  }
+
+  .preview[data-active] {
+    opacity: 1;
+  }
+
+  .pointer {
+    margin-top: var(--ia-space-12);
+  }
+}
+
+@media (min-width: 1177px) {
+  .ledger .title {
+    font-weight: 300;
+  }
+}
+
+@media (min-width: 1280px) {
+  .row {
+    grid-template-columns: 4rem minmax(0, 1.7fr) minmax(0, 1fr) 20px;
+    align-items: baseline;
+  }
+
+  .text {
+    display: contents;
+  }
+
+  .num,
+  .arrow {
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  .arrow {
+    align-self: center;
+  }
+
+  .tagline {
+    padding-inline-start: var(--ia-space-6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ledger .title,
+  .row:focus-visible .title {
+    transform: none;
+    transition: none;
+  }
+
+  .preview {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .row:hover .title {
+    transform: none;
+  }
+}
