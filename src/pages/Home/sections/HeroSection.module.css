@@ -1,739 +1,309 @@
 /* ============================================
-   Home / Hero — values ported verbatim from
-   `mockup/styles.css` (.hero*, .pulse-dot) plus the
-   per-instance inline styles in `mockup/index.html`
-   (background opacity / object-position, scrim
-   gradients, lede max-width).
+   Home / Hero — "Threshold"
+   Phones first (360–767), then 768, then 1024 and up.
+   Colours come from the dark tone; the veils are forest (#161E19) at the
+   alphas measured against the photograph's brightest pixels.
    ============================================ */
 
 .hero {
   position: relative;
-  overflow: hidden;
-
-  /* ---- Where the photograph is drawn, and how big — BELOW 920px only ----
-     These three properties describe the sub-920px stack and nothing else.
-     From 920px up the frame is still drawn whole and still pinned to the top
-     of the section, but it is sized by the section rather than by a stated
-     width — `max-width`/`max-height` on an intrinsically-sized `<img>` — and
-     the `.bg` override in the `min-width: 920px` block below replaces every
-     one of these. Read that rule for the desktop composition; nothing here
-     applies to it.
-
-     Below the breakpoint the copy spans the full width and there is no column
-     to sit beside, so the frame is drawn WHOLE — `--bg-w` is its full 2.63:1
-     width, not a box it is fitted into — pinned to the top of the section and
-     bled off both sides.
-
-     `--bg-w`'s `165vw` is a deliberate zoom: the joined hands are a fixed 25%
-     of the frame (they occupy **56.1% to 81.1%** of its width — a skin-tone
-     mask over the shipped WebP, reproduced in `scripts/generate-images.js`),
-     so the clasp is 250px of a 390px phone against the 132px an unzoomed
-     frame drew. Re-cutting the source moves those boundaries and invalidates
-     the constant — re-measure, do not re-tune by eye.
-
-     `--bg-right` is the bleed, stated as a fraction of the FRAME so the right
-     side is viewport-independent: the hero's right edge falls at 86% of the
-     frame, past the hands at 81.1%, so the far sleeve always runs off the page
-     and the clasp never can.
-
-     `--bg-top: 0` puts the frame's top edge at the top of the section, where
-     the fixed 68px header covers it and no feather is needed to hide it. See
-     the annotated `.bg` and `.scrim` blocks below. */
-  --bg-w: clamp(1000px, 165vw, 1400px);
-  --bg-right: calc(var(--bg-w) * -0.14);
-  --bg-top: 0px;
-
-  /* The feather has to dissolve into a stated colour rather than into whatever
-     happens to sit behind the section. The page is already white; this says
-     so. */
-  background: #fff;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* 100svh, never below 620 px, never above 920 px */
+  min-height: clamp(620px, 100svh, 920px);
+  /* the masthead (72 px) sits over the top of the photograph */
+  padding-top: 72px;
 }
 
-/* ============================================
-   THE OVERLAY BOX — `.scrim` alone
-   --------------------------------------------
-   The overlay fills the section at every width, with no breakpoint in its
-   geometry, which is what makes its stops percentages of the section and lets
-   one set of them describe every viewport. The photograph does not share this
-   rule — it is a placed element, sized and positioned by the `--bg-*` custom
-   properties on `.hero`.
+/* ---------- The photograph ---------- */
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--ia-bg);
+}
 
-   The two stay separate elements rather than layers on one, so that the
-   responsive override further down can restate the overlay with the
-   `background` shorthand without having to restate anything about the
-   photograph.
-   ============================================ */
-.scrim {
+/* The drifting layer is 17 % taller than the section, 8.5 % above and
+   below: a 7 % drift of 117 % is 8.19 % of the section, so no edge shows. */
+.drift {
+  position: absolute;
+  inset: -8.5% 0;
+}
+
+/* The settling layer (scale 1.08 → 1 on load). */
+.settle {
+  position: absolute;
+  inset: 0;
+}
+
+.picture {
+  width: 100%;
+  height: 100%;
+}
+
+.picture .img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+}
+
+/* The top veil carries the masthead (wordmark and call button). */
+.veil {
   position: absolute;
   inset: 0;
   pointer-events: none;
-}
-
-/* ============================================
-   THE PHOTOGRAPH — `.bg` alone
-   --------------------------------------------
-   A real `<img>`, placed and sized by the `--bg-*` properties above rather
-   than fitted into a box, and drawn WHOLE: `width: var(--bg-w); height: auto`
-   on a 2.63:1 file is the entire sizing rule, so no CSS decides a crop. What
-   the page shows of it is decided by one thing only — where the hero's edges
-   fall across it — and the bleed is set so those edges land in the parts of
-   the frame that carry nothing (the blown-out window on the left, the far
-   sleeve's outer end on the right).
-
-   This supersedes two earlier readings of the same brief, and it is worth
-   being explicit about why neither survived:
-
-     - `background-size: cover` on a section-sized box. The section runs about
-       0.4:1 on a phone and 2.4:1 on a desktop against the file's 2.63:1, so
-       `cover` was height-limited everywhere and threw away 80% of the frame on
-       a phone.
-     - `object-fit: contain` inside a placed box. That does keep the whole
-       frame, but `contain` takes its SIZE from the box, and any box tall
-       enough to be worth containing in drew the photograph either as wide as
-       the hero (a full-bleed band) or, once the box was narrowed to stop that,
-       at 1058px with a 265px clasp — the whole frame on the page and nothing
-       on it big enough to read. Drawing the frame at its own stated width and
-       letting the section clip it is the same guarantee without the box.
-
-   An `<img>` rather than a background, and that is load-bearing rather than a
-   preference: the element IS the drawn photograph, so the feather below can be
-   expressed in percentages of the image and lands on its real edges at every
-   width. It also earns `fetchpriority="high"`, which a background cannot
-   carry.
-
-   `max-width: none` overrides the global `img { max-width: 100% }` in
-   `global.css`. The frame is wider than the hero by design at every width, and
-   without this the global rule would silently shrink it back to the section.
-
-   ---- The feather ----
-
-   Three of the frame's four edges end inside the section, and each is
-   dissolved rather than cut. The fourth — the right — needs nothing: the frame
-   ends past the hero's right edge, so `overflow: hidden` on the section is
-   what ends it, exactly as the viewport ends any full-bleed image.
-
-   The ramps are stated in percentages of the IMAGE (that is the whole reason
-   for the `<img>` above), so the feather is the same fraction of the
-   photograph at 320px and at 2560px, with nothing to re-tune per breakpoint.
-
-   **They are eased curves sampled densely, not linear ramps, and that is the
-   difference between a soft edge and no edge.** A mask ramp only has to hide
-   the change in the CONTENT it crosses, and this frame's top and bottom rows
-   are the two suit sleeves — near-black, about 0.85 of the full white-to-ink
-   range. Three separate things decide whether a ramp across that reads as
-   mist or as a line, and `[2.20.0]` had to fix all three:
-
-     - **Where the curve spends its length.** Spread linearly, or even with a
-       smoothstep, the first quarter of the ramp already carries 15% of the
-       change. The alpha here is `s5(t)^3` — smootherstep cubed — which moves
-       the perceptible part deep into the ramp's own length (0.4% at a fifth of
-       the way in, 3.2% at two fifths), so the frame's edge itself sits over
-       nothing. `t^2.4` did this part correctly and this is close to it.
-     - **What the curve does where it ENDS.** This is the one the release
-       before this one missed, and the one a reader could point at. `t^2.4`
-       arrives at full strength still travelling at 2.4x, so the vertex where
-       it met the flat middle was a slope discontinuity — a Mach band, drawn
-       straight across the photograph at 34% and again at 68% of the frame.
-       `s5(t)^3` arrives with **zero slope at both ends**, so neither vertex
-       of a ramp is a corner. Any replacement curve must keep that property;
-       a bare power curve does not have it.
-     - **How finely the curve is sampled.** CSS interpolates linearly between
-       stops, so every stop is itself a small slope discontinuity. Six stops
-       per ramp — the previous sampling — put 4-5 levels into a single vertex
-       whatever the curve was. These ramps are sampled at **twentieths**,
-       which holds the worst vertex in a ramp under 1 level.
-
-   Measured on the shipped WebP as luminance curvature over a 10px window
-   (see `CHANGELOG.md` `[2.20.0]`), the frame's edges went from 9.8-31.9
-   levels to 3.2-8.5 (14.1 at 375px, where the peak lands at y=64px and the
-   fixed header covers it). Regenerate rather than hand-edit: the alphas are
-   `s5(t)^3` at `t = k/20`, `s5` being `6t^5 - 15t^4 + 10t^3`. Stops that
-   round to the same alpha as both their neighbours are dropped, which is why
-   each ramp opens on a short flat run.
-
-   **Twentieths is the floor, not a budget, and re-sampling finer is wasted
-   work.** Measuring against a FLAT near-black stand-in for the photograph
-   isolates what the gradients themselves contribute — any curvature left is
-   the mask's, never image detail — and on that test the worst 10px window in
-   the composite reads 7-9 levels. Rebuilding `--feather-y` at fortieths and at
-   eightieths moves that to 9 and 8: the residual is the curve's own curvature
-   quantised to 8-bit output, not stop spacing, so there is nothing left for
-   more stops to buy. The only lever still open on an edge is ramp LENGTH,
-   which is why the desktop `.bg` rule states its one ramp as a
-   `max(96px, 22%)` rather than as a bare fraction.
-
-   Ramp lengths differ per edge because what they cross does:
-
-     - LEFT, 16% of the frame, which is exactly the width of the blown-out
-       window it crosses. A luminance scan of the shipped WebP puts the suited
-       figure's own left edge at 15.6%-20.7% of the frame depending on the
-       row, and every column left of that measures 246-252 — white ramping
-       into white, so this ramp never has to hide anything and the edge itself
-       sits at alpha 0 over near-paper. It ran 32% until [2.19.0], which is
-       double the window: the second half was spent erasing the FIGURE rather
-       than the edge, holding the torso at about 0.19 mask behind the headline
-       — 2.7% of the photograph once the overlay was over it, i.e. nothing.
-       Do not lengthen it back past the window without re-measuring where the
-       figure starts.
-     - BOTTOM, 32% of the frame. It crosses a sleeve, and it is the number
-       the curve above was chosen for.
-     - Below 920px the top ramp is 20%, because the frame's top edge is
-       at the top of the SECTION there and the fixed 68px header already covers
-       it. The ramp only has to reach full strength by the time it clears the
-       header, not hide an edge — there is no page above the edge for it to be
-       an edge against. Lengthening it is actively worse on a phone: at 375px
-       a 20% ramp finishes at 76px, just past the header, while a 26% one
-       finishes 24px down the visible page and doubles the curvature there.
-     - Below 920px the BOTTOM ramp starts at 62% rather than 68%, so it runs
-       38% of the frame instead of 32%. It is doing a second job at that
-       breakpoint: with the frame pinned to the top of the section, the red
-       accent word sits at 77%-93% of the frame's HEIGHT — inside this ramp —
-       so the ramp's own alpha is most of what stands between "impact" and a
-       near-black sleeve. Starting it earlier is what pays for the thinner
-       veil above (3.53:1 at 900px against 3.46:1 before it, on a 3:1 floor).
-       On desktop the accent is nowhere near the ramp and 68% stands.
-
-   `mask-composite` intersects the two ramps so the corners fade on both axes.
-   Engines without it fall back to the `add` default — a union, i.e. the
-   horizontal ramp is cancelled wherever the vertical one is opaque — and
-   engines without masks at all draw the frame with hard edges. Both degrade to
-   a visible photo edge over blown-out white, never to a missing or clipped
-   backdrop.
-
-   No `useParallax` here — scrub parallax would slide the subject out of the
-   relationship with "impact" that `--bg-right` exists to hold. The backdrop is
-   static on purpose, and as of `[2.29.0]` so is every other hero's: Expertise
-   dropped the hook in `[2.28.0]` and Who We Serve in `[2.29.0]`, both because
-   scrub travel needs the photo drawn taller than its box and neither draws
-   anything but the whole frame any more. The hook itself is still live on
-   `About/IntersectionSection` and `Home/BeliefSection`. */
-.bg {
-  position: absolute;
-  top: var(--bg-top);
-  right: var(--bg-right);
-  width: var(--bg-w);
-  height: auto;
-  max-width: none;
-  pointer-events: none;
-
-  /* Declared once and read by both the prefixed and the unprefixed property.
-     At 38 stops a ramp, keeping two hand-maintained copies in step is not a
-     risk worth taking, and a custom property holds a whole gradient value
-     perfectly well. */
-  --feather-y: linear-gradient(
+  background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0) 3%,
-    rgba(0, 0, 0, 0.0002) 4%,
-    rgba(0, 0, 0, 0.0011) 5%,
-    rgba(0, 0, 0, 0.0043) 6%,
-    rgba(0, 0, 0, 0.013) 7%,
-    rgba(0, 0, 0, 0.032) 8%,
-    rgba(0, 0, 0, 0.0674) 9%,
-    rgba(0, 0, 0, 0.125) 10%,
-    rgba(0, 0, 0, 0.2087) 11%,
-    rgba(0, 0, 0, 0.318) 12%,
-    rgba(0, 0, 0, 0.4474) 13%,
-    rgba(0, 0, 0, 0.5862) 14%,
-    rgba(0, 0, 0, 0.7205) 15%,
-    rgba(0, 0, 0, 0.8361) 16%,
-    rgba(0, 0, 0, 0.9223) 17%,
-    rgba(0, 0, 0, 0.9745) 18%,
-    rgba(0, 0, 0, 0.9965) 19%,
-    rgb(0, 0, 0) 20%,
-    rgb(0, 0, 0) 62%,
-    rgba(0, 0, 0, 0.9965) 63.9%,
-    rgba(0, 0, 0, 0.9745) 65.8%,
-    rgba(0, 0, 0, 0.9223) 67.7%,
-    rgba(0, 0, 0, 0.8361) 69.6%,
-    rgba(0, 0, 0, 0.7205) 71.5%,
-    rgba(0, 0, 0, 0.5862) 73.4%,
-    rgba(0, 0, 0, 0.4474) 75.3%,
-    rgba(0, 0, 0, 0.318) 77.2%,
-    rgba(0, 0, 0, 0.2087) 79.1%,
-    rgba(0, 0, 0, 0.125) 81%,
-    rgba(0, 0, 0, 0.0674) 82.9%,
-    rgba(0, 0, 0, 0.032) 84.8%,
-    rgba(0, 0, 0, 0.013) 86.7%,
-    rgba(0, 0, 0, 0.0043) 88.6%,
-    rgba(0, 0, 0, 0.0011) 90.5%,
-    rgba(0, 0, 0, 0.0002) 92.4%,
-    rgba(0, 0, 0, 0) 94.3%,
-    rgba(0, 0, 0, 0) 100%
+    rgba(22, 30, 25, 0.62) 0%,
+    rgba(22, 30, 25, 0.18) 34%,
+    rgba(22, 30, 25, 0.18) 100%
   );
-
-  -webkit-mask-image: var(--feather-y);
-  mask-image: var(--feather-y);
 }
 
-/* ---- 920px and up: the WHOLE photograph, as large as it will go ----
-   The desktop hero no longer crops. `object-fit: cover` framed the file to
-   the section and threw away whatever did not fit — at 1440px that was 46% of
-   the frame's width — so the photograph is now drawn at its natural aspect and
-   sized to the largest box that fits inside the section entirely:
-
-     width: auto; height: auto; max-width: 100%; max-height: 100%;
-
-   Those four lines are the whole sizing rule, and they are the CSS 2.1
-   replaced-element algorithm rather than four independent constraints: with
-   both dimensions `auto` the element starts at the file's intrinsic
-   2880x1094, and when a max- constraint is violated the browser scales the
-   box down **preserving the ratio**. Nothing here can crop, letterbox, or
-   stretch it, at any viewport.
-
-   Which constraint binds depends on the width, and all three regimes are
-   intended:
-
-     - Below about 2685px — every ordinary desktop — `max-width` binds. The
-       photograph spans the section edge to edge and is 2.63:1 against a hero
-       that runs 1.43:1 at 1440px, so it draws as a band across the TOP of the
-       section: 543px of a 1002px hero at 1440px, 726px of 1020px at 1920px.
-     - From there to 2880px `max-height` binds instead (the hero's height is
-       content-driven and settles at about 1020px, so the band would otherwise
-       grow past the foot of the section). The frame goes narrower than the
-       hero and its left edge comes onto the page — see the note below.
-     - Past 2880px the file's own intrinsic width binds first. It never
-       upscales.
-
-   **`object-fit` is not used and must not come back.** `contain` would give
-   the same guarantee about the pixels, but it takes its SIZE from the box, so
-   the element box would stay the full section while the drawn frame sat in
-   the middle of it — and every percentage in the feather below would then be
-   a percentage of the BOX, not of the picture, and would miss the frame's real
-   edges. Sizing the element to the image is what keeps the mask honest, which
-   is the same reason the sub-920px stack draws it as a placed frame.
-
-   ---- Where it sits, and which edges are real ----
-
-   `top: 0` puts the frame's top edge at the top of the section, which is the
-   top of the PAGE — the hero is the first thing in `<main>` and the 68px
-   header floats over it. There is nothing above that edge for it to be an edge
-   against, so it needs no treatment at all; the same reasoning the sub-920px
-   stack uses for `--bg-top: 0`.
-
-   `right: 0` rather than `left: 0` so the composition holds in the
-   height-limited regime above: the joined hands span 55.4%-85.7% of the file,
-   and pinning the right keeps them in the right half of the hero — clear of
-   the copy column and of `--copy-edge` — instead of sliding left as the frame
-   narrows. At every ordinary width the two are the same thing, since the frame
-   spans the section.
-
-   That leaves the left and bottom edges, and only one of them is visible:
-
-     - LEFT is untreated on purpose, and measured rather than assumed. It only
-       comes onto the page at all past ~2685px, and the file's first 40 columns
-       run 246-254 against a `#fff` section — an 8.7-level step at full
-       strength, landing under a shelf that is at least 0.84 opaque there, so
-       under 1.4 levels reach the page. A ramp would be machinery for an edge
-       that cannot be seen.
-     - BOTTOM is the one real edge, and it is feathered to nothing below.
-
-   The right edge is at the hero's right edge at every width, so `overflow:
-   hidden` ends it exactly as the viewport ends any full-bleed image. */
-@media (min-width: 920px) {
-  .bg {
-    top: 0;
-    right: 0;
-    bottom: auto;
-    left: auto;
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-
-    /* How far up from the bottom edge the fade runs, and the one number that
-       is a length rather than a fraction. 22% is what the ramp costs the
-       picture; the 96px floor is what it has to be worth on a SHORT frame —
-       at 920px the band is only 346px tall, where a bare 22% is 76px and the
-       worst 10px window in the composite measures 9.4 levels against the 7-9
-       this section is held to. 96px takes that to 4.9. Above about 1090px of
-       viewport the percentage binds again and the ramp scales with the frame,
-       which is the property that matters: a ramp is read in levels per pixel,
-       not in percent of a picture.
-
-       It is stated from the bottom (`to top`, stops in px from position 0) so
-       the ramp is anchored to the edge it is hiding, whatever the frame's
-       height resolves to. */
-    --bottom-ramp: max(96px, 22%);
-
-    /* The same curve the sub-920px feathers use, for the reasons set out at
-       length on the base `.bg` rule: `s5(t)^3` — smootherstep cubed — sampled
-       at twentieths, so the edge itself sits over nothing, both ends of the
-       ramp arrive with zero slope (no Mach band where the ramp meets the flat
-       middle), and no single stop-to-stop step is more than about a level.
-       Regenerate rather than hand-edit: alpha at k/20 of the ramp is
-       `1 - s5(1 - k/20)^3`, `s5` being `6t^5 - 15t^4 + 10t^3`. Stops that
-       round to the same alpha as both their neighbours are dropped, which is
-       why the run ends flat.
-
-       Redeclaring `--feather-y` is all this rule has to do — the base `.bg`
-       rule's `mask-image: var(--feather-y)` picks it up — but both properties
-       are restated below anyway, because the rule this one replaces switched
-       the mask OFF and a reader deserves to see it come back. */
-    --feather-y: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0) 0,
-      rgba(0, 0, 0, 0.0035) calc(var(--bottom-ramp) * 0.05),
-      rgba(0, 0, 0, 0.0255) calc(var(--bottom-ramp) * 0.1),
-      rgba(0, 0, 0, 0.0777) calc(var(--bottom-ramp) * 0.15),
-      rgba(0, 0, 0, 0.1639) calc(var(--bottom-ramp) * 0.2),
-      rgba(0, 0, 0, 0.2795) calc(var(--bottom-ramp) * 0.25),
-      rgba(0, 0, 0, 0.4138) calc(var(--bottom-ramp) * 0.3),
-      rgba(0, 0, 0, 0.5526) calc(var(--bottom-ramp) * 0.35),
-      rgba(0, 0, 0, 0.682) calc(var(--bottom-ramp) * 0.4),
-      rgba(0, 0, 0, 0.7913) calc(var(--bottom-ramp) * 0.45),
-      rgba(0, 0, 0, 0.875) calc(var(--bottom-ramp) * 0.5),
-      rgba(0, 0, 0, 0.9326) calc(var(--bottom-ramp) * 0.55),
-      rgba(0, 0, 0, 0.968) calc(var(--bottom-ramp) * 0.6),
-      rgba(0, 0, 0, 0.987) calc(var(--bottom-ramp) * 0.65),
-      rgba(0, 0, 0, 0.9957) calc(var(--bottom-ramp) * 0.7),
-      rgba(0, 0, 0, 0.9989) calc(var(--bottom-ramp) * 0.75),
-      rgba(0, 0, 0, 0.9998) calc(var(--bottom-ramp) * 0.8),
-      rgb(0, 0, 0) calc(var(--bottom-ramp) * 0.85),
-      rgb(0, 0, 0) var(--bottom-ramp)
-    );
-
-    -webkit-mask-image: var(--feather-y);
-    mask-image: var(--feather-y);
-  }
-}
-
-/* The white overlay. The backdrop contributes `1 − alpha` of each pixel, so
-   this is what decides how much photo you actually see.
-
-   The treatment is one idea at every width: white where the copy is, letting
-   go toward the photograph. What changes at the 920px nav breakpoint is not
-   the idea but whether that horizontal fade can carry the legibility on its
-   own. Base rule = the sub-920px stack, one `min-width: 920px` override for
-   the desktop one, rather than a `max-width: 919px` pair: a viewport at a
-   fractional CSS width (emulation, fractional DPI, some zoom levels)
-   satisfies NEITHER query, and the base rule has to be the one that leaves
-   text readable.
-
-   ---- Below 920px: the fade, plus a vertical veil ----
-
-   Under the breakpoint the hero is one full-width column and the copy spans
-   the frame — at 375px the lede's longest line reaches 91% of the hero and the
-   accent word "impact" reaches 84%. There is no right-hand strip left for a
-   horizontal fade to clear into, so it cannot do the legibility work alone,
-   and pushing it far enough to try would just wash the photo out evenly.
-
-   So the two layers split the job by axis. The veil (layer 1) owns
-   legibility: nothing above 12% of the hero, 0.55 by 25%, held to the foot,
-   so the copy is covered whatever the fade is doing. The fade (layer 2) is
-   then free to be about the LEFT EDGE, the one thing the veil cannot help
-   with: 0.24 at the edge, eased to nothing by the right.
-
-   **The veil could come down from 0.66 to 0.55 only because `.bg`'s mobile
-   bottom ramp was lengthened at the same time**, and the two must be moved
-   together. The accent sits inside that ramp here (77%-93% of the frame's
-   height), so starting the ramp at 62% rather than 68% lightens the mask
-   under the word by more than the thinner veil costs it: 3.53:1 at 900px,
-   3.91:1 at 768px and 4.27:1 at 375px, all of them BETTER than the 3.46 /
-   3.66 / 4.16 the thicker veil produced. Thin the veil on its own and 900px
-   — the tightest width, where the frame is widest relative to the viewport —
-   is the one that fails first. The lede is past the frame entirely at 8.81:1
-   and the ink headline never drops below 8.1:1.
-
-   **Every ramp on this base rule is smootherstep sampled at twentieths**, for
-   the reason set out at length in the `.bg` block above: a gradient's visible
-   defect is not its steepness but its VERTICES, and a flat run meeting a
-   linear ramp is a corner however gentle the ramp.
-
-   ---- 920px and up ----
-
-   One layer, and a different shape. See the `min-width: 920px` block below —
-   the desktop overlay is a shelf across the copy column and a plunge past it,
-   keyed to where the glyphs end rather than to the frame, and it is where this
-   section's overlay alpha is actually tuned. */
-.scrim {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0) 12%,
-      rgba(255, 255, 255, 0.0006) 12.65%,
-      rgba(255, 255, 255, 0.0047) 13.3%,
-      rgba(255, 255, 255, 0.0146) 13.95%,
-      rgba(255, 255, 255, 0.0319) 14.6%,
-      rgba(255, 255, 255, 0.0569) 15.25%,
-      rgba(255, 255, 255, 0.0897) 15.9%,
-      rgba(255, 255, 255, 0.1293) 16.55%,
-      rgba(255, 255, 255, 0.1746) 17.2%,
-      rgba(255, 255, 255, 0.2238) 17.85%,
-      rgba(255, 255, 255, 0.275) 18.5%,
-      rgba(255, 255, 255, 0.3262) 19.15%,
-      rgba(255, 255, 255, 0.3754) 19.8%,
-      rgba(255, 255, 255, 0.4207) 20.45%,
-      rgba(255, 255, 255, 0.4603) 21.1%,
-      rgba(255, 255, 255, 0.4931) 21.75%,
-      rgba(255, 255, 255, 0.5181) 22.4%,
-      rgba(255, 255, 255, 0.5354) 23.05%,
-      rgba(255, 255, 255, 0.5453) 23.7%,
-      rgba(255, 255, 255, 0.5494) 24.35%,
-      rgba(255, 255, 255, 0.55) 25%,
-      rgba(255, 255, 255, 0.55) 100%
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.24) 0%,
-      rgba(255, 255, 255, 0.2397) 5%,
-      rgba(255, 255, 255, 0.2379) 10%,
-      rgba(255, 255, 255, 0.2336) 15%,
-      rgba(255, 255, 255, 0.2261) 20%,
-      rgba(255, 255, 255, 0.2152) 25%,
-      rgba(255, 255, 255, 0.2009) 30%,
-      rgba(255, 255, 255, 0.1836) 35%,
-      rgba(255, 255, 255, 0.1638) 40%,
-      rgba(255, 255, 255, 0.1424) 45%,
-      rgba(255, 255, 255, 0.12) 50%,
-      rgba(255, 255, 255, 0.0976) 55%,
-      rgba(255, 255, 255, 0.0762) 60%,
-      rgba(255, 255, 255, 0.0564) 65%,
-      rgba(255, 255, 255, 0.0391) 70%,
-      rgba(255, 255, 255, 0.0248) 75%,
-      rgba(255, 255, 255, 0.0139) 80%,
-      rgba(255, 255, 255, 0.0064) 85%,
-      rgba(255, 255, 255, 0.0021) 90%,
-      rgba(255, 255, 255, 0.0003) 95%,
-      rgba(255, 255, 255, 0) 100%
-    );
-}
-
-/* ---- 920px and up: the fade alone ----
-
-   One layer, replacing both of the base rule's gradients outright, since
-   `background` is a shorthand and the vertical veil has no job once the copy
-   is a left column. There is no second `::after` layer at this breakpoint
-   either — the shield existed to hold white over a placed frame that sat
-   directly behind the headline, and with the photograph drawn whole across
-   the top of the section the horizontal fade carries the whole job on its
-   own.
-
-   The shape is a shelf and a plunge, not an even ramp, and that distinction is
-   the whole rule: an even fade from the left edge to the right one crosses the
-   copy at exactly the alphas that break it (a 0.94 → 0 ramp puts about 0.18
-   white under the end of the headline at 1024px, where the accent reads
-   1.2:1). So the white holds across the copy, then drops to 0.08 inside the
-   next 8% of the hero and to nothing 8% after that.
-
-   How MUCH white the shelf holds is the number this release moves, and it
-   comes DOWN at the two stops that had room for it — 0.91 / 0.88 / 0.83 →
-   **0.86 / 0.84 / 0.83** — so more of the photograph reads through the copy
-   column. In signal rather than alpha: what survives of the photo's own pixel
-   goes from 0.09 to 0.14 at the left edge and from 0.12 to 0.16 at 30%, half
-   again and a third again on the part of the frame the brief is about. The
-   shelf is where nearly all of the photograph lives — the frame now spans the
-   section, so image-x maps straight onto hero-x, which puts the joined hands
-   at 55%-86% and their centroid at 68% while `--copy-edge` runs 63-86%, so
-   the subject is mostly under the shelf and only its right side clears the
-   plunge.
-
-   **The accent on "impact" is what prices it, and the third stop is the one
-   that cannot move.** It is the one run of copy in the section that is
-   colour-bound rather than ink-black, it gets its own line inside the left
-   column, and it sits close enough to `--copy-edge` that the alpha under it is
-   set almost entirely by that third stop — at 1920px the word's darkest column
-   reads 0.79 of the way from the second stop to the third. Lowering the first
-   two therefore costs it almost nothing (0.841 → 0.832 of white under the
-   worst pixel) while it buys the whole left column. Measured against the
-   accent's brightest fill (#E8293E) — the strict test, since it takes the
-   darkest backdrop pixel anywhere under the word — this shelf reads
-   **3.11:1 at 1920px and 2560px**, 3.32:1 at 1440px, 4.3-4.4:1 at 920-1280px
-   and 3.19:1 at 3440px, against a **3:1 floor for large text**; the 0.91 /
-   0.88 / 0.83 shelf it replaces read 3.17:1 at its own worst width. Do not
-   thin the third stop, and do not re-measure any other way.
-
-   Everything else the shelf covers is ink or near-ink at display or lede size
-   and is nowhere near its floor.
-
-   The plunge is keyed to `--copy-edge`, which follows the copy, so the shelf
-   ends where the glyphs do at every width instead of at one tuned viewport.
-   Percentages after it are hero-%, and `calc()` mixes them with the length
-   happily. 8%+8% rather than a wider ramp because the clasp sits at 68% and
-   `--copy-edge` is right on top of it, so every percent the plunge spends is a
-   percent of hand it spends it on. 8% is still 114px at 1440px — wide enough
-   that the edge reads as light rather than as a seam laid over a shallow-focus
-   photograph.
-
-   Right of the plunge the photo is untouched. That strip is 17% of the hero at
-   1920px, 11% at 1440px and 2% at 1024px — 1024px is the tightest the hero
-   ever gets, since the container has not hit its 1280px cap and the copy owns
-   the largest share of the width it ever does.
-
-   These are linear ramps, unlike the smootherstep-at-twentieths curves the
-   sub-920px stack and `.bg`'s feathers carry. That is deliberate and it is a
-   real trade: the stops at `--copy-edge` and at `+8%` are slope
-   discontinuities, so a soft vertical band is visible at each under a close
-   look. It is the shape the desktop hero is specified to have, and the plunge
-   is steep enough that easing it would visibly change where the white lets go
-   rather than just how. */
-@media (min-width: 920px) {
-  .hero {
-    /* Where the white overlay starts to let go — a length measured from the
-       hero's left edge, and the one number in this section that has to track
-       the COPY rather than the viewport, because the two do not scale
-       together: the headline sets in a `clamp()` inside a container that caps
-       at 1280px, so its right edge runs from 63% of the hero at 1920px out to
-       74% at 1024px. The fade has to clear later on a narrow desktop.
-
-       The headline is three lines at every width and its widest is the last,
-       "We deliver impact", which measures 853px at the 104px display size and
-       scales with it. Adding the container's own left offset puts its right
-       edge at exactly `50vw + 257px` from 1280px up and `50vw + 240px` at
-       1024px.
-
-       `+ 320px` and not the `+ 275px` the placed-frame release fitted to the
-       headline alone: the shelf covers the whole copy column here, and the
-       pillars row — a four-column flex that runs WIDER than the headline, and
-       whose fourth number is 14px `--red`, the least forgiving colour in the
-       section — has to be inside it. This is fitted to that row, not to a
-       display glyph, and it stays fitted to it even though the row is now
-       clear of the photograph at most widths: the frame ends 460px above the
-       pillars at 1440px and 294px above them at 1920px, and only past about
-       2500px does its feathered tail reach them at all — where the mask is
-       under 0.21 and the red measures 4.7-5.0:1, better than the 3.7-4.1:1
-       the cropped backdrop left it at.
-
-       It is declared here rather than on the base `.hero` rule because only
-       the desktop overlay reads it; below 920px the copy spans the frame and
-       there is nothing to aim at. */
-    --copy-edge: calc(50vw + 320px);
-  }
-
-  .scrim {
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.86) 0%,
-      rgba(255, 255, 255, 0.84) 30%,
-      rgba(255, 255, 255, 0.83) var(--copy-edge),
-      rgba(255, 255, 255, 0.08) calc(var(--copy-edge) + 8%),
-      rgba(255, 255, 255, 0) calc(var(--copy-edge) + 16%)
-    );
-  }
-}
-
-/* The mockup's own rhythm, at every width. The backdrop is behind the copy
-   now rather than banded above it, so the section reserves no room of its own
-   for the photograph and this is back to one unconditional rule. */
-.inner {
+/* ---------- The copy ---------- */
+.copy {
+  --hero-fade: 140px;
   position: relative;
-  padding-top: clamp(140px, 18vh, 190px);
-  padding-bottom: clamp(70px, 9vw, 110px);
+  z-index: 1;
+  padding-bottom: calc(var(--ia-dock-clearance) + var(--ia-space-6));
 }
 
-/* ========== Badge ========== */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 8px 18px;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #3d3d42;
-  background: #fff;
+/* The scrim behind the copy: it starts `--hero-fade` above the eyebrow and
+   reaches full density at the eyebrow, so wherever the copy sits (any
+   viewport height, any line count) the text has its ground. Full-bleed
+   even where the copy column stops at 1680 px. */
+.copy::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: calc(-1 * var(--hero-fade));
+  bottom: 0;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(22, 30, 25, 0) 0,
+    rgba(22, 30, 25, 0.74) var(--hero-fade),
+    rgba(22, 30, 25, 0.84) 62%,
+    rgba(22, 30, 25, 0.92) 100%
+  );
 }
 
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--red);
-  animation: pulseDot 2.2s ease-in-out infinite;
+.copy .grid {
+  row-gap: 0;
 }
 
-@keyframes pulseDot {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.4;
-    transform: scale(0.8);
-  }
+.copy .eyebrow {
+  margin-bottom: var(--ia-space-4);
+  /* At 360 the label takes two lines: keep them even. */
+  text-wrap: balance;
 }
 
-/* Deliberate departure from the mockup, which sets "impact" in the
-   Instrument Serif italic accent (`.serif`). Here the word keeps only the
-   red `.grad-text` fill and otherwise renders exactly like the rest of the
-   headline — the <em> default italic is the one thing left to undo, since
-   family, weight, and tracking already inherit from `.display`. */
-.impact {
-  font-style: normal;
+/* The 144 optical size is Fraunces's display master. It keeps the tagline
+   at the type table's size and on its two lines from 360 px up (the 40 px
+   master would need 368 px for "Shaping experiences." at 45 px). */
+.title {
+  font-variation-settings: 'opsz' 144;
+  margin-bottom: var(--ia-space-5);
 }
 
-/* The hero lede is narrower than the shared `.lede` default. */
-.lede {
-  max-width: 640px;
+.copy .lede {
+  max-width: 44ch;
+  margin-bottom: 28px;
 }
 
-.cta {
-  margin-top: 38px;
+.actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
-  align-items: center;
+  gap: var(--ia-space-3) var(--ia-space-4);
+  margin-bottom: var(--ia-space-8);
 }
 
-/* ========== Pillars row ========== */
-.pillars {
-  margin-top: clamp(48px, 7vw, 80px);
+/* Phones: the dock's "Start a project" is the primary action. */
+.actions .primaryAction {
+  display: none;
+}
+
+/* Phones: one caption line, "Led by … · Patna, Bihar". */
+.meta {
   display: flex;
   flex-wrap: wrap;
-  border-top: 1px solid var(--line);
+  color: var(--ia-fg-2);
+  font-size: var(--ia-fs-caption);
+  line-height: 1.5;
 }
 
-.pillars > div {
-  flex: 1 1 220px;
-  padding: 22px 24px 0 0;
+.metaItem + .metaItem::before {
+  content: '\00B7';
+  content: '\00B7' / '';
+  margin-inline: 0.5em;
+}
+
+.wide {
+  display: none;
+}
+
+.disciplines {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.pillars b {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--red);
+.disciplines li {
+  white-space: nowrap;
 }
 
-.pillars span {
-  font-size: 15px;
-  font-weight: 600;
+.disciplines li + li::before {
+  content: '\00B7';
+  content: '\00B7' / '';
+  margin-inline: 0.7em;
 }
 
-/* Deliberate departure from the mockup, which uses one flat size at every
-   width. On desktop the row reads undersized against the hero's display
-   headline and lede, so it is scaled up from the 920px nav-takeover
-   breakpoint. The mockup values above stay untouched below it — the phone
-   and tablet layout is unchanged. */
-@media (min-width: 920px) {
-  .pillars > div {
-    padding: 28px 28px 0 0;
-    gap: 14px;
+/* ---------- Tablet (768–1023) ---------- */
+@media (min-width: 768px) {
+  .hero {
+    min-height: min(100svh, 900px);
+    padding-top: 88px;
   }
 
-  .pillars b {
-    font-size: 14px;
+  .picture .img {
+    object-position: 45% 50%;
   }
 
-  .pillars span {
-    font-size: 18px;
+  .veil {
+    background: linear-gradient(
+      180deg,
+      rgba(22, 30, 25, 0.66) 0,
+      rgba(22, 30, 25, 0.5) 88px,
+      rgba(22, 30, 25, 0.16) 36%,
+      rgba(22, 30, 25, 0.16) 100%
+    );
+  }
+
+  .copy {
+    --hero-fade: 180px;
+  }
+
+  .copy .eyebrow {
+    margin-bottom: var(--ia-space-6);
+  }
+
+  .title {
+    margin-bottom: var(--ia-space-8);
+  }
+
+  .copy .lede {
+    margin-bottom: var(--ia-space-8);
+  }
+
+  .actions {
+    margin-bottom: 0;
+  }
+
+  .actions .primaryAction {
+    display: inline-flex;
+  }
+
+  .metaCol {
+    margin-top: var(--ia-space-10);
+  }
+
+  /* A row under a hairline, in labels. */
+  .meta {
+    gap: var(--ia-space-2) var(--ia-space-8);
+    padding-top: var(--ia-space-5);
+    border-top: 1px solid var(--ia-line-strong);
+    font-size: var(--ia-fs-label);
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .metaItem + .metaItem::before {
+    content: none;
+  }
+
+  .wide {
+    display: inline;
   }
 }
 
-/* Intentional improvement on the mockup, which leaves `pulseDot` looping
-   under reduced motion: the badge dot stops at its neutral frame, solid red.
-   Matches the same block in `ContactPage.module.css`, whose badge carries the
-   identical dot. */
-@media (prefers-reduced-motion: reduce) {
-  .dot {
-    animation: none;
+/* ---------- Desktop (1024 and up) ---------- */
+@media (min-width: 1024px) {
+  .hero {
+    /* 100svh, never below 680 px */
+    min-height: max(100svh, 680px);
+    padding-top: 104px;
+  }
+
+  .veil {
+    background: linear-gradient(
+      180deg,
+      rgba(22, 30, 25, 0.8) 0,
+      rgba(22, 30, 25, 0.72) 104px,
+      rgba(22, 30, 25, 0.16) 38%,
+      rgba(22, 30, 25, 0.12) 100%
+    );
+  }
+
+  .copy {
+    --hero-fade: 200px;
+    padding-bottom: calc(var(--ia-dock-clearance) + var(--ia-space-10));
+  }
+
+  .title {
+    margin-bottom: var(--ia-space-10);
+  }
+
+  /* One row: below 1280 columns 1–5 are narrower than the two buttons, so
+     the second runs into the empty columns 6–7 rather than wrapping. */
+  .actions {
+    flex-wrap: nowrap;
+  }
+
+  .actions > * {
+    flex-shrink: 0;
+  }
+
+  .metaCol {
+    margin-top: 0;
+  }
+
+  /* A right-aligned stack, items separated by hairlines, its last line on
+     the buttons' bottom edge. */
+  .meta {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0;
+    padding-top: 0;
+    border-top: 0;
+    text-align: right;
+  }
+
+  .metaItem {
+    padding-block: var(--ia-space-3);
+  }
+
+  .metaItem + .metaItem {
+    border-top: 1px solid var(--ia-line-strong);
+  }
+
+  .metaItem:last-child {
+    padding-bottom: 0;
+  }
+
+  /* The three words, one per line: a dot would lead a wrapped line. */
+  .disciplines {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .disciplines li + li::before {
+    content: none;
   }
 }

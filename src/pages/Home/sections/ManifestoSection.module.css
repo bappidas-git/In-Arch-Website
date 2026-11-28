@@ -1,0 +1,83 @@
+/* ============================================
+   Home / Opening statement — "The practice"
+   Phones first (360–767), then 768, then 1024 and up.
+   ============================================ */
+
+.manifesto .grid {
+  row-gap: 0;
+}
+
+.eyebrow {
+  margin-bottom: var(--ia-space-6);
+}
+
+.statement {
+  max-width: 30ch;
+}
+
+.body {
+  margin-top: var(--ia-space-8);
+}
+
+.paragraph {
+  max-width: 52ch;
+  margin-bottom: var(--ia-space-4);
+  color: var(--ia-fg-2);
+}
+
+/* Phones: inset by the gutter on the left, bleeding off the right edge. */
+.figure {
+  margin-top: var(--ia-space-12);
+}
+
+.frame {
+  width: calc(100% + var(--ia-gutter));
+}
+
+/* ---------- Tablet (768–1023) ---------- */
+@media (min-width: 768px) {
+  .eyebrow {
+    margin-bottom: var(--ia-space-8);
+  }
+
+  .body {
+    margin-top: var(--ia-space-10);
+  }
+
+  /* Columns 5–8, overlapping the text block's last 48 px. */
+  .figure {
+    margin-top: calc(-1 * var(--ia-space-12));
+  }
+
+  .frame {
+    width: 100%;
+  }
+}
+
+/* ---------- Desktop (1024 and up) ---------- */
+@media (min-width: 1024px) {
+  /* One idea per screen. */
+  .manifesto {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 90svh;
+  }
+
+  /* The photograph spans both rows; the second (paragraph and link) takes
+     the extra height, so the paragraph stays under the statement. */
+  .manifesto .grid {
+    grid-template-rows: auto 1fr;
+  }
+
+  .body {
+    margin-top: var(--ia-space-12);
+  }
+
+  /* Columns 9–12, starting 96 px lower than the eyebrow. */
+  .figure {
+    grid-row: 1 / span 2;
+    align-self: start;
+    margin-top: var(--ia-space-24);
+  }
+}

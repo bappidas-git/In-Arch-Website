@@ -72,7 +72,7 @@ Both servers get exactly the same treatment:
   - Tile seams across a fractionally translated photograph vary by ±1–2 levels. A pixel counts as differing only when a channel moves by more than `--tolerance`, which defaults to 2. Smaller changes are still counted and reported.
 
   The computed-style digest stays exact, so a real colour change of any size is still caught.
-- **Third-party fonts and icons are blocked.** Requests to `fonts.googleapis.com`, `fonts.gstatic.com` and `api.iconify.design` are blocked. **Web fonts and admin icons are therefore not covered by the pixel comparison**; the manual pass covers them.
+- **Third-party fonts and icons are blocked.** Requests to `fonts.googleapis.com`, `fonts.gstatic.com` and the Iconify API are blocked: `api.iconify.design` and the fallback hosts Iconify tries when it is refused, `api.simplesvg.com` and `api.unisvg.com` (without those two, admin icons sometimes loaded on one side only). **Web fonts and admin icons are therefore not covered by the pixel comparison**; the manual pass covers them.
 - **The lead store is reset.** It is reset to the same three seeded leads (`qa-parity-0001`…`0003`, fixed timestamps) through `/api/leads.php`, using the admin key from `.env`. This **deletes every lead in the store**, so the script only accepts `127.0.0.1` / `localhost` servers.
 
 What each suite captures:

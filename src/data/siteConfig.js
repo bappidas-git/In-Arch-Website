@@ -138,7 +138,8 @@ export const studio = {
   // PDF §10 F, the footer line.
   blurb: 'Thoughtful architectural and interior design solutions from Patna, Bihar.',
   // No portrait supplied (D-11): a typographic plate stands in.
-  principal: { name: 'Ar. Mohammad Hassanuddin', role: 'Principal Architect & Founder', portrait: null },
+  // `title` is the role alone (PDF §3), for short credit lines.
+  principal: { name: 'Ar. Mohammad Hassanuddin', title: 'Principal Architect', role: 'Principal Architect & Founder', portrait: null },
   phone: '+917292831128',
   phoneDisplay: '+91 72928 31128',
   whatsapp: '917292831128',

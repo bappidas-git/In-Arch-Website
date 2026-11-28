@@ -14,8 +14,10 @@
    - time frozen: the browser clock is installed at 2026-01-15T10:30:00+05:30
      and then PAUSED, and every wait advances fake time by the same amounts,
      so GSAP, React timers and MUI transitions land on identical frames;
-   - fonts.googleapis.com, fonts.gstatic.com and api.iconify.design blocked
-     (web fonts and admin icons are therefore NOT covered by the pixel
+   - fonts.googleapis.com, fonts.gstatic.com and the Iconify API blocked —
+     api.iconify.design and its fallback hosts api.simplesvg.com and
+     api.unisvg.com, which Iconify tries when the first is refused (web
+     fonts and admin icons are therefore NOT covered by the pixel
      comparison — the manual pass covers them);
    - the lead store reset to the same three seeded leads (fixed lead_ids and
      timestamps) through /api/leads.php. Only loopback hosts are accepted,
@@ -107,7 +109,7 @@ const HEIGHT = 900;
 
 /* ---------- determinism ---------- */
 const FIXED_TIME = new Date('2026-01-15T10:30:00+05:30');
-const BLOCKED = /^https?:\/\/(fonts\.googleapis\.com|fonts\.gstatic\.com|api\.iconify\.design)\//;
+const BLOCKED = /^https?:\/\/(fonts\.googleapis\.com|fonts\.gstatic\.com|api\.iconify\.design|api\.simplesvg\.com|api\.unisvg\.com)\//;
 
 // Rasterise on the CPU, in one pass, without the GPU's or the raster
 // threads' timing-dependent shortcuts, so the same page paints the same
