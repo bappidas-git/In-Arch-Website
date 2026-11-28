@@ -1,173 +1,202 @@
 /* ============================================
-   LeadModal — the global enquiry modal
+   LeadModal — the global enquiry sheet (prompt 05)
    --------------------------------------------
-   The site's single enquiry surface. Ported from the `.modal`
-   block that every `mockup/*.html` page carries: a blurred overlay, a
-   centered white box with the ✕ close button, the fixed heading block,
-   and the shared `UnifiedLeadForm`.
+   <LeadModal isOpen onClose source="dock-cta" serviceInterest="Interior Design"
+              context={{ label: 'Portfolio — Graphite Gloss Kitchen' }} />
 
-   Behaviour matches `mockup/scripts.js` (backdrop click, ✕ and Escape
-   all close) plus the accessibility the static mockup lacks: a focus
-   trap, focus restored to whatever opened the modal, and a body scroll
-   lock that preserves the page's scroll position.
+   Rendered once (App.jsx, LeadModalWrapper) and opened by every CTA through
+   `openLeadModal(source, { service_interest, context })`.
+
+   - Through Portal (paper tone); role="dialog", aria-modal, labelled by its
+     heading. Backdrop rgba(22,30,25,.55), fading in 240 ms.
+   - Below 768 px a bottom sheet: full width, min(92svh, content) tall, its
+     own scroll (overscroll contained), header pinned above it. It rises
+     from the bottom (yPercent 100 → 0, 500 ms power3.inOut) and leaves in
+     350 ms. From 768 px a right-hand panel (520 px; 560 from 1280), full
+     height, sliding in from the right (xPercent). Reduced motion: it simply
+     appears and disappears.
+   - When the on-screen keyboard covers the bottom of the viewport (the
+     visual viewport shrinks), the sheet sits on top of it, so the focused
+     field and the submit button stay reachable.
+   - Header: eyebrow "Start a project", heading "Tell us about your space."
+     and, when the CTA passed one, a quiet context line.
+   - Body: the one UnifiedLeadForm, compact.
+
+   Kept from the previous modal: Escape, the close button and a backdrop
+   click close it; focus is trapped inside and returned to the opener; the
+   page behind is scroll-locked at its offset and put back (only if the
+   route is unchanged), with scheduleRefresh() on both edges (useScrollLock);
+   any route change closes it (ModalContext). New: on open, focus goes to
+   the heading (tabindex -1), not into a field, so a phone keyboard does not
+   jump up uninvited.
    ============================================ */
 
-import React, { useCallback, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import UnifiedLeadForm from '../UnifiedLeadForm/UnifiedLeadForm';
-import { scheduleRefresh } from '../../../animations';
+import Portal from '../../ui/Portal/Portal';
+import Eyebrow from '../../ui/Eyebrow/Eyebrow';
+import Heading from '../../ui/Heading/Heading';
+import IconButton from '../../ui/IconButton/IconButton';
+import { useIsoLayoutEffect } from '../../ui/_shared/refs';
+import useFocusTrap from '../../../hooks/useFocusTrap';
+import useScrollLock from '../../../hooks/useScrollLock';
+import { gsap, useGSAP } from '../../../animations/gsapSetup';
+import { DUR, DUR_NAMED, EASE } from '../../../motion/tokens';
+import { prefersReducedMotion } from '../../../motion/reducedMotion';
+import { isServiceOption } from '../../../data/enquiry';
 import styles from './LeadModal.module.css';
 
-const FOCUSABLE =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+const WIDE = '(min-width: 768px)';
 
-const LeadModal = ({ isOpen, onClose, source = 'general', serviceInterest = '' }) => {
-  const boxRef = useRef(null);
-  const closeRef = useRef(null);
-  // Whatever had focus when the modal opened — focus returns there on close.
-  const openerRef = useRef(null);
+const isWide = () =>
+  typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(WIDE).matches;
 
-  const focusableItems = useCallback(
-    () => Array.from(boxRef.current?.querySelectorAll(FOCUSABLE) || []),
-    []
-  );
+/** Px of the layout viewport hidden under an on-screen keyboard (0 when zoomed). */
+const keyboardInset = () => {
+  const vv = typeof window !== 'undefined' ? window.visualViewport : null;
+  if (!vv || (vv.scale && vv.scale > 1.05)) return 0;
+  return Math.max(0, Math.round(window.innerHeight - (vv.height + vv.offsetTop)));
+};
 
-  // Escape closes; Tab cycles inside the box.
-  useEffect(() => {
-    if (!isOpen) return undefined;
+const LeadModal = ({ isOpen, onClose, source = 'general', serviceInterest = '', context }) => {
+  // Stays rendered while the exit plays; each opening mounts a fresh form.
+  const [present, setPresent] = useState(isOpen);
+  const [session, setSession] = useState(isOpen ? 1 : 0);
+  const [wasOpen, setWasOpen] = useState(isOpen);
+  if (isOpen !== wasOpen) {
+    setWasOpen(isOpen);
+    if (isOpen) {
+      setPresent(true);
+      setSession((n) => n + 1);
+    }
+  }
 
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        event.stopPropagation();
-        onClose();
-        return;
+  const rootRef = useRef(null);
+  const sheetRef = useRef(null);
+  const backdropRef = useRef(null);
+  const headingRef = useRef(null);
+  const leaving = useRef(false);
+  const headingId = `lead-modal-title-${useId().replace(/:/g, '')}`;
+
+  useScrollLock(isOpen);
+  useFocusTrap(sheetRef, isOpen, { initialFocus: headingRef, onEscape: onClose });
+
+  const { contextSafe } = useGSAP({ scope: rootRef });
+
+  const animate = contextSafe((toOpen) => {
+    const sheet = sheetRef.current;
+    const backdrop = backdropRef.current;
+    if (!sheet || !backdrop) return;
+    gsap.killTweensOf([sheet, backdrop]);
+    const axis = isWide() ? 'xPercent' : 'yPercent';
+    const other = axis === 'xPercent' ? 'yPercent' : 'xPercent';
+
+    if (prefersReducedMotion()) {
+      gsap.set([sheet, backdrop], { clearProps: 'transform,opacity' });
+      leaving.current = false;
+      if (!toOpen) setPresent(false);
+      return;
+    }
+
+    if (toOpen) {
+      const resume = leaving.current;
+      leaving.current = false;
+      gsap.set(sheet, { [other]: 0 });
+      if (resume) {
+        gsap.to(sheet, { [axis]: 0, duration: DUR_NAMED.overlayIn, ease: EASE.mask, clearProps: 'transform' });
+        gsap.to(backdrop, { opacity: 1, duration: DUR.hover, ease: EASE.out, clearProps: 'opacity' });
+      } else {
+        gsap.fromTo(
+          sheet,
+          { [axis]: 100 },
+          { [axis]: 0, duration: DUR_NAMED.overlayIn, ease: EASE.mask, clearProps: 'transform' }
+        );
+        gsap.fromTo(backdrop, { opacity: 0 }, { opacity: 1, duration: DUR.hover, ease: EASE.out, clearProps: 'opacity' });
       }
+    } else {
+      leaving.current = true;
+      gsap.to(backdrop, { opacity: 0, duration: DUR_NAMED.overlayOut, ease: EASE.out });
+      gsap.to(sheet, {
+        [axis]: 100,
+        duration: DUR_NAMED.overlayOut,
+        ease: EASE.mask,
+        onComplete: () => {
+          leaving.current = false;
+          setPresent(false);
+        },
+      });
+    }
+  });
 
-      if (event.key !== 'Tab') return;
+  // Before paint, so the sheet never flashes in its resting place.
+  useIsoLayoutEffect(() => {
+    if (!present) return;
+    animate(isOpen);
+  }, [isOpen, present]); // eslint-disable-line react-hooks/exhaustive-deps
 
-      const items = focusableItems();
-      if (!items.length) return;
-
-      const first = items[0];
-      const last = items[items.length - 1];
-      const active = document.activeElement;
-
-      if (event.shiftKey && (active === first || !boxRef.current?.contains(active))) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && active === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose, focusableItems]);
-
-  // Body scroll lock — fix the body at the current offset so the page
-  // doesn't jump, and restore both the styles and the scroll position.
-  //
-  // `position: fixed` collapses the document to viewport height, which
-  // invalidates every ScrollTrigger start/end behind the overlay. Refresh on
-  // both edges (the mockup never had to — its modal did not lock the body),
-  // so a reveal or parallax below the fold is not left measuring a page that
-  // no longer exists. `scheduleRefresh` defers a frame, so on close it runs
-  // after the styles and scroll position are back.
+  // The on-screen keyboard: lift the sheet above it.
   useEffect(() => {
-    if (!isOpen) return undefined;
-
-    const { body } = document;
-    const scrollY = window.scrollY;
-    const previous = {
-      overflow: body.style.overflow,
-      position: body.style.position,
-      top: body.style.top,
-      width: body.style.width,
-    };
-    // The route the offset above was measured on. `ModalContext` closes the
-    // modal on navigation, so normally this still matches on release — but a
-    // back/forward gesture can also change the route out from under an open
-    // modal, and then `scrollY` describes a page that is no longer rendered.
-    const lockedRoute = window.location.pathname + window.location.search;
-
-    body.style.overflow = 'hidden';
-    body.style.position = 'fixed';
-    body.style.top = `-${scrollY}px`;
-    body.style.width = '100%';
-    scheduleRefresh();
-
+    const sheet = sheetRef.current;
+    const vv = typeof window !== 'undefined' ? window.visualViewport : null;
+    if (!isOpen || !sheet || !vv) return undefined;
+    const update = () => sheet.style.setProperty('--ia-kb', `${keyboardInset()}px`);
+    update();
+    vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
     return () => {
-      body.style.overflow = previous.overflow;
-      body.style.position = previous.position;
-      body.style.top = previous.top;
-      body.style.width = previous.width;
-
-      // Only put the visitor back where they were if "where they were" still
-      // exists. Replaying the offset onto a different — and usually shorter —
-      // route drops them wherever it clamps to, which on /contact is the
-      // bottom of the document: the footer. There, ScrollManager owns the
-      // position and has already put them at the top.
-      if (window.location.pathname + window.location.search === lockedRoute) {
-        window.scrollTo(0, scrollY);
-      }
-      scheduleRefresh();
+      vv.removeEventListener('resize', update);
+      vv.removeEventListener('scroll', update);
+      sheet.style.removeProperty('--ia-kb');
     };
   }, [isOpen]);
 
-  // Move focus into the modal on open, and hand it back on close.
-  useEffect(() => {
-    if (!isOpen) return undefined;
+  if (!present) return null;
 
-    openerRef.current =
-      document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    closeRef.current?.focus();
+  const service = isServiceOption(serviceInterest) ? serviceInterest : '';
+  const label = context && typeof context.label === 'string' ? context.label.trim() : '';
 
-    return () => {
-      openerRef.current?.focus?.();
-    };
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
-  const handleOverlayClick = (event) => {
-    if (event.target === event.currentTarget) onClose();
-  };
-
-  return createPortal(
-    <div
-      className={styles.overlay}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Enquiry form"
-      onClick={handleOverlayClick}
-    >
-      <div className={styles.box} ref={boxRef}>
-        <button
-          type="button"
-          ref={closeRef}
-          className={styles.close}
-          onClick={onClose}
-          aria-label="Close"
+  return (
+    <Portal tone="paper">
+      <div ref={rootRef} className={styles.root} data-open={isOpen ? '' : undefined} data-shell-float="">
+        <div ref={backdropRef} className={styles.backdrop} onClick={onClose} aria-hidden="true" />
+        <div
+          ref={sheetRef}
+          className={styles.sheet}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={headingId}
         >
-          &#10005;
-        </button>
+          <header className={styles.header}>
+            <div className={styles.titles}>
+              <Eyebrow className={styles.eyebrow}>Start a project</Eyebrow>
+              <Heading as="h2" size="sm" id={headingId} ref={headingRef} tabIndex={-1} className={styles.heading}>
+                Tell us about your space.
+              </Heading>
+              {(service || label) && (
+                <p className={`ia-t-small ${styles.context}`}>
+                  {service && <span>Enquiring about: {service}</span>}
+                  {service && label && <span aria-hidden="true"> · </span>}
+                  {label && <span>From: {label}</span>}
+                </p>
+              )}
+            </div>
+            <IconButton icon="close" label="Close" onClick={onClose} className={styles.close} />
+          </header>
 
-        <p className={`eyebrow ${styles.eyebrow}`}>Start a conversation</p>
-        <h2 className={styles.head}>Tell us what you&rsquo;re building.</h2>
-        <p className={styles.sub}>
-          One form, one conversation — we&rsquo;ll route your enquiry to the
-          right expertise.
-        </p>
-
-        <UnifiedLeadForm
-          source={source}
-          formId={`modal-${source}`}
-          prefill={{ service_interest: serviceInterest }}
-        />
+          <div className={styles.body}>
+            <UnifiedLeadForm
+              key={session}
+              variant="compact"
+              source={source}
+              formId={`modal-${source}`}
+              prefill={{ service_interest: serviceInterest }}
+              context={context}
+              onClose={onClose}
+            />
+          </div>
+        </div>
       </div>
-    </div>,
-    document.body
+    </Portal>
   );
 };
 

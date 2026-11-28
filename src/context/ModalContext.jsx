@@ -6,9 +6,19 @@
    — e.g. an expertise `service_interest` passed by the accordion's
    "Discuss this area" button.
 
-   The modal's heading copy is fixed in the mockup, so this context no
-   longer carries per-CTA titles; it is pure state. Scroll lock and
-   focus handling belong to `LeadModal` itself.
+   The context contract every CTA follows (prompt 05):
+     openLeadModal(source, { service_interest, context })
+   - source: kebab-case `<page>-<place>` ('dock-cta', 'footer-cta',
+     'home-hero', 'expertise-e03', 'project-<slug>', …);
+   - service_interest: one of the service titles or 'Something else'
+     (anything else is ignored by the form's prefill);
+   - context: { label, ref } — `label` is what the visitor was looking at,
+     in words ("Portfolio — Graphite Gloss Kitchen"); it is shown in the
+     sheet and stored on the lead as `context_label`.
+
+   The modal's heading copy is fixed, so this context carries no per-CTA
+   titles; it is pure state. Scroll lock and focus handling belong to
+   `LeadModal` itself.
    ============================================ */
 
 import React, {
@@ -31,7 +41,7 @@ export const ModalProvider = ({ children }) => {
    * Open the enquiry modal.
    * @param {string} sourceKey - CTA identifier, stored as the lead's `source`
    *   (e.g. 'header-cta', 'expertise-e03').
-   * @param {Object} [extraData] - Optional extras, e.g. `{ service_interest }`.
+   * @param {Object} [extraData] - Optional extras: `{ service_interest, context: { label, ref } }`.
    */
   const openLeadModal = useCallback((sourceKey = 'general', extraData = {}) => {
     setModalConfig({ source: sourceKey, ...extraData });
