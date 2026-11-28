@@ -1,0 +1,71 @@
+/* ============================================
+   Studio / 01 — About In-Arch
+   Phones first (360–767), then 768, then 1024 and up.
+   ============================================ */
+
+.about .grid {
+  row-gap: 0;
+}
+
+.eyebrow {
+  margin-bottom: var(--ia-space-6);
+}
+
+.title {
+  max-width: 18ch;
+}
+
+.prose {
+  margin-top: var(--ia-space-10);
+}
+
+.lead,
+.paragraph {
+  max-width: 62ch;
+}
+
+.lead {
+  color: var(--ia-fg);
+}
+
+.paragraph {
+  margin-top: var(--ia-space-6);
+  color: var(--ia-fg-2);
+}
+
+/* ---------- Tablet (768–1023) ---------- */
+@media (min-width: 768px) {
+  .eyebrow {
+    margin-bottom: var(--ia-space-8);
+  }
+
+  .prose {
+    margin-top: var(--ia-space-12);
+  }
+}
+
+/* ---------- Desktop (1024 and up) ----------
+   The heading column stretches to the prose's height (the grid row), so
+   its sticky block travels with the reading and is released when the
+   prose ends. Both columns start on the same line. */
+@media (min-width: 1024px) {
+  .headCol {
+    align-self: stretch;
+  }
+
+  .sticky {
+    position: sticky;
+    top: var(--studio-sticky-top, 120px);
+  }
+
+  .prose {
+    margin-top: 0;
+    /* The prose's first line sits level with the heading's, below the
+       eyebrow (its 12 × 1.4 px line plus its 32 px margin). */
+    padding-top: calc(var(--ia-fs-label) * 1.4 + var(--ia-space-8));
+  }
+
+  .paragraph {
+    margin-top: var(--ia-space-8);
+  }
+}

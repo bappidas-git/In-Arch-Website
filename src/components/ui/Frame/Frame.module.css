@@ -7,10 +7,17 @@
   background: var(--ia-placeholder);
 }
 
-/* `ratioLg`: another ratio from 1024 px. */
+/* `ratioMd`: another ratio from 768 px; `ratioLg` from 1024 px. Each level
+   falls back to the one below it. */
+@media (min-width: 768px) {
+  .frame {
+    aspect-ratio: var(--frame-ratio-md, var(--frame-ratio, 4 / 5));
+  }
+}
+
 @media (min-width: 1024px) {
   .frame {
-    aspect-ratio: var(--frame-ratio-lg, var(--frame-ratio, 4 / 5));
+    aspect-ratio: var(--frame-ratio-lg, var(--frame-ratio-md, var(--frame-ratio, 4 / 5)));
   }
 }
 

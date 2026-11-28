@@ -1,0 +1,169 @@
+/* ============================================
+   Studio / 02 — Design philosophy
+   Phones first (360–767), then 768, then 1024 and up.
+   ============================================ */
+
+.philosophy .grid {
+  row-gap: 0;
+}
+
+.eyebrow {
+  margin-bottom: var(--ia-space-6);
+}
+
+.title {
+  max-width: 14ch;
+}
+
+/* The panel exists from 1024 px only (its image is lazy, so a hidden
+   panel never requests it). */
+.panelCol {
+  display: none;
+}
+
+.listCol {
+  margin-top: var(--ia-space-12);
+}
+
+.item {
+  display: grid;
+  gap: var(--ia-space-3);
+  padding-block: var(--ia-space-8);
+}
+
+.item:first-child {
+  padding-top: 0;
+}
+
+.item:last-child {
+  padding-bottom: 0;
+}
+
+.item + .item {
+  border-top: 1px solid var(--ia-line);
+}
+
+.index {
+  color: var(--ia-accent-display);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.itemTitle {
+  color: var(--ia-fg);
+}
+
+.text {
+  max-width: 52ch;
+  color: var(--ia-fg-2);
+}
+
+/* ---------- Tablet (768–1023): two by two ---------- */
+@media (min-width: 768px) {
+  .eyebrow {
+    margin-bottom: var(--ia-space-8);
+  }
+
+  .listCol {
+    margin-top: var(--ia-space-16);
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--ia-grid-gap, var(--ia-space-6));
+    row-gap: var(--ia-space-12);
+  }
+
+  .item,
+  .item:first-child,
+  .item:last-child {
+    align-content: start;
+    padding: var(--ia-space-6) 0 0;
+    border-top: 1px solid var(--ia-line);
+  }
+}
+
+/* ---------- Desktop (1024 and up) ----------
+   The panel column stretches to the list's height, so the panel stays
+   beside the principles and is released when the last one has passed.
+   The 4:5 frame is as wide as the column allows, or narrower when the
+   viewport is short, so the numeral and the whole frame always fit
+   between the sticky offset and the dock. */
+@media (min-width: 1024px) {
+  .panelCol,
+  .listCol {
+    margin-top: var(--ia-space-20);
+  }
+
+  .panelCol {
+    display: block;
+    align-self: stretch;
+  }
+
+  .panel {
+    position: sticky;
+    top: var(--studio-sticky-top, 120px);
+  }
+
+  /* The four numerals share one cell; only the current one is opaque. */
+  .numerals {
+    display: grid;
+    color: var(--ia-accent-display);
+  }
+
+  .numeral {
+    grid-area: 1 / 1;
+    font-variant-numeric: lining-nums tabular-nums;
+    opacity: 0;
+    transition: opacity var(--ia-dur-3) var(--ia-ease-in-out);
+  }
+
+  .numeral[data-current] {
+    opacity: 1;
+  }
+
+  .frame {
+    width: min(
+      100%,
+      calc(
+        (var(--studio-sticky-room, 60svh) - var(--ia-fs-display-2xl) * 1.02 - var(--ia-space-6)) * 0.8
+      )
+    );
+    margin-top: var(--ia-space-6);
+  }
+
+  /* Each principle has 40vh of room, so each one crosses the middle of
+     the screen on its own. The index steps down to a label: the panel
+     carries the large numeral here. */
+  .list {
+    display: block;
+  }
+
+  .item,
+  .item:first-child,
+  .item:last-child {
+    align-content: start;
+    min-height: 40vh;
+    padding: var(--ia-space-8) 0;
+    border-top: 1px solid var(--ia-line);
+  }
+
+  .index {
+    font-family: var(--ia-font-sans);
+    font-size: var(--ia-fs-label);
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.18em;
+    color: var(--ia-accent);
+  }
+
+  .itemTitle {
+    margin-top: var(--ia-space-3);
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .numeral {
+    transition: none;
+  }
+}

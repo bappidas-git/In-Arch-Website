@@ -10,7 +10,9 @@
 
    | prop     | effect                                                         |
    |----------|----------------------------------------------------------------|
-   | ratio    | 4/5 · 3/2 · 16/9 · 21/9 · 1/1 (default 4/5)                    |
+   | ratio    | 4/5 · 4/3 · 3/2 · 16/9 · 21/9 · 1/1 (default 4/5)              |
+   | ratioMd  | optional ratio from 768 px (e.g. a 4:3 band that is 21:9 from  |
+   |          | tablets up); pair it with Picture `art` for the matching crop  |
    | ratioLg  | optional ratio from 1024 px (e.g. a 4:5 tile that is 3:2 on    |
    |          | desktop); pair it with Picture `art` for the matching crop     |
    | reveal   | data-m="shutter" + the cover: inside a useMotionScope section  |
@@ -33,14 +35,15 @@ import cx from '../_shared/cx';
 import { devWarn } from '../_shared/dev';
 import styles from './Frame.module.css';
 
-export const RATIOS = ['4/5', '3/2', '16/9', '21/9', '1/1'];
+export const RATIOS = ['4/5', '4/3', '3/2', '16/9', '21/9', '1/1'];
 const PARALLAX_MAX = 6;
 
 const Frame = forwardRef(function Frame(
-  { as: Tag = 'div', ratio = '4/5', ratioLg, reveal = false, parallax = false, arch = false, className, style, children, ...rest },
+  { as: Tag = 'div', ratio = '4/5', ratioMd, ratioLg, reveal = false, parallax = false, arch = false, className, style, children, ...rest },
   ref
 ) {
   if (!RATIOS.includes(ratio)) devWarn(`Frame: ratio "${ratio}" is not one of ${RATIOS.join(', ')}.`);
+  if (ratioMd && !RATIOS.includes(ratioMd)) devWarn(`Frame: ratioMd "${ratioMd}" is not one of ${RATIOS.join(', ')}.`);
   if (ratioLg && !RATIOS.includes(ratioLg)) devWarn(`Frame: ratioLg "${ratioLg}" is not one of ${RATIOS.join(', ')}.`);
   const amount =
     parallax === true ? PARALLAX_MAX : typeof parallax === 'number' ? Math.max(0, Math.min(parallax, PARALLAX_MAX)) : 0;
@@ -51,6 +54,7 @@ const Frame = forwardRef(function Frame(
       className={cx(styles.frame, arch && styles.arch, amount > 0 && styles.drift, className)}
       style={{
         '--frame-ratio': String(ratio).replace('/', ' / '),
+        ...(ratioMd ? { '--frame-ratio-md': String(ratioMd).replace('/', ' / ') } : null),
         ...(ratioLg ? { '--frame-ratio-lg': String(ratioLg).replace('/', ' / ') } : null),
         ...style,
       }}

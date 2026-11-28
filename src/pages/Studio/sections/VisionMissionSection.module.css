@@ -1,0 +1,101 @@
+/* ============================================
+   Studio / 03 — Vision and mission
+   Phones first (360–767), then 768, then 1024 and up.
+   ============================================ */
+
+.vision .grid {
+  row-gap: 0;
+}
+
+.eyebrow {
+  margin-bottom: var(--ia-space-6);
+}
+
+/* About 22 em: columns 1–9 at the widest. */
+.statement {
+  max-width: 22em;
+}
+
+.missionCol {
+  margin-top: var(--ia-space-16);
+}
+
+.label {
+  margin-top: var(--ia-space-6);
+  color: var(--ia-fg);
+}
+
+.list {
+  margin-top: var(--ia-space-4);
+}
+
+.point {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  column-gap: var(--ia-space-3);
+  align-items: baseline;
+  padding-block: var(--ia-space-5);
+  border-bottom: 1px solid var(--ia-line);
+}
+
+.point:last-child {
+  border-bottom: 0;
+}
+
+.index {
+  color: var(--ia-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.text {
+  max-width: 52ch;
+  color: var(--ia-fg);
+}
+
+/* ---------- Tablet (768–1023) ---------- */
+@media (min-width: 768px) {
+  .eyebrow {
+    margin-bottom: var(--ia-space-8);
+  }
+
+  .missionCol {
+    margin-top: var(--ia-space-20);
+  }
+
+  .label {
+    margin-top: var(--ia-space-8);
+  }
+
+  .list {
+    margin-top: var(--ia-space-6);
+  }
+
+  .point {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    padding-block: var(--ia-space-6);
+  }
+}
+
+/* ---------- Desktop (1024 and up) ----------
+   Two columns, filled top to bottom: 01–03, then 04–05. Every point has
+   a hairline above it, so the two columns' rules line up. */
+@media (min-width: 1024px) {
+  .missionCol {
+    margin-top: var(--ia-space-24);
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: column;
+    column-gap: var(--ia-grid-gap, var(--ia-space-8));
+    margin-top: var(--ia-space-8);
+  }
+
+  .point,
+  .point:last-child {
+    border-bottom: 0;
+    border-top: 1px solid var(--ia-line);
+  }
+}
