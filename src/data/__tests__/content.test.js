@@ -136,6 +136,28 @@ describe('studio content', () => {
     expect(studioContent.principal.role.startsWith(`${studio.principal.title} |`)).toBe(true);
   });
 
+  it('takes the Home belief line and its three words from the homepage introduction', () => {
+    const { lead, accent, scope } = studioContent.homeBelief;
+    expect(studioContent.homeIntro.paragraphs[0].toLowerCase()).toContain(`${lead} ${accent}`.toLowerCase());
+    expect(studioContent.homeIntro.paragraphs[1]).toContain('residential, commercial and interior design projects');
+    expect(scope).toEqual(['Residential', 'Commercial', 'Interiors']);
+  });
+
+  it('sets the Home closing headline from the closing call to action', () => {
+    const { lead, accent } = studioContent.homeClosing;
+    expect(`${lead} ${accent}`.toLowerCase()).toBe(studioContent.closingCta.title.toLowerCase());
+  });
+
+  it('shows on Home only the registrations and the degree the PDF lists', () => {
+    const creds = studioContent.principal.credentials.join(' ');
+    expect(studioContent.homeCredentials).toHaveLength(3);
+    studioContent.homeCredentials.forEach(({ value }) => {
+      value.split(' and ').forEach((part) => expect(creds).toContain(part));
+    });
+    expect(studioContent.homeCredentials.map((c) => c.label)).toEqual(['Registered Architect', 'Registered Architect', 'B.Arch']);
+    expect(creds).toContain('(B.Arch), Piloo Mody College of Architecture, Cuttack');
+  });
+
   it('lists the experience in the PDF order, with no dates for Zenith', () => {
     const rows = studioContent.principal.experience;
     expect(rows.map((r) => r.organisation)).toEqual([

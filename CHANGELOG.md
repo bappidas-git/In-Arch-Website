@@ -175,6 +175,32 @@ The first two screens of Home are IN-ARCH's. The four remaining old Home section
 
 - The old Home hero and its stylesheet, the marquee strip and the "Who we are" section.
 
+### Prompt 07 — Home: remaining sections (2026-11-28)
+
+Home is now entirely IN-ARCH's: eight bands in one `ia` root, alternating dark → light → sand → dark → light → sand → light → dark, with no old markup, stylesheet or Dulcey content left. **Every admin screen is unchanged** (`scripts/qa/parity.js --suite admin`: 34/34 identical to `cc2fc52`).
+
+#### Added
+
+- **Selected work** (`SelectedWorkSection`, sand): three projects from `projects.js` (not the hero's), each tile linking to `/portfolio/<slug>` with its portfolio number, category and title. Phones and tablets get a native, snapping swipe row (78vw / 44vw tiles) with a polite "1 / 3" counter and previous / next buttons that move exactly one tile; desktop gets three offset tiles on the 12-column grid. "View all work" → `/portfolio`.
+- **The belief** (`StatementSection`, dark): "Every space *tells a story.*" alone in a band at least 80svh tall, a 48 px rule and "Residential · Commercial · Interiors".
+- **What we do** (`ServicesIndexSection`, light): the seven services as a ledger, each row one link to `/expertise#e01`…`#e07`. On a fine pointer from 1024 px, hovering or focusing a row cross-fades its icon into a reserved slot; nothing appears on touch. A line points to `/interior-design`.
+- **How we work** (`HowWeWorkSection`, sand): the four phases with their numerals, first-step icons and the PDF step titles they group; a link to `/expertise#process`.
+- **Who leads the work** (`PrincipalSection`, light): the principal's name and role and three credential lines (two registrations, the degree), typographic only; "About the principal" → `/about#principal`.
+- **The invitation** (`ClosingSection`, dark): the PDF's closing headline and line, one primary "Start a conversation" (`home-closing`, context "Home — closing"), and WhatsApp and call links. Its foot always clears the floating dock.
+- **Data:** `homeBelief`, `homeCredentials` and `homeClosing` in `studioContent.js`, each tied to the PDF wording by a test.
+- **Kit:** `Frame` takes `ratioLg` (another ratio from 1024 px); `ProjectTile` takes `ratioLg`, `art` (art-directed crops, passed to `Picture`) and `rise` (its caption rises).
+- **Tests:** the six sections and the page as a whole (283 in all).
+
+#### Changed
+
+- `HomePage`: one `ia` root holding all eight sections; the old wrapper and its reset are gone.
+- Headline line masks (`data-m="lines"`): split lines now carry `ia-split-line`, and their masks get 0.16em of room at the bottom (with a matching negative margin), so Fraunces descenders are no longer clipped at the 1.02–1.08 line-heights.
+- `src/config/seo.js`: a comment only; the Home entry from prompt 06 already describes the finished page.
+
+#### Removed
+
+- The four old Home sections and their stylesheets (`BeliefSection`, `ExpertiseIndexSection`, `WhoWeServeSection`, `ClosingCtaSection`) and `HomePage.module.css`. Home no longer links to `/industries`, which still resolves.
+
 ## [2.31.0] — 2026-08-20 — Who We Serve hero: the right edge dissolves too
 
 `[2.30.0]` drew the frame at the section's full width, which put the

@@ -83,6 +83,9 @@ if (typeof window !== 'undefined') {
 
 const SCOPE_ATTR = 'data-m-scope';
 
+/** Class of each split headline line; its mask is `${SPLIT_LINE_CLASS}-mask`. */
+export const SPLIT_LINE_CLASS = 'ia-split-line';
+
 const toNumber = (value, fallback = 0) => {
   const n = parseFloat(value);
   return Number.isFinite(n) ? n : fallback;
@@ -199,6 +202,10 @@ export default function useMotionScope(options = {}) {
             SplitText.create(el, {
               type: 'lines',
               mask: 'lines',
+              // The masks get `ia-split-line-mask` (SplitText appends
+              // "-mask"): type.css gives them room for descenders, which
+              // a 1.02–1.08 line-height would otherwise clip for good.
+              linesClass: SPLIT_LINE_CLASS,
               autoSplit: true,
               aria: 'auto',
               // Returning the tween lets SplitText revert it and carry its

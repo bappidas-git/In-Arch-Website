@@ -144,7 +144,10 @@ export const seoConfig = {
   pages: {
     // IN-ARCH Home (prompt 06): PDF §12's homepage title and description,
     // verbatim, and its keyword list without "Best architects in Patna" —
-    // a superlative the site does not claim.
+    // a superlative the site does not claim. Prompt 07 (the rest of Home)
+    // re-checked it: the description already names every subject the page
+    // now shows (the principal, architecture, residential planning,
+    // interiors, 3D visualisation, consultancy), so nothing changes.
     home: {
       path: '/',
       title: STUDIO_TITLE,

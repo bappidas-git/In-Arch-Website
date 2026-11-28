@@ -11,6 +11,8 @@
    | prop     | effect                                                         |
    |----------|----------------------------------------------------------------|
    | ratio    | 4/5 · 3/2 · 16/9 · 21/9 · 1/1 (default 4/5)                    |
+   | ratioLg  | optional ratio from 1024 px (e.g. a 4:5 tile that is 3:2 on    |
+   |          | desktop); pair it with Picture `art` for the matching crop     |
    | reveal   | data-m="shutter" + the cover: inside a useMotionScope section  |
    |          | the cover slides away while the image settles 1.12 → 1         |
    | parallax | data-m-parallax: the image drifts while the frame crosses the  |
@@ -35,10 +37,11 @@ export const RATIOS = ['4/5', '3/2', '16/9', '21/9', '1/1'];
 const PARALLAX_MAX = 6;
 
 const Frame = forwardRef(function Frame(
-  { as: Tag = 'div', ratio = '4/5', reveal = false, parallax = false, arch = false, className, style, children, ...rest },
+  { as: Tag = 'div', ratio = '4/5', ratioLg, reveal = false, parallax = false, arch = false, className, style, children, ...rest },
   ref
 ) {
   if (!RATIOS.includes(ratio)) devWarn(`Frame: ratio "${ratio}" is not one of ${RATIOS.join(', ')}.`);
+  if (ratioLg && !RATIOS.includes(ratioLg)) devWarn(`Frame: ratioLg "${ratioLg}" is not one of ${RATIOS.join(', ')}.`);
   const amount =
     parallax === true ? PARALLAX_MAX : typeof parallax === 'number' ? Math.max(0, Math.min(parallax, PARALLAX_MAX)) : 0;
 
@@ -46,7 +49,11 @@ const Frame = forwardRef(function Frame(
     <Tag
       ref={ref}
       className={cx(styles.frame, arch && styles.arch, amount > 0 && styles.drift, className)}
-      style={{ '--frame-ratio': String(ratio).replace('/', ' / '), ...style }}
+      style={{
+        '--frame-ratio': String(ratio).replace('/', ' / '),
+        ...(ratioLg ? { '--frame-ratio-lg': String(ratioLg).replace('/', ' / ') } : null),
+        ...style,
+      }}
       data-m={reveal ? 'shutter' : undefined}
       data-m-parallax={amount > 0 ? amount : undefined}
       {...rest}

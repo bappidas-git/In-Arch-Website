@@ -1,0 +1,49 @@
+/* ============================================
+   Home / The belief
+   Phones first (360–767), then 768, then 1024 and up.
+   The standard section rhythm, plus a minimum height instead of extra
+   padding: the sentence sits in the vertical centre.
+   ============================================ */
+
+.belief {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 80svh;
+}
+
+.inner {
+  width: 100%;
+}
+
+.title {
+  max-width: 14ch;
+}
+
+/* The 48 px hairline: --ia-line-strong (mist-2), because the dark tone's
+   own hairline (forest-3) all but disappears at this length. */
+.rule {
+  width: var(--ia-space-12);
+  margin-top: var(--ia-space-10);
+}
+
+.scope {
+  margin: var(--ia-space-5) 0 0;
+  color: var(--ia-fg-2);
+}
+
+@media (min-width: 768px) {
+  .rule {
+    margin-top: var(--ia-space-12);
+  }
+
+  .scope {
+    margin-top: var(--ia-space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .title {
+    max-width: none;
+  }
+}

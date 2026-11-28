@@ -117,3 +117,14 @@
   font-style: italic;
   color: var(--ia-accent-display);
 }
+
+/* ---------- Headline line masks (data-m="lines") ----------
+   SplitText wraps each line in a mask with `overflow: clip`. At the display
+   line-heights (1.02–1.08) Fraunces descenders reach about 0.1–0.13em below
+   the line box, so the mask is given 0.16em more room at the bottom and the
+   same negative margin (no layout change). A line that rises from 110 % of
+   its height still starts wholly below the enlarged clip edge. */
+.ia-split-line-mask {
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+}
