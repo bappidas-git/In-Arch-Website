@@ -24,7 +24,8 @@
    | data-m-parallax="7"  | the frame's inner image drifts ±7 % (yPercent, scrub 0.6) |
    |                      | while the frame crosses the viewport; ±4 % below 1024 px  |
    | data-m-delay="0.1"   | extra delay in seconds                                    |
-   | data-m-now           | play on mount instead of on scroll (heroes)               |
+   | data-m-now           | play on mount instead of on scroll (heroes); during a     |
+   |                      | page transition, as the curtain leaves (revealGate.js)    |
 
    Rules
    - Every hidden starting state is set here, by GSAP, never by CSS: if
@@ -63,6 +64,7 @@ import {
   PARALLAX,
   MQ,
 } from './tokens';
+import { isRevealHeld, onReveal } from './revealGate';
 
 // gsapSetup.js stays the place ScrollTrigger and useGSAP are registered;
 // SplitText is only needed by this hook, so it is registered here, once.
@@ -125,6 +127,28 @@ export default function useMotionScope(options = {}) {
           const trigger = (el) =>
             playsNow(el) ? undefined : { trigger: el, start, once: true };
 
+          // `data-m-now` motion created under the page curtain waits for it to
+          // lift: the tween is built (so its hidden start state applies) but
+          // paused, and restarted — delay included — on release. Keyed by
+          // element so a re-split headline replaces its own earlier tween.
+          const waiting = new Map();
+          let cancelReveal = null;
+          const gateNow = (el, tween) => {
+            if (!playsNow(el) || !isRevealHeld()) return tween;
+            tween.pause();
+            waiting.set(el, tween);
+            if (!cancelReveal) {
+              cancelReveal = onReveal(
+                context.add('iaRevealNow', () => {
+                  cancelReveal = null;
+                  waiting.forEach((t) => t.restart(true));
+                  waiting.clear();
+                })
+              );
+            }
+            return tween;
+          };
+
           /* ---- rise ---- */
           const riseEls = owned('[data-m="rise"]');
           if (riseEls.length) {
@@ -132,14 +156,17 @@ export default function useMotionScope(options = {}) {
 
             const reveal = (els) =>
               els.forEach((el, i) =>
-                gsap.to(el, {
-                  opacity: 1,
-                  y: 0,
-                  duration: DUR.reveal,
-                  ease: EASE.out,
-                  delay: i * STAGGER.items + delayOf(el),
-                  overwrite: 'auto',
-                })
+                gateNow(
+                  el,
+                  gsap.to(el, {
+                    opacity: 1,
+                    y: 0,
+                    duration: DUR.reveal,
+                    ease: EASE.out,
+                    delay: i * STAGGER.items + delayOf(el),
+                    overwrite: 'auto',
+                  })
+                )
               );
 
             reveal(riseEls.filter(playsNow));
@@ -167,14 +194,17 @@ export default function useMotionScope(options = {}) {
               // progress over when it re-splits (fonts loaded, width change),
               // so a finished headline does not replay on resize.
               onSplit: (self) =>
-                gsap.from(self.lines, {
-                  yPercent: 110,
-                  duration: DUR.hero,
-                  ease: EASE.lines,
-                  stagger: STAGGER.lines,
-                  delay: delayOf(el),
-                  scrollTrigger: trigger(el),
-                }),
+                gateNow(
+                  el,
+                  gsap.from(self.lines, {
+                    yPercent: 110,
+                    duration: DUR.hero,
+                    ease: EASE.lines,
+                    stagger: STAGGER.lines,
+                    delay: delayOf(el),
+                    scrollTrigger: trigger(el),
+                  })
+                ),
             });
           });
 
@@ -183,10 +213,13 @@ export default function useMotionScope(options = {}) {
             const cover = frame.querySelector('[data-m-cover]');
             const media = mediaOf(frame);
             if (!cover && !media) return;
-            const tl = gsap.timeline({
-              delay: delayOf(frame),
-              scrollTrigger: trigger(frame),
-            });
+            const tl = gateNow(
+              frame,
+              gsap.timeline({
+                delay: delayOf(frame),
+                scrollTrigger: trigger(frame),
+              })
+            );
             if (cover) {
               tl.fromTo(
                 cover,
@@ -207,7 +240,7 @@ export default function useMotionScope(options = {}) {
 
           /* ---- rule ---- */
           owned('[data-m="rule"]').forEach((el) => {
-            gsap.fromTo(
+            gateNow(el, gsap.fromTo(
               el,
               { scaleX: 0, transformOrigin: '0% 50%' },
               {
@@ -217,21 +250,24 @@ export default function useMotionScope(options = {}) {
                 delay: delayOf(el),
                 scrollTrigger: trigger(el),
               }
-            );
+            ));
           });
 
           /* ---- fade ---- */
           owned('[data-m="fade"]').forEach((el) => {
-            gsap.fromTo(
+            gateNow(
               el,
-              { opacity: 0 },
-              {
-                opacity: 1,
-                duration: DUR.reveal,
-                ease: EASE.out,
-                delay: delayOf(el),
-                scrollTrigger: trigger(el),
-              }
+              gsap.fromTo(
+                el,
+                { opacity: 0 },
+                {
+                  opacity: 1,
+                  duration: DUR.reveal,
+                  ease: EASE.out,
+                  delay: delayOf(el),
+                  scrollTrigger: trigger(el),
+                }
+              )
             );
           });
 
@@ -263,6 +299,10 @@ export default function useMotionScope(options = {}) {
 
           // One coalesced re-measure once the whole tree has committed.
           scheduleRefresh();
+
+          return () => {
+            if (cancelReveal) cancelReveal();
+          };
         }
       );
 

@@ -13,9 +13,10 @@
    schedule and hands back a cancel function for effect cleanup.
    ============================================ */
 
-// Fixed header height (68px) + breathing room. Matches the mockup's
-// `scroll-margin-top:90px` on deep-linked elements.
-export const HEADER_OFFSET = 90;
+// Breathing room above a deep-linked target. There is no fixed header to
+// clear any more (prompt 04: the masthead scrolls away and the Index Dock is
+// at the bottom), so this is only the gap above the target.
+export const HEADER_OFFSET = 32;
 
 // Retry schedule (ms) — long enough for a lazy route chunk to mount.
 export const HASH_RETRY_DELAYS = [100, 300, 600, 1000, 2000];

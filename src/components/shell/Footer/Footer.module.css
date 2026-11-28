@@ -1,0 +1,146 @@
+/* ============================================
+   Footer — dark, compact rhythm; bottom padding clears the dock.
+   ============================================ */
+
+.footer {
+  padding-top: var(--ia-section-y-sm);
+  padding-bottom: calc(var(--ia-dock-clearance) + env(safe-area-inset-bottom));
+  background: var(--ia-bg);
+  color: var(--ia-fg);
+}
+
+/* ---------- Opening line ---------- */
+.opening {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ia-space-8);
+  padding-bottom: var(--ia-space-12);
+  border-bottom: 1px solid var(--ia-line);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ia-space-5);
+  max-width: 34rem;
+}
+
+.blurb {
+  margin: 0;
+  color: var(--ia-fg-2);
+  max-width: var(--ia-measure);
+}
+
+.invite {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--ia-space-4);
+  margin: 0;
+}
+
+.inviteText {
+  color: var(--ia-fg-2);
+}
+
+@media (min-width: 1024px) {
+  .opening {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+/* ---------- Four groups ---------- */
+/* (0,2,0): .ia-grid's `gap` shorthand comes later in the cascade. */
+.footer .groups {
+  padding-block: var(--ia-space-12);
+  row-gap: var(--ia-space-10);
+}
+
+.group {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ia-space-3);
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .group {
+    grid-column: span 4;
+  }
+}
+
+@media (min-width: 1024px) {
+  .group {
+    grid-column: span 3;
+  }
+}
+
+.heading {
+  margin: 0 0 var(--ia-space-1);
+  color: var(--ia-fg-3);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.address {
+  display: flex;
+  flex-direction: column;
+  font-style: normal;
+  color: var(--ia-fg-2);
+}
+
+.hours {
+  margin: 0;
+  color: var(--ia-fg-2);
+}
+
+/* ---------- Legal row ---------- */
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--ia-space-6);
+  row-gap: var(--ia-space-2);
+  padding-top: var(--ia-space-6);
+  border-top: 1px solid var(--ia-line);
+  color: var(--ia-fg-2);
+}
+
+.copyright,
+.credit {
+  margin: 0;
+}
+
+.credit {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.3em;
+}
+
+.inline {
+  color: var(--ia-fg);
+}
+
+.top {
+  margin-left: auto;
+}
+
+@media print {
+  .footer {
+    padding-bottom: var(--ia-space-8);
+  }
+
+  .top {
+    display: none;
+  }
+}

@@ -10,6 +10,7 @@
 
 export { default as useMotionScope } from './useMotionScope';
 export { useReducedMotion, prefersReducedMotion } from './reducedMotion';
+export { holdReveal, releaseReveal, isRevealHeld, onReveal } from './revealGate';
 export {
   DUR,
   DUR_NAMED,

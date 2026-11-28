@@ -1,10 +1,11 @@
 /* ============================================
    PublicLayout — shell scaffolding only.
-   The header is fixed (68px), so pages own their own top spacing
-   exactly as the mockup's `.hero__inner` padding does.
+   The masthead is absolute over the first section and the dock is fixed
+   at the bottom, so <main> starts at the very top of the document.
    ============================================ */
 
 .shell {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -15,4 +16,55 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  /* Old page bodies overflow sideways in places (the Home marquee strip is
+     wider than the viewport) and relied on the legacy body clip, which the
+     public document no longer has. `clip` contains them without making
+     <main> a scroll container, so position: sticky still works inside it.
+     Browsers without `clip` keep `hidden`. */
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+/* <main> takes focus after every navigation (tabindex -1). The content is
+   the indication; a ring around the whole page would only be noise. */
+.main:focus {
+  outline: none;
+}
+
+/* ---------- Skip link: first in the tab order, shown on focus ---------- */
+.skip {
+  position: fixed;
+  top: var(--ia-space-3);
+  left: var(--ia-space-3);
+  z-index: calc(var(--ia-z-curtain) + 1);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: var(--ia-space-5);
+  border-radius: var(--ia-radius);
+  background: var(--ia-forest);
+  color: var(--ia-ivory);
+  font-family: var(--ia-font-sans);
+  font-size: var(--ia-fs-label);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transform: translateY(calc(-100% - var(--ia-space-6)));
+}
+
+.skip:focus,
+.skip:focus-visible {
+  transform: none;
+}
+
+.skip:focus-visible {
+  outline: 2px solid var(--ia-terracotta-300);
+  outline-offset: 3px;
+}
+
+@media print {
+  .skip {
+    display: none;
+  }
 }

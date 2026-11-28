@@ -1,0 +1,270 @@
+/* ============================================
+   Dock — fixed to the bottom edge at every breakpoint.
+   Two bars share one <nav>; CSS shows the one for the viewport.
+   ============================================ */
+
+.dock {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: var(--ia-z-dock);
+  height: 56px;
+  border: 1px solid var(--ia-line);
+  border-radius: var(--ia-radius);
+  /* Solid where backdrop-filter is unsupported (see @supports below). */
+  background: var(--ia-bg);
+  color: var(--ia-fg);
+  box-shadow: var(--ia-shadow-overlay);
+  transform: translateY(0);
+  visibility: visible;
+  transition:
+    background-color var(--ia-dur-2) var(--ia-ease-out),
+    border-color var(--ia-dur-2) var(--ia-ease-out),
+    color var(--ia-dur-2) var(--ia-ease-out),
+    transform var(--ia-dur-3) var(--ia-ease-out),
+    visibility 0s linear 0s;
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .dock {
+    background: color-mix(in srgb, var(--ia-bg) 86%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+  }
+}
+
+/* Slides out; becomes invisible only once it has left. */
+.dock[data-hidden] {
+  transform: translateY(140%);
+  visibility: hidden;
+  transition:
+    background-color var(--ia-dur-2) var(--ia-ease-out),
+    border-color var(--ia-dur-2) var(--ia-ease-out),
+    color var(--ia-dur-2) var(--ia-ease-out),
+    transform var(--ia-dur-3) var(--ia-ease-out),
+    visibility 0s linear var(--ia-dur-3);
+}
+
+/* ---------- Phones and tablets: Menu · CTA · WhatsApp ---------- */
+.compact {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--ia-space-1);
+  height: 100%;
+  padding-right: 3px;
+}
+
+.wide {
+  display: none;
+}
+
+.menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ia-space-2);
+  /* One fixed width for Menu (dock) and Close (overlay), so the CTA and
+     WhatsApp sit in exactly the same place in both bars. */
+  flex: none;
+  width: 98px;
+  height: 100%;
+  min-height: 54px;
+  padding-inline: var(--ia-space-2);
+  color: inherit;
+  font-family: var(--ia-font-sans);
+  font-size: var(--ia-fs-label);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  border-radius: var(--ia-radius);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: opacity var(--ia-dur-1) var(--ia-ease-out);
+}
+
+.menu:active {
+  opacity: 0.7;
+}
+
+/* The CTA takes the flexible middle zone and never truncates: the label
+   ("START A PROJECT", 128 px) fits from a 360 px viewport with these
+   paddings (zone 177 px − 2 × 10 − 8 − 16 = 133 px); below 360 the arrow
+   gives way (see the end of this file). */
+.dock .cta {
+  width: 100%;
+  gap: var(--ia-space-2);
+  padding-inline: 10px;
+  white-space: nowrap;
+  /* The yield (primary → secondary) changes colours only, over 240 ms. */
+  transition:
+    color var(--ia-dur-2) var(--ia-ease-out),
+    background-color var(--ia-dur-2) var(--ia-ease-out),
+    scale var(--ia-dur-1) var(--ia-ease-out);
+}
+
+.dock .cta::after {
+  transition: border-color var(--ia-dur-2) var(--ia-ease-out);
+}
+
+.whatsapp {
+  flex: none;
+}
+
+/* ---------- Desktop: mark · five links · CTA ---------- */
+@media (min-width: 1024px) {
+  .dock {
+    left: 0;
+    right: 0;
+    bottom: 24px;
+    width: fit-content;
+    max-width: min(960px, calc(100vw - 48px));
+    height: 60px;
+    margin-inline: auto;
+  }
+
+  .compact {
+    display: none;
+  }
+
+  .wide {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-inline: var(--ia-space-2);
+  }
+
+  .dock .cta {
+    width: auto;
+    gap: var(--ia-space-3);
+    padding-inline: 20px;
+  }
+}
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding-inline: var(--ia-space-3);
+  border-radius: var(--ia-radius);
+}
+
+.rule {
+  flex: none;
+  width: 1px;
+  height: 24px;
+  margin-inline: var(--ia-space-2);
+  background: var(--ia-line);
+}
+
+.links {
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 18px;
+  color: inherit;
+  font-family: var(--ia-font-sans);
+  font-size: var(--ia-fs-label);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: var(--ia-radius);
+  transition: opacity var(--ia-dur-1) var(--ia-ease-out);
+}
+
+.link:active {
+  opacity: 0.7;
+}
+
+.linkText {
+  position: relative;
+  padding-block: 4px;
+}
+
+/* The TextLink underline: drawn from the left in the accent. */
+.linkText::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--ia-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--ia-dur-3) var(--ia-ease-expo);
+}
+
+.link:focus-visible .linkText::after {
+  transform: scaleX(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover .linkText::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Current page: a 6 px terracotta dot under the label. */
+.dot {
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: var(--ia-accent-display);
+}
+
+.link[aria-current] .linkText::after {
+  display: none;
+}
+
+/* ---------- Reduced motion: no transforms; hide and show in place ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .dock,
+  .dock[data-hidden] {
+    transform: none;
+    transition: none;
+  }
+
+  .dock[data-hidden] {
+    opacity: 0;
+  }
+
+  .linkText::after {
+    transition: none;
+  }
+}
+
+/* Below 360 px (prompt 17's range) the arrow gives way, and the label may
+   wrap onto two lines inside the bar rather than overflow. */
+@media (max-width: 359px) {
+  .compact .cta > span:last-child {
+    display: none;
+  }
+
+  .dock .cta {
+    white-space: normal;
+    padding-block: var(--ia-space-1);
+  }
+}
+
+@media print {
+  .dock {
+    display: none;
+  }
+}

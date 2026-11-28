@@ -1,8 +1,16 @@
 /* ============================================
-   SEO Configuration — Dulcey Lead Services
+   SEO Configuration
    --------------------------------------------
    Central configuration for every SEO setting, page title/description and
-   schema input used by the five-route Dulcey site.
+   schema input.
+
+   IN-ARCH redesign (prompt 04 onwards): the SITE-LEVEL values (site name,
+   default title and description, title template, organization, site URL)
+   read `studio` (src/data/siteConfig.js) and the client's document
+   (`details of in-arch.pdf` §12). The entries of the pages that are still
+   the old Dulcey pages (home, about, expertise, industries, contact,
+   notFound) are left exactly as they were until each page's prompt
+   replaces it, and `pages.admin` is admin-bound (prompt 15 only).
 
    Everything here is generated from the single sources of truth so the
    metadata can never drift from the visible site:
@@ -11,24 +19,30 @@
      - the seven sectors served  → src/data/industriesData.js
      - the nav labels (used for breadcrumb names) → src/data/navigation.js
 
-   Two layers consume this file and MUST stay in sync with each other:
+   Two layers consume this file:
      1. runtime  — src/utils/seo.js generators + SEOHead inject JSON-LD by
         element id and rewrite the head on every client-side navigation.
-     2. static   — public/index.html carries the same tags and the same
-        schema element ids as a no-JS fallback for crawlers. When a schema
-        id or the home-page copy changes here, mirror it there.
+     2. static   — public/index.html carries the home page's title,
+        description and Open Graph / Twitter text. Its static JSON-LD
+        blocks, canonical and og:url / twitter:url were removed in prompt 04
+        (they named the previous domain); SEOHead creates all of them at run
+        time, and prompt 18 restores a static copy once the domain is known.
 
    Deliberately NOT modelled (no fabricated facts — Google structured-data
    guidelines): LocalBusiness, PostalAddress, geo coordinates, opening
    hours, aggregate ratings, and FAQPage (the site has no visible FAQ).
    ============================================ */
 
-import { siteConfig, absoluteUrl } from '../data/siteConfig';
+import { siteConfig, studio, studioUrl } from '../data/siteConfig';
 import { expertiseAreas, expertiseTitles } from '../data/expertiseData';
 import { industries } from '../data/industriesData';
+import { serviceTitles } from '../data/services';
 import { NAV_LINKS } from '../data/navigation';
 
-const SITE_URL = siteConfig.siteUrl; // https://www.dulceyleadservices.com
+// The studio's domain is not known yet (owner decision D-05), so run-time
+// tags use the origin the site is served from: `studioUrl()` returns
+// `studio.siteUrl` once it is set. No trailing slash.
+const SITE_URL = studioUrl('/').replace(/\/$/, '');
 
 /** Absolute URL for a route path ('/' → siteUrl + '/'). */
 const absolute = (path) => `${SITE_URL}${path}`;
@@ -42,49 +56,64 @@ const keywords = (...terms) => [siteConfig.brandName, ...terms].join(', ');
 
 const industryNames = industries.map((industry) => industry.name);
 
+// ---------- IN-ARCH site-level values (prompt 04) ----------
+
+// `details of in-arch.pdf` §12, "Suggested Homepage SEO Title" and "Meta
+// Description", verbatim.
+const STUDIO_TITLE = `${studio.fullName} | Architects in Patna, Bihar`;
+const STUDIO_DESCRIPTION =
+  'In-Arch Architects & Interior Designer, led by Ar. Mohammad Hassanuddin, offers architectural design, residential planning, interior design, 3D visualisation and project consultancy in Patna, Bihar.';
+const TITLE_TEMPLATE = `%s | ${studio.name}`;
+
+/** A page title through the site template: "Portfolio | IN-ARCH". */
+const titled = (title) => TITLE_TEMPLATE.replace('%s', title);
+
+/** §12 "Suggested SEO Keywords", studio-prefixed. */
+const studioKeywords = (...terms) => [studio.fullName, ...terms].join(', ');
+
+/** The studio's social profiles that exist (D-12: none supplied yet). */
+const studioSameAs = Object.values(studio.social).filter(Boolean);
+
 export const seoConfig = {
   // =========================================
   // Site-level Settings
   // =========================================
-  siteName: siteConfig.brandName,
+  siteName: studio.fullName,
   siteUrl: SITE_URL,
-  defaultTitle: `${siteConfig.brandName} — ${siteConfig.tagline}`,
-  titleTemplate: `%s — ${siteConfig.brandName}`,
-  defaultDescription:
-    'Dulcey Lead Services works with businesses, institutions and entrepreneurs to navigate complexity, strengthen organizational capability and grow sustainably.',
+  defaultTitle: STUDIO_TITLE,
+  titleTemplate: TITLE_TEMPLATE,
+  defaultDescription: STUDIO_DESCRIPTION,
   defaultImage: `${SITE_URL}/og-image.png`,
   locale: 'en_IN',
   language: 'en',
 
   // =========================================
-  // Organization Details
+  // Organization Details — IN-ARCH
   // --------------------------------------------
-  // Emitted as a plain `Organization` — there is no public postal address,
-  // and inventing one to qualify for LocalBusiness would be a guidelines
-  // violation. Contact reachability is expressed via `contactPoint`.
+  // A plain `Organization` for now: the postal address is incomplete (no
+  // building or PIN code, D-04), no email is published (D-03) and no hours
+  // beyond "from 10:00 AM" are known (D-14), so nothing is claimed that the
+  // client has not supplied. Prompt 18 owns the structured-data audit.
   // =========================================
   organization: {
     schemaType: 'Organization',
-    name: siteConfig.brandName,
-    legalName: siteConfig.legalName,
+    name: studio.fullName,
+    legalName: studio.fullName,
     url: SITE_URL,
-    // The ink lockup (light backgrounds). The logos are self-hosted now, so
-    // the config value is a root-relative path — a crawler needs it absolute.
-    logo: absoluteUrl(siteConfig.logo),
-    // The footer brand paragraph, verbatim.
-    description:
-      'A professional business support and consulting organization — helping businesses, institutions, entrepreneurs, and professionals build for sustainable growth.',
-    slogan: siteConfig.tagline, // Beyond Business Support
+    // The espresso lockup (light backgrounds), absolute for crawlers.
+    logo: `${SITE_URL}${studio.logos.lockupOnLight.src}`,
+    description: studio.blurb,
+    slogan: studio.tagline,
     contactPoint: {
       // schema.org prefers a hyphenated E.164-ish string.
-      telephone: siteConfig.phoneDisplay.replace(/\s+/g, '-'),
+      telephone: studio.phoneDisplay.replace(/\s+/g, '-'),
       contactType: 'customer service',
-      email: siteConfig.email,
+      // Empty until supplied (D-03); the generator drops an empty email.
+      email: studio.email,
     },
-    // Fill when the client provides real profiles; empty arrays are dropped.
-    sameAs: [],
-    // The ten areas of experience — what this organization has expertise in.
-    knowsAbout: expertiseTitles,
+    // Empty arrays are dropped by the generator.
+    sameAs: studioSameAs,
+    knowsAbout: serviceTitles,
   },
 
   // =========================================
@@ -173,7 +202,51 @@ export const seoConfig = {
       robots: 'index, follow',
     },
 
+    // ---- IN-ARCH pages added by prompt 04 ----
+    // Titles from `details of in-arch.pdf` §12 ("Suggested individual page
+    // SEO titles"). Until each page's prompt lands its route renders the
+    // interim page and SEOHead resolves it to `pending` (noindex) instead.
+    interiors: {
+      path: '/interior-design',
+      breadcrumb: navLabel('/interior-design'),
+      title: titled('Interior Designers in Patna, Bihar'),
+      description:
+        'Interior design by In-Arch Architects & Interior Designer in Patna, Bihar: homes, modular kitchens, wall panelling, false ceilings, lighting and made-to-measure storage.',
+      keywords: studioKeywords(
+        'Interior designers in Patna',
+        'Interior design consultancy in Patna',
+        'Modular kitchen design in Patna',
+      ),
+      robots: 'index, follow',
+    },
+    portfolio: {
+      path: '/portfolio',
+      breadcrumb: navLabel('/portfolio'),
+      title: titled('Architecture & Interior Design Portfolio'),
+      description:
+        'Selected interiors by In-Arch Architects & Interior Designer, Patna: living halls, kitchens and made-to-measure prayer units, photographed as completed.',
+      keywords: studioKeywords('Architecture firms in Patna', 'Interior designers in Patna'),
+      robots: 'index, follow',
+    },
+    // One case study at /portfolio/:slug. Prompt 12 gives each project its
+    // own title and description from src/data/projects.js.
+    project: {
+      path: '/portfolio',
+      breadcrumb: navLabel('/portfolio'),
+      title: titled('Architecture & Interior Design Portfolio'),
+      description: STUDIO_DESCRIPTION,
+      robots: 'index, follow',
+    },
+
     // ---- Non-indexable routes ----
+    // A route whose page is still being built (prompt 04's interim page).
+    pending: {
+      path: '/',
+      title: titled('This page is being prepared'),
+      description: STUDIO_DESCRIPTION,
+      robots: 'noindex, nofollow',
+      noindex: true,
+    },
     admin: {
       path: '/admin',
       // The admin panel's browser-tab title.

@@ -1,0 +1,30 @@
+/* ============================================
+   PendingPage — one screen, light. The masthead sits over its top edge.
+   ============================================ */
+
+.page {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: 120px; /* clears the masthead (72 / 88 / 104 px) */
+  padding-bottom: calc(var(--ia-dock-clearance) + var(--ia-space-8));
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ia-space-8);
+}
+
+.heading {
+  max-width: 14ch;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--ia-space-8);
+  row-gap: var(--ia-space-2);
+}

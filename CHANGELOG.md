@@ -96,6 +96,39 @@ The component kit every later prompt builds from. **No live page, shell componen
 - `src/lab/LabPage.jsx`: the `?frame=<section>` view; `src/lab/registry.js`: the "Primitives" entry.
 - `scripts/qa/public-check.js`: the target-size check skips controls the Lab shows in a forced press state.
 
+### Prompt 04 — Global shell: dock navigation, footer, page transitions, favicon and meta (2026-11-28)
+
+The site now navigates like IN-ARCH while the old page bodies are replaced one by one: **every old page renders unchanged inside the new shell**, and **every admin screen is unchanged** — `scripts/qa/parity.js --suite admin` shows 34/34 captures identical to `cc2fc52`.
+
+#### Added
+
+- **The shell** in `src/components/shell/`:
+  - `Masthead` — the logo only (wordmark on phones and tablets, the full lockup from 1024 px), a call button or the "Patna, Bihar · phone" line; it scrolls away with the page and takes the tone of the first section.
+  - `Dock` — the **Index Dock**, fixed to the bottom at every breakpoint: Menu · Start a project · WhatsApp on phones and tablets; the "IA" mark, five links and Start a project from 1024 px. It follows the tone of the section beneath it, steps down to secondary while an in-page `[data-primary-cta]` is in view, reads "Write to us" on `/contact`, and slides out only for the overlay, the lead modal, the on-screen keyboard and the footer's contact block.
+  - `IndexOverlay` — the full-screen site index below 1024 px (six numbered rows with descriptors), with its controls in the dock's positions; focus trap, Escape, scroll lock, closes on navigation and at 1024 px.
+  - `Footer` — the lockup and blurb, one quiet "Start a project", Explore / Services / Visit / Talk, and the legal row with the developer credit and "Back to top". It shows no email while none is supplied.
+  - **Page transitions**: `transition/TransitionProvider`, `TLink` and `usePageReady`, the `Curtain` and the `RouteAnnouncer`. A forest curtain covers (400 ms), the route changes under it, and it lifts (550 ms) once the page is ready (≤ 1200 ms). Back / forward fade in instead; reduced motion has no curtain. Focus moves to `<main>` and the new title is announced after every navigation. Links warm the target chunk on hover, focus and touch.
+  - `useSurfaceTone` and `useMatchMedia`.
+- **Routes** `/interior-design`, `/portfolio` and `/portfolio/:slug`, rendering an honest interim `PendingPage` (`noindex`) until prompts 10–12. Every lazy route has a `preload()` handle.
+- `src/motion/revealGate.js`: `data-m-now` hero motion waits for the curtain to lift.
+- `src/styles/inarch/document.css`: the public surface's document rules (`overflow-x: clip`, no legacy scroll containers, dock clearance for focused controls).
+- **Document brand**: new favicon and PWA icons (ivory "IA" on espresso, thickened for 16–48 px), Open Graph image, web app manifest, IN-ARCH splash, default title, description and social meta. The admin keeps today's icons (`public/legacy-icons/`), splash, toolbar colour, boot title and fonts through a surface script at the end of `<head>`.
+- `scripts/generate-icons.js` and `scripts/generate-og.js` rewritten for the IN-ARCH mark and palette.
+- An `arrow-up` glyph in the kit's `Icon`.
+- **Tests:** navigation against the route table, `TLink`'s click rules, the footer's silence, SEO route resolution and the reveal gate (204 in all).
+
+#### Changed
+
+- `src/data/navigation.js`: six destinations with descriptors (Studio, Expertise, Interior Design, Portfolio, Contact; Who We Serve leaves the navigation, its URL still works).
+- `src/config/seo.js`: site-level values from `studio`; `pages.interiors`, `pages.portfolio`, `pages.project`, `pages.pending`. `SEOHead` resolves the new routes.
+- `src/utils/hashScroll.js`: `HEADER_OFFSET` 90 → 32. `src/context/ThemeContext.jsx`: no `theme-color` write on the public surface.
+- `scripts/qa/public-check.js` (via `_shared.js`) now covers the three new routes; `scripts/qa/parity.js` skips the IN-ARCH splash on the admin while it is hidden.
+
+#### Removed
+
+- `src/components/common/Header/`, `MobileMenu/` and `Footer/`.
+- The static JSON-LD blocks, canonical link and `og:url` / `twitter:url` in `public/index.html` (they named the previous domain; `SEOHead` creates them at run time, and prompt 18 restores a static copy).
+
 ## [2.31.0] — 2026-08-20 — Who We Serve hero: the right edge dissolves too
 
 `[2.30.0]` drew the frame at the section's full width, which put the

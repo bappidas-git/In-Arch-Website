@@ -1,0 +1,199 @@
+/* ============================================
+   IndexOverlay — full viewport, dark (the Portal carries data-tone="dark").
+   Visible only while [data-open]; the hide waits for the 350 ms exit.
+   ============================================ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ia-z-overlay);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--ia-bg);
+  color: var(--ia-fg);
+  visibility: hidden;
+  transition: visibility 0s linear 350ms;
+  overscroll-behavior: contain;
+}
+
+.overlay[data-open] {
+  visibility: visible;
+  transition: none;
+}
+
+/* Never shown from 1024 px: the dock carries the links there. */
+@media (min-width: 1024px) {
+  .overlay {
+    display: none;
+  }
+}
+
+.top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: 72px;
+  padding-inline: var(--ia-gutter);
+}
+
+@media (min-width: 768px) {
+  .top {
+    height: 88px;
+  }
+}
+
+/* The rows scroll on their own when the viewport is short (landscape). */
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-inline: var(--ia-gutter);
+  padding-bottom: var(--ia-space-6);
+  /* The scroll region ends above the bottom bar (its offset + 56 px + 12 px),
+     so rows never pass behind or around it. */
+  margin-bottom: calc(max(12px, env(safe-area-inset-bottom)) + 68px);
+}
+
+.rows {
+  border-top: 1px solid var(--ia-line);
+}
+
+.item {
+  border-bottom: 1px solid var(--ia-line);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: var(--ia-space-3);
+  min-height: 64px;
+  padding-block: var(--ia-space-3);
+  color: inherit;
+  transition: opacity var(--ia-dur-1) var(--ia-ease-out);
+}
+
+.row:active {
+  opacity: 0.7;
+}
+
+.num {
+  color: var(--ia-accent);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ia-space-1);
+  min-width: 0;
+}
+
+.label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ia-space-3);
+}
+
+/* Current page: the terracotta dot after the label. */
+.dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ia-accent-display);
+}
+
+.descriptor {
+  color: var(--ia-fg-2);
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ia-space-1);
+  padding-top: var(--ia-space-6);
+  color: var(--ia-fg-2);
+}
+
+.address {
+  margin: 0;
+}
+
+.tel {
+  color: var(--ia-fg);
+}
+
+/* ---------- Bottom bar: the dock's three positions ---------- */
+.bar {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--ia-space-1);
+  height: 56px;
+  padding-right: 3px;
+  border: 1px solid var(--ia-line);
+  border-radius: var(--ia-radius);
+  background: var(--ia-forest-2);
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ia-space-2);
+  /* One fixed width for Menu (dock) and Close (overlay), so the CTA and
+     WhatsApp sit in exactly the same place in both bars. */
+  flex: none;
+  width: 98px;
+  height: 100%;
+  min-height: 54px;
+  padding-inline: var(--ia-space-2);
+  color: inherit;
+  font-family: var(--ia-font-sans);
+  font-size: var(--ia-fs-label);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  border-radius: var(--ia-radius);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: opacity var(--ia-dur-1) var(--ia-ease-out);
+}
+
+.close:active {
+  opacity: 0.7;
+}
+
+.bar .cta {
+  width: 100%;
+  gap: var(--ia-space-2);
+  padding-inline: 10px;
+  white-space: nowrap;
+}
+
+@media (max-width: 359px) {
+  .bar .cta > span:last-child {
+    display: none;
+  }
+
+  .bar .cta {
+    white-space: normal;
+    padding-block: var(--ia-space-1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    transition: none;
+  }
+}

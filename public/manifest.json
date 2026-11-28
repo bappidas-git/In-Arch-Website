@@ -1,7 +1,7 @@
 {
-  "short_name": "Dulcey",
-  "name": "Dulcey Lead Services",
-  "description": "Dulcey Lead Services — beyond business support: business solutions, people & organization, corporate services, and leadership & capability building.",
+  "short_name": "IN-ARCH",
+  "name": "In-Arch Architects & Interior Designer",
+  "description": "Thoughtful architectural and interior design solutions from Patna, Bihar.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -36,8 +36,8 @@
   "start_url": ".",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#0B0B0C",
-  "background_color": "#FFFFFF",
+  "theme_color": "#161E19",
+  "background_color": "#F4EFE7",
   "categories": ["business", "productivity"],
   "lang": "en",
   "dir": "ltr",

@@ -592,3 +592,122 @@ Owner decisions live in [`00_INDEX.md` §12](00_INDEX.md#12-owner-decisions). Th
 8. **`react-router-dom`'s missing `dist/main.js`:** if the package is upgraded, check whether the Jest `moduleNameMapper` entries are still needed.
 9. **No VoiceOver or NVDA was available.** Accessibility was checked through axe, the heading order, names and live regions.
 10. `npm audit` advisories in CRA 5's tree are unchanged.
+
+---
+
+## 2026-11-28 — Prompt 04: Global shell — dock navigation, footer, page transitions, favicon and meta
+
+**Branch:** `claude/zen-meitner-5fu5jx`, from `585706b` (prompt 03 merged). **Baseline:** `cc2fc52d90987adcf62a5c286c4eb87d155fc3f3`, served from `../inarch-baseline` on port 8081 for parity (removed afterwards).
+
+**Starting state, confirmed:**
+- Prompts 01–03 are done: tokens, base layer, `src/motion`, `SurfaceManager`, the QA scripts; `studio`, `services.js`, `credits.js`, the image manifest and the brand files (the prompt says "six files": `studio.logos` has six roles; `public/images/brand/` holds eight PNGs, the two lockups also at 800 px); the kit (`Button`, `TextLink`, `IconButton`, `Icon`, `Logo`, `LinkProvider`, `Portal`) and both overlay hooks.
+- Owner decisions read from `00_INDEX.md` §12. None conflicts with the data in `src/data/`, so nothing needed reconciling. Applied here: D-15 (developer credit kept), D-22 (wordmark below 44 px: masthead on phones and tablets, overlay), D-03 (no email row), D-13 (no Icons8 credit: none ships), D-04 / D-14 (address and "From 10:00 AM" as they stand), D-05 (static absolute URLs carry the placeholder domain), D-17 (`/industries` leaves the navigation; its URL still works).
+
+### Files
+
+**Created**
+
+| Area | Files |
+|---|---|
+| Shell | `src/components/shell/Masthead/`, `Dock/`, `IndexOverlay/`, `Footer/`, `Curtain/`, `RouteAnnouncer/` (each `.jsx` + `.module.css`) |
+| Transitions | `src/components/shell/transition/TransitionProvider.jsx`, `TLink.jsx`, `usePageReady.js` (also exports `RouteMounted`) |
+| Shell helpers | `src/components/shell/useSurfaceTone.js`, `src/components/shell/useMatchMedia.js` |
+| Interim page | `src/pages/Pending/PendingPage.jsx`, `PendingPage.module.css`, `index.js` |
+| Motion | `src/motion/revealGate.js` |
+| Document CSS | `src/styles/inarch/document.css` |
+| Icons | `public/legacy-icons/favicon.ico`, `favicon.png`, `apple-touch-icon.png` (byte copies of the baseline's, made before regeneration; `cmp` against `cc2fc52` is identical) |
+| Tests | `src/data/__tests__/navigation.test.js`; `src/components/shell/__tests__/TLink.test.jsx`, `Footer.test.jsx`, `seoRoutes.test.js`; `src/motion/__tests__/revealGate.test.js` |
+
+**Rewritten:** `src/components/layout/PublicLayout/PublicLayout.jsx` + `.module.css`; `src/data/navigation.js`; `scripts/generate-icons.js`; `scripts/generate-og.js`. Regenerated: `public/favicon.ico`, `favicon.png`, `apple-touch-icon.png`, `logo192.png`, `logo512.png`, `maskable-192.png`, `maskable-512.png`, `og-image.png`.
+
+**Changed**
+
+- `src/App.jsx`: `lazyWithPreload` (every lazy route, admin included, has a memoised `preload()`); the routes `/interior-design`, `/portfolio`, `/portfolio/:slug` (PendingPage); the public layout route wrapped in `TransitionProvider` + `LinkProvider component={TLink}`; `RouteMounted` inside `lazyRoute` and after the eager Home; the splash hide site also hides `#ia-initial-loader`. `ErrorBoundary`, `SectionLoader`, `ScrollManager`, `LeadModalWrapper`, `SEOHead`, the `.app` wrapper, the provider order, `/industries` and both admin routes are as they were.
+- `src/config/seo.js`: site-level values from `studio`; `pages.interiors`, `pages.portfolio`, `pages.project`, `pages.pending`. The old pages' entries and `pages.admin` are untouched.
+- `src/components/common/SEO/SEOHead.jsx`: the new routes; pending routes → `pages.pending`.
+- `src/utils/hashScroll.js`: `HEADER_OFFSET` 90 → 32 (and its comment).
+- `src/context/ThemeContext.jsx`: the one guard.
+- `src/motion/useMotionScope.js` (the `data-m-now` gate), `src/motion/tokens.js` (`DUR_NAMED.overlayIn / overlayOut / curtainLift`), `src/motion/index.js` (exports).
+- `src/components/ui/Icon/Icon.jsx`: an `arrow-up` glyph (for "Back to top").
+- `src/styles/inarch/index.css` (imports `document.css` last) and `__tests__/tokens.test.js` (Deviation 4).
+- `public/index.html`, `public/manifest.json`.
+- `scripts/qa/_shared.js` (route discovery), `scripts/qa/parity.js` and `scripts/qa/README.md` (Deviation 5).
+- `CHANGELOG.md`.
+
+**Deleted:** `src/components/common/Header/`, `MobileMenu/`, `Footer/`. A search found no importer other than `PublicLayout` (App.jsx only named `MobileMenu` in a comment, now rewritten).
+
+**Admin-frozen check:** `git diff --stat cc2fc52… -- src/admin src/theme src/styles/variables.css … public/api .env .env.example` prints nothing. The admin-bound values (`brandName`, `legalName`, `logo`, `LOGO_SIZE`, `expertiseTitles`, `pages.admin`, `getConfig()`) are unchanged.
+
+### Decisions
+
+1. **When is the incoming page "ready"?** Pages that call `usePageReady(ready)` decide; it *claims* the decision in a layout effect and signals in a passive one. Pages that do not (the old bodies) are revealed when their route has committed: `RouteMounted`, rendered *inside* each route's Suspense boundary (and after the eager Home), reports it from a passive effect, by which time any claim in the same commit is known. Every signal carries its pathname and only counts for the path the router was sent to, so a late signal from the outgoing page cannot lift the curtain early. The cap is 1200 ms from the router navigation.
+2. **The routed page is keyed by pathname** (`<Outlet key={pathname} />`), so `/portfolio/a` → `/portfolio/b` (one route) mounts a fresh page and the transition waits for it.
+3. **The lift starts two animation frames after "ready".** Measured at 4× CPU throttling: with an immediate lift, the legacy Home's first layout and its queued ScrollTrigger refresh landed in the first lift frame (167 ms at curtain −8 %). With the double rAF, every long frame of a transition falls while the curtain fully covers the page (curtain 0 %), plus one 50 ms frame at the click with the curtain still off-screen. A navigation id guards the deferred lift.
+4. **Hero motion waits for the curtain** (`src/motion/revealGate.js`). The provider holds the gate before covering and releases it as the lift starts; `useMotionScope` builds its `data-m-now` tweens paused while held (so hidden start states apply) and restarts them with their delays on release. The gate is open on first load, back / forward and under reduced motion.
+5. **Robustness rules.** A click while covering retargets; a click once covered navigates again under the same cover; a click while lifting re-covers from where the curtain is; a back / forward gesture (or any navigation that did not come through the provider) aborts a transition in progress; a 4 s watchdog always ends one. The curtain intercepts pointer clicks while it covers, which is intended. Ten rapid keyboard activations (which do reach links under the curtain), three rounds, always land on the last target with the curtain lifted.
+6. **Focus and announcement after every navigation** — curtain navigations as the curtain lifts, every other navigation (old pages' plain router links, back / forward) after its commit; not on the first load and not for a fragment-only POP. The skip link moves focus to `<main>` itself instead of changing the URL fragment, which the router would report as a POP.
+7. **Dock details.**
+   - Tone is sampled at x = 4 px, outside the bar at every width, looking through `[data-shell-float]` layers.
+   - While slid out it is `inert`, so focus can never land off-screen; keyboard focus inside it keeps it in place (a mouse click's focus does not).
+   - "Write to us" on `/contact` scrolls to `#enquiry`, else (the old page, until prompt 13) to the page's form, focusing its first field; with neither it opens the modal.
+   - Menu (dock) and Close (overlay) share one fixed width (98 px), so the CTA and WhatsApp sit in exactly the same place in both bars (measured equal at 320, 360, 390, 768). The compact CTA uses 10 px padding and an 8 px arrow gap so "START A PROJECT" fits from 360 px; below 360 the arrow gives way and the label may wrap to two lines.
+   - The overlay's CTA also uses `dock-cta` (the prompt names only `dock-cta` and `footer-cta` for the shell).
+8. **Masthead tone** = the deepest `[data-tone]` whose top is the top of `<main>`. Old page bodies have none → light, with a ground (Deviation 1).
+9. **Overlay.** Visibility follows `data-open` in CSS (the focus trap runs before the animation effect, and cannot focus inside a `visibility: hidden` panel); GSAP moves it only. Its scroll region ends above the bottom bar, so rows never pass behind it in landscape. When it closes because the viewport crossed 1024 px, focus goes to the desktop dock's first control (the Menu button no longer exists).
+10. **Footer.** The Talk group is the "contact block" the dock yields to (`[data-footer-contact]`). The lockup is an image, not a link (Explore already has Home). "Back to top" scrolls and moves focus to the masthead's home link.
+11. **`<main>` has `overflow-x: clip`** (with a `hidden` fallback). The legacy Home marquee strip is 30 px wider than the viewport and relied on the old `body` clip, which the public document no longer has; `public-check` caught it at ≥ 1024 px. `clip` creates no scroll container, so sticky still works.
+12. **`seoConfig.siteUrl` is now `studioUrl('/')`** — the serving origin until D-05 — instead of the Dulcey domain, so canonicals, `og:image` and schema URLs on every route (old pages included) point at the site actually serving them. The old pages' titles and descriptions are untouched, so at run time `/`, `/about`, `/expertise`, `/industries`, `/contact` and the 404 still read "… — Dulcey Lead Services" until their prompts; only the static `index.html` (and the three pending routes) read IN-ARCH. Title template `%s | IN-ARCH`; the page titles come from PDF §12.
+13. **Icons.** Ivory `#F4EFE7` ink with the source monogram's alpha (no colour drift), on an opaque espresso tile; all seven files are RGB without alpha. Mark width: 80 % (16–48), 60 % (apple-touch), 64 % (any), 52 % (maskable: the 1.4 : 1 mark's corners sit inside the 80 % circle, which allows ≤ 65 %). For 16–48 px the alpha is blurred (σ 0.55 px at 4× supersampling) and steepened (× 2.6 − 30); three settings were compared side by side at 1× and 6×.
+14. **Open Graph image** is a 256-colour dithered PNG: 193 KB instead of 658 KB, under the ~300 KB some messengers accept for a preview; the overlay leaves few tones to band.
+15. **The IN-ARCH splash shows only under `html[data-surface="public"]`** (the prompt asks for "hidden under admin"): without JavaScript no surface is set, and the legacy behaviour is unchanged. Its mark is `loading="lazy"`, so the hidden splash on `/admin` never requests it, and the surface script preloads it on the public surface.
+16. **The shell imports `src/motion/tokens`, `reducedMotion` and `revealGate` directly**, not the barrel: the barrel re-exports `useMotionScope`, which registers SplitText as a side effect and pulled it into the main bundle. After the change no production chunk contains SplitText.
+17. **`lazyWithPreload`** memoises the import, so a warmed chunk is never fetched twice, and forgets a failed import so the ErrorBoundary's retry can try again.
+
+### Deviations from the prompt
+
+1. **The masthead lays a translucent ivory ground over old page bodies** (`[data-legacy]`: `--ia-bg` at 86 % with a 16 px backdrop blur). The prompt says the masthead has no background and is "light for legacy pages", but the old heroes were drawn for the old glass header, and at 1440 the "Patna, Bihar · phone" line sat on the dark part of the old Home photograph. It disappears by itself on any page whose first section has a `[data-tone]`; prompt 14 can delete the rule.
+2. **Static `keywords` and `author` in `index.html` now read IN-ARCH** (the PDF §12 keywords; the studio's name). They are not in the prompt's list, but they were the previous client's brand strings in the public document's default meta.
+3. **Static `og:image` / `twitter:image` use `https://SITE-URL-NOT-SET.invalid/og-image.png`** (D-05) instead of the Dulcey domain; SEOHead replaces both with the serving origin at run time.
+4. **`tokens.test.js`** now allows `html[data-surface="public"]` as the selector prefix in `document.css` only, and expects six layers in `index.css`.
+5. **QA harness.** `_shared.js` tests parameterised routes with a concrete sample (`/portfolio/:slug` → the first slug in `projects.js`), so `public-check` covers all three new routes. `parity.js` skips `#ia-initial-loader` in the digest **only while it is `display: none`** (always, on the admin): without this the four hidden splash elements shifted every index of the body-level digest (0 pixels differed). If the splash ever rendered on the admin it would be digested and fail.
+6. **Extra files:** `useMatchMedia.js`, `revealGate.js`, the `arrow-up` glyph, and the tests listed above.
+7. **The regression pass was driven with Playwright** (as in prompts 01–03), with request bodies read from the intercepted requests; the scripts stayed in the session scratchpad.
+
+### Evidence
+
+- **`npm test -- --watchAll=false`:** 15 suites, **204 tests, all passing** (158 before), no console warnings.
+- **`npm run build`:** "Compiled successfully.", no warnings. Main JS 501,272 B (169,379 B gzip), against 461,903 / 156,148 after prompt 03: the whole shell, the kit pieces it uses, the overlay hooks and the transition. 24 JS files (the baseline has 23; +1 is PendingPage). No `.js` contains `__lab` or SplitText.
+- **Admin parity, baseline against this branch: 34/34 identical**, 0 pixels and 0 digest differences, no `/fonts/` request (twice, on the final build). Calibration, baseline against itself: 34/34 (one earlier calibration run showed 2/34, harness noise on the baseline alone — the known dashboard race, prompt 03 Open item 1).
+- **`public-check` (production build on PHP, 10 routes × 7 widths + reduced motion): 81/90 clean.** The 9 failures are the pre-existing legacy `/contact` contrast issue (prompt 01 Open item 7), identical to prompts 01–03. Before the `<main>` clip, `/` failed overflow at 1024–1920 (Decision 11).
+- **`public-check --base http://localhost:3000 --routes /__lab`** (dev server): 9/9 clean. Dev console on the shell's states (overlay, hidden dock, two transitions, 390 and 1440): no warning, no error.
+- **Document brand, measured before React mounts** (main bundle blocked):
+  - Public `/` and `/portfolio`: title "In-Arch Architects & Interior Designer | Architects in Patna, Bihar", icons `/favicon.*`, both `theme-color` `#161E19`, the two font preloads with `crossorigin`, the IN-ARCH splash shown and the old one hidden.
+  - `/admin/login` and `/admin/dashboard`: icons `/legacy-icons/*`, both `theme-color` `#0B0B0C`, title "Dulcey Lead Services — Beyond Business Support", old splash shown, IN-ARCH splash hidden; **no request** for any `/fonts/` file or the IN-ARCH mark. After mount: "Admin Panel — Dulcey Lead Services", `theme-color` `#FFFFFF` / `#0B0B0C` and Archivo applied — exactly the baseline's values.
+  - `manifest.json` parses; name, short name, description (= `studio.blurb`), colours as specified; icon list unchanged.
+  - Icon sizes: `favicon.ico` 16 + 32 + 48; `favicon.png` 32; `apple-touch-icon.png` 180; `logo192` / `maskable-192` 192; `logo512` / `maskable-512` 512; all opaque RGB. `og-image.png` 1200 × 630, 193 KB.
+- **Interaction suite (Playwright, 27/27):** Menu ≥ 88 × 54 (the bar's inner height); overlay opens with `aria-expanded`, focus on "01 Home", Tab stays inside, scroll locked, dock out; Escape closes, focus back on Menu, scroll restored to the same offset; a row link → curtain → `/contact` at the top, focus on `<main>`, title announced, overlay closed, curtain hidden; "Write to us" scrolls to the form and focuses a field; a focused field on touch slides the dock out; desktop dock centred and ≤ 960 px (892 at 1440); a dock link covers, navigates, focuses and marks `aria-current`; back and forward without a curtain; dock dark over the footer and light again at the top; out at the footer's Talk block; yields to an injected `[data-primary-cta]`; slides out for the modal and comes back with focus on its CTA; reduced motion has no curtain. No page errors.
+- **Overlay:** resizing 900 → 1100 px closes it, releases the lock and puts focus on the dock's "IN-ARCH — home"; at 844 × 390 the rows scroll above the bar.
+- **Transitions at 4× CPU:** frames median 16.7 ms, p90 16.7–16.8 ms; long frames only under full cover (Decision 3).
+- **Keyboard:** Tab from the top at 390 and 1440 on four routes: skip link → masthead → dock → page → footer, every IN-ARCH stop with its 2 px ring, and no focused control ever under the visible dock.
+- **Sizes:** no horizontal overflow at 320, 360, 390, 768, 1024, 1280, 1440, 1920 or 844 × 390; the dock CTA label fits from 360 px (wraps at 320). Every target ≥ 44 × 44 at ≤ 768 px (`public-check`).
+- **Deep links:** `/expertise#e07` typed, the old Home index row to `#e03`, and the footer's service link to `#e05` (through the curtain) each open their item and land 32 px from the top, at 390 and 1440.
+- **Regression pass** (production build on PHP; 29/29):
+  - all nine routes at 390 and 1440: one `h1`, one primary `nav`, `main` and `footer`; `index, follow` with a canonical on the old pages; `noindex, nofollow` and no canonical on the three pending routes and the 404; no console errors;
+  - the modal from `home-hero`, `dock-cta` and `footer-cta`: focus in and trapped, closes on Escape and the button, scroll lock released, focus back on the opener;
+  - an enquiry through the modal sends exactly the 21 frozen keys (`source: dock-cta`, `state` empty, `status: new`, `page_url` set); success shows the first name;
+  - the same mobile through `/contact` (`source: contact-page`) returns `duplicate: true` and "Already received!" shows;
+  - admin: redirect to login, login, dashboard with the new lead and its unchanged title, search, all four selects operated, sorting, CSV export (contains the lead), CSV import ("Imported 0 leads (1 duplicates skipped)"), bulk select, the delete dialog (cancelled), the detail page with name, mobile, email, interest, message, `dock-cta` and the page URL, a note added and the status changed (both persisted in the store), the Guidelines gate and its 4 tabs, logout; no page errors. Pagination was not exercised: the store held a single lead.
+  - Every test lead (and the parity seeds) deleted afterwards: both stores empty.
+
+### Open items
+
+1. **Prompt 05:** the dock, the overlay (`dock-cta`) and the footer (`footer-cta`) call `openLeadModal`; the dock slides out while `isModalOpen`. Rebuild the modal on `Portal`; mark its submit button `data-primary-cta` only if it should make the dock yield (the dock is out while the modal is open anyway).
+2. **Pages from prompt 06 on:** put `class="ia"` on the page root and `data-tone` on each section (the first one sets the masthead's tone and removes its legacy ground); call `usePageReady()` (pass `false` until the hero image has decoded if wanted); mark in-page primary buttons `data-primary-cta`; hero motion with `data-m-now` already waits for the curtain.
+3. **Prompt 13:** give the enquiry section `id="enquiry"`; until then the dock's "Write to us" targets the old page's form.
+4. **Prompt 14:** hoist `ia` to the layout root; remove `.masthead[data-legacy]`; switch body background / colour / font; decide whether `<main>`'s `overflow-x: clip` stays; the old `.initial-loader` and its preload. Public parity against `cc2fc52` is no longer meaningful (the shell changed by design); prompt 14's split proof needs its own baseline.
+5. **Prompt 15:** remove the admin branch of the end-of-`<head>` surface script, `public/legacy-icons/` and the static `dls-mark-860.png` preload (its `<img>` in the hidden old splash still downloads on public routes). The manifest is already IN-ARCH for the whole origin (visible on `/admin` only if someone installs the site as an app from an admin page).
+6. **Prompt 17:** `env(safe-area-inset-bottom)` cannot be emulated in headless Chromium; check the dock and the overlay bar on a real iPhone with a home indicator. Check 320 px (the dock label wraps to two lines there).
+7. **Prompt 18:** restore the static JSON-LD, canonical and `og:url` / `twitter:url` once the domain is known; replace the placeholder image URLs; the old pages' SEO entries still carry Dulcey titles at run time until their prompts.
+8. The legacy `/contact` contrast failure (prompt 01 Open item 7) remains until prompt 13.
+9. No VoiceOver or NVDA in this session: landmarks, names, heading order and the live region were checked through the accessibility tree and axe.
+10. `npm audit` advisories in CRA 5's tree are unchanged.

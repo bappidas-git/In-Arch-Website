@@ -1,90 +1,63 @@
 /* ============================================
-   generate-og.js — Social share (Open Graph) image
+   generate-og.js — the Open Graph / social share image (IN-ARCH, prompt 04)
    --------------------------------------------
-   Builds public/og-image.png (1200×630) — the image shown when the site is
-   shared on Facebook, LinkedIn, WhatsApp, Slack, X, Google Discover, etc.
+   public/og-image.png, 1200 × 630: the `og-source` photograph (the client's
+   own ph08, cut by scripts/build-images.js) under a forest overlay
+   rgba(22, 30, 25, 0.62), with the ivory lockup centred-left at 520 px
+   wide. No other text: the build machine's fonts are not the brand's.
 
-   Composition follows the Dulcey design system: white background, ink
-   (#0B0B0C) headline, a Dulcey-red accent rule, the color logo lockup
-   top-left, and the secondary tagline + site URL along the bottom. Text is
-   drawn via an SVG layer; the logo is composited on top.
+   Inputs (both already in public/, produced by earlier prompts):
+     public/images/inarch/og-source-1200.jpg       (npm run build:images)
+     public/images/brand/inarch-lockup-on-dark-1600.png   (npm run build:brand)
 
-   Brand values are mirrored from src/data/siteConfig.js and
-   src/styles/variables.css — update both if the palette changes.
-
-   Usage:  node scripts/generate-og.js  (npm run generate:og)
+   Usage:  node scripts/generate-og.js   (npm run generate:og)
    Requires dev dep: sharp
    ============================================ */
 
-const fs = require("fs");
-const path = require("path");
-const sharp = require("sharp");
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
 
-// Ink lockup (light backgrounds) — keep in sync with siteConfig.logo. Now read
-// off disk rather than fetched: the wordmark is self-hosted, so `npm run
-// generate:og` no longer needs the network.
-const LOGO_FILE = path.resolve(
-  __dirname,
-  "..",
-  "public",
-  "images",
-  "logo",
-  "dulcey-wordmark-1351.png"
-);
-
-const OUT = path.resolve(__dirname, "..", "public", "og-image.png");
+const ROOT = path.resolve(__dirname, '..');
+const PHOTO = path.join(ROOT, 'public', 'images', 'inarch', 'og-source-1200.jpg');
+const LOCKUP = path.join(ROOT, 'public', 'images', 'brand', 'inarch-lockup-on-dark-1600.png');
+const OUT = path.join(ROOT, 'public', 'og-image.png');
 
 const W = 1200;
 const H = 630;
-const WHITE = "#FFFFFF";
-const INK = "#0B0B0C"; // --ink
-const RED = "#D5192E"; // --red (Dulcey red)
-const SLATE = "#4A4A4F"; // --grey-2
-const FONT = "Liberation Sans, DejaVu Sans, Arial, Helvetica, sans-serif";
-
-function readLogo() {
-  if (!fs.existsSync(LOGO_FILE))
-    throw new Error(`Logo not found at ${LOGO_FILE}`);
-  return fs.readFileSync(LOGO_FILE);
-}
-
-function buildSvg() {
-  return Buffer.from(`
-<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
-  <rect width="${W}" height="${H}" fill="${WHITE}" />
-  <!-- red accent rule above the headline -->
-  <rect x="80" y="322" width="62" height="6" rx="3" fill="${RED}" />
-  <text x="80" y="406" font-family="${FONT}" font-size="66" font-weight="700"
-        letter-spacing="-2" fill="${INK}">Dulcey Lead Services</text>
-  <text x="80" y="484" font-family="${FONT}" font-size="66" font-weight="700"
-        letter-spacing="-2" fill="${RED}">Beyond Business Support</text>
-  <text x="80" y="574" font-family="${FONT}" font-size="26" font-weight="500"
-        fill="${SLATE}">Your Partner in Business Leadership</text>
-  <text x="${W - 80}" y="574" text-anchor="end" font-family="${FONT}"
-        font-size="26" font-weight="600" fill="${INK}">www.dulceyleadservices.com</text>
-</svg>`);
-}
+const OVERLAY = { r: 22, g: 30, b: 25, alpha: 0.62 }; // forest #161E19 at 62 %
+const LOCKUP_WIDTH = 520;
+// Left edge of the lockup: the page gutter at 1440 (57 px) scaled up to read
+// as a deliberate margin on a share card.
+const LEFT = 96;
 
 async function main() {
-  console.log("Reading Dulcey wordmark…");
-  const logoRaw = readLogo();
-  const logo = await sharp(logoRaw)
-    .resize({ width: 440, fit: "inside" })
+  for (const file of [PHOTO, LOCKUP]) {
+    if (!fs.existsSync(file)) throw new Error(`Missing input: ${path.relative(ROOT, file)}`);
+  }
+
+  const photo = await sharp(PHOTO).resize(W, H, { fit: 'cover' }).removeAlpha().png().toBuffer();
+  const overlay = await sharp({ create: { width: W, height: H, channels: 4, background: OVERLAY } })
     .png()
     .toBuffer();
-  const { height: logoH } = await sharp(logo).metadata();
+  const lockup = await sharp(LOCKUP).resize({ width: LOCKUP_WIDTH, kernel: 'lanczos3' }).png().toBuffer();
+  const { height: lockupH } = await sharp(lockup).metadata();
 
-  // The wordmark is transparent, so flatten the SVG plate first — compositing
-  // a transparent mark straight onto the base is what keeps the edges clean.
-  const base = sharp(buildSvg()).flatten({ background: WHITE }).png();
-  const composed = await base
-    .composite([{ input: logo, left: 80, top: Math.round(160 - logoH / 2) }])
-    .png({ compressionLevel: 9, palette: true })
+  const composed = await sharp(photo)
+    .composite([
+      { input: overlay, left: 0, top: 0 },
+      { input: lockup, left: LEFT, top: Math.round((H - lockupH) / 2) },
+    ])
+    .png()
     .toBuffer();
 
-  await sharp(composed).toFile(OUT);
+  // Flatten to opaque RGB in a second pass (sharp composites last).
+  // A 256-colour palette (dithered) keeps the card well under the ~300 KB
+  // that some messengers accept for a link preview; the 62 % overlay leaves
+  // few tones to band.
+  await sharp(composed).removeAlpha().png({ palette: true, quality: 90, effort: 10, dither: 1, compressionLevel: 9 }).toFile(OUT);
   const kb = (fs.statSync(OUT).size / 1024).toFixed(1);
-  console.log(`Wrote ${OUT} (${W}×${H}, ${kb} KB)`);
+  console.log(`Wrote ${path.relative(ROOT, OUT)} (${W}×${H}, ${kb} KB)`);
 }
 
 main().catch((err) => {

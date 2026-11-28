@@ -170,17 +170,20 @@ describe('tokens.css', () => {
 describe('src/styles/inarch/ cannot leak outside .ia', () => {
   const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.css'));
   const ALLOWED = /^(:root$|\.ia(?![\w-])|\.ia-[\w-]|:where\(\.ia(?![\w-]))/;
+  // document.css (prompt 04) holds the public surface's document-level rules.
+  const DOCUMENT = /^html\[data-surface="public"\](?=$|[\s.>:[])/;
+  const allowedIn = (file) => (file === 'document.css' ? DOCUMENT : ALLOWED);
 
-  test('the five layers are present and index.css imports them in order', () => {
+  test('the six layers are present and index.css imports them in order', () => {
     const imports = [...read('index.css').matchAll(/@import\s+['"]\.\/([\w-]+\.css)['"]/g)].map((m) => m[1]);
-    expect(imports).toEqual(['tokens.css', 'fonts.css', 'base.css', 'type.css', 'layout.css']);
+    expect(imports).toEqual(['tokens.css', 'fonts.css', 'base.css', 'type.css', 'layout.css', 'document.css']);
   });
 
-  test.each(files)('%s: every selector starts with :root, .ia, :where(.ia) or an ia- class', (file) => {
+  test.each(files)('%s: every selector starts with :root, .ia, :where(.ia), an ia- class or (document.css) html[data-surface="public"]', (file) => {
     const offenders = [];
     rules(read(file)).forEach(({ selector, body }) => {
       splitSelectors(selector).forEach((sel) => {
-        if (!ALLOWED.test(sel)) offenders.push(sel);
+        if (!allowedIn(file).test(sel)) offenders.push(sel);
       });
       if (selector === ':root') {
         body

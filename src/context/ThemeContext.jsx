@@ -45,9 +45,10 @@ export const ThemeProvider = ({ children }) => {
     const root = document.documentElement;
     root.setAttribute('data-theme', resolvedTheme);
 
-    // Update meta theme-color
+    // Update meta theme-color — except on the public surface, where the
+    // IN-ARCH shell owns that tag (prompt 04).
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (metaThemeColor) {
+    if (metaThemeColor && root.dataset.surface !== 'public') {
       metaThemeColor.setAttribute(
         'content',
         resolvedTheme === THEMES.DARK ? '#0B0B0C' : '#FFFFFF'
