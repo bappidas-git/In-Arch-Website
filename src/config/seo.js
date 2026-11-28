@@ -8,10 +8,10 @@
    default title and description, title template, organization, site URL)
    read `studio` (src/data/siteConfig.js) and the client's document
    (`details of in-arch.pdf` §12). The entries of the pages that are still
-   the old Dulcey pages (home, about, expertise, industries, contact,
-   notFound) are left exactly as they were until each page's prompt
-   replaces it (home: prompt 06), and `pages.admin` is admin-bound
-   (prompt 15 only).
+   the old Dulcey pages (expertise, industries, contact, notFound) are left
+   exactly as they were until each page's prompt replaces it (home: prompt
+   06, about: prompt 08), and `pages.admin` is admin-bound (prompt 15
+   only).
 
    Everything here is generated from the single sources of truth so the
    metadata can never drift from the visible site:
@@ -169,18 +169,17 @@ export const seoConfig = {
       // The service list is relevant to the home index and /expertise only.
       services: true,
     },
+    // IN-ARCH Studio (prompt 08): the PDF §12 "About" title through the
+    // site template, a description written from the page's own facts (the
+    // practice, its place, its principal and his registration), and §12
+    // keywords the page supports. The breadcrumb is the nav label, "Studio".
     about: {
       path: '/about',
       breadcrumb: navLabel('/about'),
-      title: `About — ${siteConfig.brandName}`,
+      title: titled('About In-Arch Architects, Patna'),
       description:
-        'Built on experience, defined by trust — Dulcey Lead Services brings people, processes, information, operations and leadership together, with depth in pharma.',
-      keywords: keywords(
-        'about Dulcey',
-        'business consulting India',
-        'organizational capability',
-        'pharmaceutical business experience',
-      ),
+        'In-Arch Architects & Interior Designer is an architecture and interior design practice in Patna, Bihar, led by Principal Architect Ar. Mohammad Hassanuddin, a registered architect with the Council of Architecture, India.',
+      keywords: studioKeywords('Architects in Patna', 'Architecture firms in Patna', 'Interior designers in Patna'),
       robots: 'index, follow',
     },
     expertise: {

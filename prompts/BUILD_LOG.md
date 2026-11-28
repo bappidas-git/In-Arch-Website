@@ -1007,3 +1007,182 @@ Owner decisions live in [`00_INDEX.md` §12](00_INDEX.md#12-owner-decisions). Th
 4. **Prompt 17:** check the swipe row's momentum and snapping on real iOS Safari and Android Chrome, and the ledger preview on an iPad with a trackpad (it reports `hover: hover` and `pointer: fine`, so it will show the preview from 1024 px).
 5. **Prompt 19:** Home's in-page primaries are the hero's "Start a project" (from 768 px) and the closing's "Start a conversation"; the dock steps down for both.
 6. No VoiceOver or NVDA in this session: the accessibility tree and axe were checked instead. `npm audit` advisories in CRA 5's tree are unchanged.
+
+---
+
+## 2026-11-28 — Prompt 08: Studio / About
+
+**Branch:** `claude/peaceful-newton-qi7ig2`, from `117906f` (prompt 07 merged). **Baseline:** `cc2fc52d90987adcf62a5c286c4eb87d155fc3f3`, built in a scratchpad worktree and served on port 8081 for parity (removed afterwards). The prompt-07 build (`117906f`) was built in place for the bundle comparison.
+
+**Starting state, confirmed:**
+- Prompts 01–07 are done: the kit (`Section`, `Grid` / `Col`, `Eyebrow`, `Heading`, `Lede`, `Frame`, `Picture`, `FactList`, `Logo`, `Rule`, `Button`, `TextLink`, `VisuallyHidden`), `useMotionScope` with `data-m-now` and the reveal gate, the shell (`usePageReady`, masthead tone from the first section, the dock's `data-primary-cta` yield), the lead modal with `context.label`, `studioContent` (about, vision, mission, philosophy, principal) and the image keys `studio-band-wide`, `studio-band-tall`, `studio-detail` (prompt 02 kept `studio-detail`, with a tighter box). Home's "About the principal" link already pointed at `/about#principal` (prompt 07 Open item 1).
+- Owner decisions read from `00_INDEX.md` §12. None conflicts with the data in `src/data/`, so nothing needed reconciling. I compared `studioContent` with `pdftotext -layout` of the PDF: §2 and §3 match word for word. Applied here:
+  - D-11: typographic plate, no portrait, no quotation;
+  - D-23: Zenith without dates;
+  - D-03: no email row;
+  - D-04: the address as it stands;
+  - D-14: "From 10:00 AM";
+  - D-16: name-based directions.
+- No new content gap was found, so `00_INDEX.md` is unchanged.
+
+### Files
+
+**Created**
+
+| Area | Files |
+|---|---|
+| Page | `src/pages/Studio/StudioPage.jsx`, `StudioPage.module.css`, `index.js` |
+| Sections | `src/pages/Studio/sections/StudioHero`, `AboutSection`, `PhilosophySection`, `VisionMissionSection`, `PrincipalSection`, `VisitSection` (each `.jsx` + `.module.css`) |
+| Tests | `src/pages/Studio/__tests__/StudioPage.test.jsx` (17 tests) |
+
+**Changed**
+
+- `src/App.jsx`: `/about` lazy-loads `./pages/Studio/StudioPage` through the same `lazyWithPreload` / `lazyRoute`, and `ROUTE_PRELOADS` uses its `preload()`. The header comment names the page.
+- `src/config/seo.js`: `pages.about` and the header comment. `ROUTE_MAP` in `SEOHead.jsx` is untouched (the route is not new).
+- `src/components/ui/Frame/Frame.jsx` + `.module.css`: `ratioMd` and the `4/3` ratio (Deviation 1).
+- `CHANGELOG.md`.
+
+**Deleted:** `src/pages/About/` (`AboutPage.jsx`, `AboutPage.module.css`, `index.js`, and the six section pairs `HeroSection`, `IntersectionSection`, `PerspectiveSection`, `DifferenceSection`, `PrinciplesSection`, `CommitmentSection`). Before deleting, a search found no importer other than `App.jsx`.
+
+**Admin-frozen check:** `git diff --stat cc2fc52… -- src/admin src/theme src/styles/variables.css src/styles/global.css src/styles/animations.css src/styles/responsive.css src/styles/dulcey.css src/App.css src/hooks/useMediaQuery.js public/api .env .env.example` prints nothing. `siteConfig.js`, `studioContent.js`, `expertiseData.js` and `webhookSubmit.js` have no diff, so every admin-bound value is unchanged.
+
+### Decisions
+
+1. **The statement is the biography's last paragraph.** The prompt's statement ("He believes in continuously improving design skills…") is `principal.bio[4]` verbatim. It is therefore set apart once, in display-sm, and the prose shows `bio[0–3]`; repeating it would say it twice. It is a `<p>`, not a `<blockquote>` or `<q>`, with no quotation marks.
+2. **The hero band opens with the page when it is on the first screen.** A layout effect, declared before the section's `useMotionScope` so it runs first, gives the band `data-m-now` if its top is inside the viewport at mount.
+   - This holds on portrait phones, tablets and desktops (band top 431 px at 390 × 844, 534 at 1440 × 900). Its shutter then waits for the page curtain like the hero's lines, with a 0.55 s delay after the lede.
+   - Where the band starts below the fold (844 × 390, top 524) it keeps its scroll trigger and opens as it enters.
+   - Without this, a scroll-triggered shutter that is in view at load plays *under* the curtain after a transition (see Open item 2).
+3. **`usePageReady()` with no argument.** The page is ready as soon as it mounts, as the prompt says. The first screen is type, and the band's shutter opens after the curtain lifts, so the curtain is not held for the photograph.
+4. **The hero copy.**
+   - The `h1` is "Design with `<br>` *purpose.*", always two lines. On desktop the lede beside it then never meets a long first line.
+   - The lede names the place from `studio.address` (`heroLede()`), never typed.
+   - From 1024 px the `h1` (columns 1–8) and the lede (8–12) share grid row 1. The `h1` needs an explicit `start: 1`: auto-placed, it could not share column 8 and was pushed into implicit columns, which the first desktop screenshot showed.
+   - The lede's last baseline sits on the `h1`'s. A `calc()` margin covers the two faces' descent and half-leading (about 5 px).
+5. **One sticky offset for the page.**
+   - `StudioPage.module.css` defines `--studio-sticky-top: 120px` and `--studio-sticky-room` (`100svh` minus the offset and `--ia-dock-clearance`).
+   - The philosophy panel's 4:5 frame is `min(100%, (room − numeral − 24 px) × 0.8)` wide. The principal's slot is `min(100%, room × 0.8)`.
+   - Both therefore always fit between the offset and the dock. Measured: panel 552 / 504 / 684 / 864 px in a room of 552 / 504 / 684 / 864 px at 1024 × 768, 1280 × 720, 1440 × 900 and 1920 × 1080.
+   - Each sticky element sits in a column that stretches to its grid area, so it is released where the content ends. It is CSS `position: sticky` only, from 1024 px; nothing is pinned.
+6. **The numeral cross-fade.**
+   - An `IntersectionObserver` with `rootMargin: '-50% 0px -50% 0px'` (a zero-height line across the middle of the viewport) marks the principle crossing the middle.
+   - The four numerals share one grid cell, and only `[data-current]` is opaque, through a CSS opacity transition of 400 ms in-out. Under reduced motion there is no transition, so the numeral simply switches.
+   - No tween and no scroll listener are involved. This follows Home's ledger preview (prompt 07), which also cross-fades with CSS on state.
+   - The panel's numerals are `aria-hidden`. The list is an `<ol>` whose visible numbers are decorative too.
+7. **The philosophy panel exists from 1024 px only** (`display: none` below). Its `studio-detail` image is lazy, so it is never requested on phones. From 1024 the list items' numerals step down to a label: the panel carries the large one.
+8. **Vision.**
+   - The `h2`'s one italic phrase is the sentence's own last clause, "meaningful built environments.", and the words are unchanged (`visionParts()`, tested).
+   - "Max 22 words per measure" is read as a `22em` max-width: about columns 1–9 at 44 px.
+   - The section is named "Vision and mission" by `aria-label`, because its `h2` is a 26-word sentence.
+9. **Sub-headings are `h3`s set as labels:** "Mission", "Credentials", "Experience", "Education", "Talk", "Visit". The ending has no visible headline, so a visually hidden `h2`, "Visit and talk", names it and keeps the heading order.
+10. **Credentials.** `credentialFacts()` splits each PDF line at its first comma ("Registered Architect" / "Council of Architecture, India") and drops the closing full stop, as prompt 02 did for labels. A test re-joins every pair to the PDF line.
+11. **The experience table.**
+    - It is a `<table>` with explicit `role`s on the table, rows and cells (the redundant `rowgroup` roles were removed after a lint warning). It keeps its semantics when `display` changes: 6 rows and 3 column headers in the accessibility tree at 360, 390, 1024 and 1440.
+    - Below 1280 px it reflows to stacked rows: the organisation, then "role · period". The column there is too narrow for three columns (348 px at 390, 453 px at 1024).
+    - The empty Zenith period cell is hidden in the stacked layout and stays an empty cell in the table.
+    - The "·" separator is CSS content with an empty alternative text where supported.
+    - No horizontal scroll at any width (`scrollWidth = clientWidth`).
+12. **The principal's layout.**
+    - Phones: eyebrow, then the slot, then the name. From 768 the slot spans two explicit grid rows beside the eyebrow and the text: columns 1–3 / 4–8 on tablets, 1–5 / 7–12 on desktop.
+    - The plate is `data-tone="dark"` and `aria-hidden`: it is decorative, and the role follows the name in text. Its "IA" mark is the dark-tone `Logo` at 72 px with `alt=""`.
+    - A portrait's alt text is the principal's name.
+13. **Short phones keep the name above the dock on `/about#principal`.** At 360 × 640 and 375 × 667 the full-width 4:5 slot put the name under the dock (name bottom 667 / 688 against dock top 572 / 599).
+    - Below 768 px the slot is now `min(100%, (100svh − section padding − dock clearance − 12rem) × 0.8)` wide. It narrows only on screens under about 790 px tall (218 px wide at 360 × 640) and stays full width at 360 × 800, 390 × 844 and 412 × 915.
+14. **The ending.**
+    - Talk comes first in the DOM, as on phones. From 768 px Visit is placed on the left (both on grid row 1). The two groups are independent, so the tab order (Talk, then Visit) does not change meaning.
+    - "Talk to the studio" is a secondary `Button` without `data-primary-cta`, as the prompt asks, so the dock's "Start a project" stays the primary action on this page.
+    - New-tab links carry a visually hidden " (opens in a new tab)"; the kit adds `rel="noopener noreferrer"`.
+    - The bottom padding is `max(section rhythm, dock clearance + 24 px + safe area)`, as on Home's closing.
+15. **SEO.** The title goes through the site template, giving "About In-Arch Architects, Patna | IN-ARCH" (as prompt 04 did for the other PDF §12 titles). The description is the prompt's, and the keywords are three PDF §12 terms the page supports. The breadcrumb is `navLabel('/about')`, "Studio".
+16. **`nameParts` comes from Home's `PrincipalSection`.** Home is eager, so the import costs the Studio chunk nothing.
+17. **Bundle.**
+    - Main JS grows from 601,241 B (196,795 B gzip, the prompt-07 build in place) to 606,277 B (198,023 B gzip), **+1.2 KB gzip**.
+    - The source maps list the same modules in both mains; only `Frame.jsx`, `seo.js` and `App.jsx` differ. No Studio module is in main.
+    - The growth is webpack's module wrappers: `Section`, `Rule`, `FactList`, `Lede`, `Container`, `Frame` and the motion hook were scope-hoisted into main while only main used them. Now the Studio chunk imports them too, so each is emitted as a shared module. Every later page that uses the kit shares this cost.
+    - The Studio chunk is 4,529 B JS + 2,855 B CSS gzip. There are 23 JS files, as before (the old About chunk is replaced). No chunk contains `__lab`.
+
+### Deviations from the prompt
+
+1. **Kit extension (not in the file list).** `Frame` takes `ratioMd` (another ratio from 768 px) and accepts `4/3`. Without them the band could not be 4:3 on phones and 21:9 from 768 in one frame. Both are additive: no existing call passes `ratioMd`, and the CSS falls back level by level.
+2. **The SEO title carries the site template's suffix** ("… | IN-ARCH"), like every other IN-ARCH page title (Decision 15).
+3. **The hero band's shutter plays with the page when the band is on the first screen** rather than strictly "as it enters" (Decision 2). Below the fold it does open as it enters.
+4. **The statement is not repeated in the biography prose** (Decision 1).
+5. **The vision `h2` gets one italic phrase** (Decision 8). The prompt gives no accent for it, but every headline carries one.
+6. **The experience table stacks below 1280 px**, not only on phones (Decision 11).
+7. **The portrait slot narrows on short phones** so the deep link shows the name (Decision 13). It is still full width on phones of usual height.
+8. **Extra pieces:** the test file; the exports `heroLede`, `studioPlace`, `aboutProse`, `visionParts`, `biography`, `credentialFacts`, `educationLines`, `CLOSING_SOURCE` and the title ids.
+9. **The QA passes were driven with Playwright** (as in prompts 01–07). The scripts stayed in the session scratchpad.
+
+### Evidence
+
+- **`npm test -- --watchAll=false`:** 22 suites, **300 tests, all passing** (283 before + 17 Studio).
+- **`npm run build`:** "Compiled successfully.", no warnings (sizes in Decision 17).
+- **Content against the PDF** (`pdftotext -layout`):
+  - The tests tie every block to `studioContent`, verbatim: about[1–4], the four principles, the vision, the five mission points, bio[0–4], the five credentials, the experience in the PDF's order and the education.
+  - Rendered page: of 68 text blocks, 45 are found in the PDF and 23 are the prompt's own wording or `studio` facts (eyebrows, headings, labels, the address, hours and phone). Nothing else appears.
+  - No quotation marks, years of experience, founding year, team, client list, rating or email on the page.
+- **`public-check`** (production build on PHP, 10 routes × 7 widths + reduced motion): **81/90 clean**, and `/about` is **9/9**.
+  - The 9 failures are the pre-existing legacy `/contact` card-label contrast (prompt 01 Open item 7), the same as prompts 01–07.
+  - `/about` was re-run after the last CSS change: 9/9.
+- **Layout** at 360 × 800, 390 × 844, 768 × 1024, 1024 × 768, 1280 × 720, 1440 × 900, 1920 × 1080 and 844 × 390:
+  - The `h1` is two lines at every width (40.3 → 104 px).
+  - No element of `main` reaches past the viewport, and there is no horizontal scroll.
+  - The hero copy starts 120 / 152 / 192 px from the top, clear of the masthead.
+  - The band is edge to edge, and the crops show none of prompt 02's listed blemishes.
+- **Sticky** (Playwright, 72/72 interaction checks):
+  - About heading, philosophy panel and principal slot sit at exactly 120 px at three scroll points at 1024, 1280, 1440 and 1920. Each is released with its column's end (bottoms equal ±1 px).
+  - They are `static` at 768 and 390.
+- **Cross-fade:** scrolling each principle to the middle at 1440 gives 01 → 02 → 03 → 04, one numeral opaque each time. The transition is 0.4 s, and under reduced motion it is effectively 0.
+- **Deep link `/about#principal`:**
+  - It works typed, from Home's "About the principal" (through the curtain) and set while already on `/about`.
+  - The section lands 32 px from the top, with the name above the dock, at 390 × 844, 360 × 800, 1440 × 900 and 844 × 390.
+  - After Decision 13 it also holds at 360 × 640, 375 × 667 and 412 × 915.
+- **Portrait slot:** a temporary build with `studio.principal.portrait = 'studio-detail'`, served on port 8091, rendered the photograph (alt "Ar. Mohammad Hassanuddin", lazy). The slot box, the name's position and the section height were identical to the plate build at 390, 768 and 1440. The change was reverted (`git diff src/data/` is empty).
+- **The ending** at 390 and 1440:
+  - `tel:+917292831128`; WhatsApp `https://wa.me/917292831128?text=…` with `target="_blank"` and `noopener`; "Get directions" goes to `studioMapsHref` and opens Google Maps in a new tab. Both new-tab links read "(opens in a new tab)". There is no `mailto:`.
+  - The button opens the sheet "From: Studio" and sends `source: "studio-closing"`, `context_label: "Studio"`. Escape returns focus to it.
+- **Keyboard** (390 touch, 1440, 844 × 390):
+  - `main`'s stops are the phone, WhatsApp, "Talk to the studio" and "Get directions", in that order; the rest of the page is reading.
+  - Every stop has a 2 px solid terracotta-300 ring.
+  - No focused control is ever under the visible dock.
+  - Enter and Space open the sheet, and Escape returns focus.
+- **Accessibility tree:**
+  - One `h1`, then the `h2`s and `h3`s with no skipped level. Six named regions; `header`, `main`, `nav` and `footer`.
+  - The band and the detail photograph have their manifest alt text. The plate's mark is hidden.
+  - The experience is a table named "Experience" in both layouts.
+- **Contrast** (computed, per colour pair, at 1440): every pair passes. Examples: terracotta-500 accents 3.75:1 on ivory and 3.36:1 on sand (display sizes only); terracotta-700 labels 5.77 / 5.17:1; ink-2 8.15:1; mist 8.93:1; terracotta-300 7.74:1 on forest. The smallest text is 12 px (labels). No text sits on a photograph.
+- **Motion:**
+  - After a curtain transition from `/` the band's cover stays at 0 until the curtain has lifted, then opens.
+  - On first load it opens after the lede.
+  - Under reduced motion: no SplitText, no transform or opacity change on any `data-m` element, and every shutter cover rests off its image.
+- **`node scripts/qa/lead-flow.js`:** 37/37 at 390 and 37/37 at 1440.
+- **Admin parity:** calibration (baseline against itself) 34/34; **baseline against this branch 34/34 identical**, with 0 pixels and 0 digest differences.
+- **Regression pass** (production build on PHP, Playwright; **53/53**):
+  - **Routes:** the nine routes at 390 and 1440, each with one `h1`, `main` / `nav` / `footer`, no overflow and no console errors, and the right robots. `/about` is "About In-Arch Architects, Patna | IN-ARCH", `index, follow`; the old pages keep their titles until their prompts.
+  - **Sheet from four CTAs:** `studio-closing`, `dock-cta`, `home-hero` and `home-closing`. Each time focus is inside, scroll is locked, Escape closes it, and focus and scroll come back.
+  - **Enquiries:**
+    - a real enquiry from `/about` carries all 21 frozen keys (+ `context_label`), with `source: studio-closing`, `status: new`, `state` empty and `page_url …/about`, and the success state shows;
+    - the same mobile through `/contact` gives `duplicate: true` and the notice.
+  - **Admin**, with 15 leads (11 seeded for pagination):
+    - redirect to login, login, and the dashboard (counts, trend, the new lead in Recent Enquiries, the heading unchanged, CSV export);
+    - leads page: search (exactly one row); Status, Interested In ("Residential Architecture"), Source (`studio-closing`) and Date Range, then Clear All; sorting by Name both ways; pagination 1–10 → 11–15;
+    - inline status (saved `contacted`); bulk select with its cancelled dialog; CSV export (contains the lead) and import ("Imported 0 leads (15 duplicates skipped)"); row delete (Cancel keeps it, Delete removes it);
+    - detail page with every field; a note and a status change, both saved (`consultation_booked`);
+    - the Guidelines gate and its four tabs, and logout. No page errors.
+- `grep -ri "dulcey\|pharma\|trust. security" src/pages/Studio` prints nothing. `src/pages/About/` no longer exists, and nothing imports it.
+- Every test lead and the parity seeds were deleted. `build/api/data/leads.json` is `[]`, and `public/api/data/` was never created.
+
+### Open items
+
+1. **Prompt 09:** Home still links to `/expertise#process` and `#e01`–`#e07` (prompt 07 Open item 1). `/about#principal` is now supplied.
+2. **Prompt 16 (motion):**
+   - A scroll-triggered reveal that is already in view when a page mounts plays under the page curtain. Studio's band works around it per element (Decision 2). Consider making the reveal gate hold scroll-triggered reveals created while it is held, site-wide.
+   - `studio-detail` (a 1.46 : 1 crop) is centre-cropped by its 4:5 frame: the fan's left blade is cut. A dedicated 4:5 cut or an `object-position` would frame it better.
+3. **Prompt 17:**
+   - Check the sticky columns and the short-phone slot (Decision 13) with real mobile toolbars: `svh` is the small viewport.
+   - Check the experience table at 200 % zoom and with text spacing.
+4. **Prompt 18:**
+   - `/about`'s LCP was not measured. It is probably the `h1` or the band. A route-guarded preload of the band in `public/index.html`, like Home's, is an option; `index.html` belongs to prompts 04 / 06 / 18.
+   - A real screen-reader pass of the stacked table and the hidden headings.
+5. **Prompt 19:** Studio has no in-page primary button, so the dock's "Start a project" is the primary action throughout and "Talk to the studio" is secondary, as specified. Confirm in the CTA review.
+6. No VoiceOver or NVDA in this session: the accessibility tree and axe were checked instead. `npm audit` advisories in CRA 5's tree are unchanged.

@@ -5,7 +5,7 @@
    masthead, Index Dock, index overlay, footer, page transitions), plus the
    `/admin/*` routes and a `*` catch-all.
 
-   Public routes: / · /about · /expertise · /interior-design · /portfolio ·
+   Public routes: / · /about (the Studio page) · /expertise · /interior-design · /portfolio ·
    /portfolio/:slug · /industries (still reachable by URL; out of the
    navigation, forwarded by prompt 11) · /contact · *. The old page bodies
    render inside the new shell until their prompts replace them;
@@ -65,7 +65,7 @@ const lazyWithPreload = (factory) => {
 };
 
 // Pages (Lazy loaded)
-const AboutPage = lazyWithPreload(() => import('./pages/About/AboutPage'));
+const StudioPage = lazyWithPreload(() => import('./pages/Studio/StudioPage'));
 const ExpertisePage = lazyWithPreload(() => import('./pages/Expertise/ExpertisePage'));
 const IndustriesPage = lazyWithPreload(() => import('./pages/Industries/IndustriesPage'));
 const ContactPage = lazyWithPreload(() => import('./pages/Contact/ContactPage'));
@@ -90,7 +90,7 @@ const AdminProtectedShell = lazyWithPreload(() =>
 // Public path → its chunk's preload(), for TLink's warm-up. Home is eager.
 // Keep in step with the <Route> table below.
 const ROUTE_PRELOADS = [
-  { path: '/about', preload: AboutPage.preload },
+  { path: '/about', preload: StudioPage.preload },
   { path: '/expertise', preload: ExpertisePage.preload },
   { path: '/interior-design', preload: PendingPage.preload },
   { path: '/portfolio', preload: PendingPage.preload },
@@ -488,7 +488,7 @@ const App = () => {
               {/* Public site — one shared IN-ARCH shell */}
               <Route element={publicShell}>
                 <Route path="/" element={eagerRoute(<HomePage />)} />
-                <Route path="/about" element={lazyRoute(<AboutPage />)} />
+                <Route path="/about" element={lazyRoute(<StudioPage />)} />
                 <Route
                   path="/expertise"
                   element={lazyRoute(<ExpertisePage />)}

@@ -1,0 +1,68 @@
+/* ============================================
+   Studio / Visit and talk
+   Phones first (360–767), then 768, then 1024 and up.
+   The bottom padding never drops below the dock's clearance plus 24 px,
+   so the last control is never under the floating dock when the band's
+   foot reaches the bottom of the screen.
+   ============================================ */
+
+.visit {
+  padding-bottom: max(
+    var(--ia-section-y),
+    calc(var(--ia-dock-clearance) + var(--ia-space-6) + env(safe-area-inset-bottom, 0px))
+  );
+}
+
+.grid {
+  row-gap: var(--ia-space-16);
+}
+
+.label {
+  color: var(--ia-fg-2);
+}
+
+.big {
+  margin-top: var(--ia-space-4);
+  color: var(--ia-fg);
+}
+
+.address {
+  font-style: normal;
+}
+
+.line {
+  display: block;
+}
+
+.hours {
+  margin-top: var(--ia-space-3);
+  color: var(--ia-fg-2);
+}
+
+.links {
+  margin-top: var(--ia-space-4);
+}
+
+.action {
+  margin-top: var(--ia-space-8);
+}
+
+/* ---------- From 768: Visit left, Talk right ---------- */
+@media (min-width: 768px) {
+  .talk,
+  .visitCol {
+    grid-row: 1;
+  }
+
+  .big {
+    margin-top: var(--ia-space-6);
+  }
+
+  .links {
+    margin-top: var(--ia-space-6);
+  }
+
+  .action {
+    margin-top: var(--ia-space-10);
+  }
+}

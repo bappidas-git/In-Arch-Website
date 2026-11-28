@@ -1,0 +1,16 @@
+/* ============================================
+   Studio — page-level values shared by its sections
+   --------------------------------------------
+   --studio-sticky-top  where the sticky columns rest (About, Philosophy,
+                        Principal), 120 px from the top of the viewport.
+                        The masthead scrolls away with the page, so this is
+                        only breathing room.
+   --studio-sticky-room the viewport height a sticky panel may use without
+                        reaching under the floating dock.
+   Sticky applies from 1024 px only; below that everything is plain flow.
+   ============================================ */
+
+.page {
+  --studio-sticky-top: 120px;
+  --studio-sticky-room: calc(100svh - var(--studio-sticky-top) - var(--ia-dock-clearance));
+}

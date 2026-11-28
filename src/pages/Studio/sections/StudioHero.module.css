@@ -1,0 +1,81 @@
+/* ============================================
+   Studio / Hero
+   Phones first (360–767), then 768, then 1024 and up.
+   The section has no bottom padding: the band closes it, and the next
+   section's own padding opens the reading.
+   ============================================ */
+
+.hero {
+  /* Clear of the 72 px masthead. */
+  padding-top: 120px;
+}
+
+.grid {
+  row-gap: 0;
+}
+
+.eyebrow {
+  margin-bottom: var(--ia-space-6);
+}
+
+/* "Design with / purpose." — two lines at every width, so the lede beside
+   it on desktop never meets a long first line. */
+.title {
+  overflow-wrap: normal;
+}
+
+.ledeCol {
+  margin-top: var(--ia-space-6);
+}
+
+/* Edge to edge: the frame sits outside the container. */
+.band {
+  margin-top: var(--ia-space-12);
+}
+
+/* ---------- Tablet (768–1023) ---------- */
+@media (min-width: 768px) {
+  /* Clear of the 88 px masthead. */
+  .hero {
+    padding-top: 152px;
+  }
+
+  .eyebrow {
+    margin-bottom: var(--ia-space-8);
+  }
+
+  .ledeCol {
+    margin-top: var(--ia-space-8);
+  }
+
+  .band {
+    margin-top: var(--ia-space-16);
+  }
+}
+
+/* ---------- Desktop (1024 and up) ----------
+   The h1 in columns 1–8 and the lede in 8–12 share one row; the lede's
+   last baseline sits on the h1's (the difference between the two faces'
+   descent and half-leading, about 5 px). */
+@media (min-width: 1024px) {
+  .hero {
+    padding-top: 192px;
+  }
+
+  .titleCol,
+  .ledeCol {
+    grid-row: 1;
+  }
+
+  .ledeCol {
+    margin-top: 0;
+  }
+
+  .lede {
+    margin-bottom: calc(0.1485 * var(--ia-fs-display-xl) - 0.442 * var(--ia-fs-body-lg));
+  }
+
+  .band {
+    margin-top: var(--ia-space-24);
+  }
+}

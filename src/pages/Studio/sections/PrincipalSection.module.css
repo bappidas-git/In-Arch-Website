@@ -1,0 +1,308 @@
+/* ============================================
+   Studio / 04 — Principal architect
+   Phones first (360–767), then 768, then 1024 and up.
+   ============================================ */
+
+.principal .grid {
+  row-gap: 0;
+}
+
+.eyebrow {
+  margin-bottom: var(--ia-space-6);
+}
+
+/* ---------- The portrait slot ----------
+   Phones: full width, above the name. On a short phone (under about
+   790 px of height) the 4:5 slot narrows, so that arriving at #principal
+   — the section's top 32 px from the top of the screen — the name below
+   the slot still sits above the dock: the room is the screen minus the
+   section's padding, the dock's clearance and 12rem for the offset, the
+   eyebrow, the gap and two lines of the name. */
+.slot {
+  width: min(100%, calc((100svh - var(--ia-section-y) - var(--ia-dock-clearance) - 12rem) * 0.8));
+}
+
+/* The plate fills the frame's media layer. */
+.plate {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ia-space-6);
+}
+
+.mark {
+  object-position: center;
+}
+
+.plateLabel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--ia-space-6);
+  text-align: center;
+  color: var(--ia-fg-2);
+}
+
+/* ---------- The text ---------- */
+
+.textCol {
+  margin-top: var(--ia-space-10);
+}
+
+/* "Ar. Mohammad / Hassanuddin." — the surname never breaks. */
+.name {
+  max-width: 12ch;
+  overflow-wrap: normal;
+}
+
+.role {
+  margin-top: var(--ia-space-5);
+  color: var(--ia-fg-2);
+}
+
+.prose {
+  margin-top: var(--ia-space-8);
+}
+
+.paragraph {
+  max-width: 62ch;
+  color: var(--ia-fg-2);
+}
+
+.paragraph + .paragraph {
+  margin-top: var(--ia-space-5);
+}
+
+/* Set apart: the document's own description of him — no quotation marks. */
+.statement {
+  max-width: 30ch;
+  margin-top: var(--ia-space-12);
+  padding-top: var(--ia-space-8);
+  border-top: 1px solid var(--ia-line);
+  color: var(--ia-fg);
+}
+
+.block {
+  margin-top: var(--ia-space-12);
+}
+
+.blockTitle {
+  margin-bottom: var(--ia-space-4);
+  color: var(--ia-accent);
+}
+
+/* ---------- Experience: stacked rows below 1280 px ----------
+   The table keeps its semantics (explicit roles) while each row is laid
+   out as a small block: the organisation, then the role and the period
+   on one line that wraps. The column headers stay for assistive
+   technology. */
+.table {
+  display: block;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tbody {
+  display: block;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--ia-space-3);
+  row-gap: var(--ia-space-1);
+  padding-block: var(--ia-space-4);
+  border-top: 1px solid var(--ia-line);
+}
+
+.row:last-child {
+  border-bottom: 1px solid var(--ia-line);
+}
+
+.row > td {
+  display: block;
+  padding: 0;
+  text-align: left;
+}
+
+.org {
+  flex: 1 0 100%;
+  color: var(--ia-fg);
+}
+
+.designation {
+  color: var(--ia-fg-2);
+}
+
+/* "Registered Architect · December 2020 – Present" */
+.period:not(:empty)::before {
+  content: '·';
+  content: '·' / ''; /* silent for assistive technology where supported */
+  margin-right: var(--ia-space-3);
+  color: var(--ia-fg-3);
+}
+
+.period {
+  color: var(--ia-fg-2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* No period supplied (the Zenith row, D-23): nothing is shown. */
+.period:empty {
+  display: none;
+}
+
+.education {
+  display: grid;
+  gap: var(--ia-space-1);
+}
+
+.degree {
+  color: var(--ia-fg);
+}
+
+.college {
+  color: var(--ia-fg-2);
+}
+
+/* ---------- Tablet (768–1023) ----------
+   The slot in columns 1–3, beside the eyebrow and the text in 4–8. */
+@media (min-width: 768px) {
+  .eyebrow {
+    margin-bottom: var(--ia-space-8);
+  }
+
+  .eyebrowCol {
+    grid-row: 1;
+  }
+
+  .slotCol {
+    grid-row: 1 / span 2;
+    align-self: start;
+  }
+
+  .slot {
+    width: 100%;
+  }
+
+  .textCol {
+    grid-row: 2;
+    margin-top: 0;
+  }
+
+  .prose {
+    margin-top: var(--ia-space-10);
+  }
+
+  .statement,
+  .block {
+    margin-top: var(--ia-space-16);
+  }
+}
+
+/* ---------- Desktop (1024 and up) ----------
+   The slot column stretches to the whole section; the slot sticks 120 px
+   from the top and is never taller than the room above the dock. */
+@media (min-width: 1024px) {
+  .slotCol {
+    align-self: stretch;
+  }
+
+  .slotHold {
+    position: sticky;
+    top: var(--studio-sticky-top, 120px);
+  }
+
+  .slot {
+    width: min(100%, calc(var(--studio-sticky-room, 60svh) * 0.8));
+  }
+
+  .statement {
+    max-width: 26ch;
+  }
+}
+
+/* ---------- From 1280: the experience as a table ---------- */
+@media (min-width: 1280px) {
+  .table {
+    display: table;
+    table-layout: auto;
+  }
+
+  .thead {
+    position: static;
+    display: table-header-group;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+  }
+
+  .thead th {
+    padding: 0 var(--ia-space-4) var(--ia-space-3) 0;
+    color: var(--ia-fg-2);
+    text-align: left;
+    vertical-align: bottom;
+  }
+
+  .tbody {
+    display: table-row-group;
+  }
+
+  .row {
+    display: table-row;
+    padding: 0;
+    border-top: 0;
+  }
+
+  .row:last-child {
+    border-bottom: 0;
+  }
+
+  .row > td {
+    display: table-cell;
+    padding: var(--ia-space-4) var(--ia-space-4) var(--ia-space-4) 0;
+    border-top: 1px solid var(--ia-line);
+    vertical-align: baseline;
+  }
+
+  .row:last-child > td {
+    border-bottom: 1px solid var(--ia-line);
+  }
+
+  .row > td:last-child,
+  .thead th:last-child {
+    padding-right: 0;
+  }
+
+  .period:not(:empty)::before {
+    content: none;
+  }
+
+  .period:empty {
+    display: table-cell;
+  }
+
+  .period {
+    white-space: nowrap;
+  }
+}

@@ -201,6 +201,31 @@ Home is now entirely IN-ARCH's: eight bands in one `ia` root, alternating dark �
 
 - The four old Home sections and their stylesheets (`BeliefSection`, `ExpertiseIndexSection`, `WhoWeServeSection`, `ClosingCtaSection`) and `HomePage.module.css`. Home no longer links to `/industries`, which still resolves.
 
+### Prompt 08 — Studio (`/about`) (2026-11-28)
+
+The About page is now IN-ARCH's **Studio** page, at the same URL. It is word-first: a typographic opening, sticky reading columns and a practical ending, built only from the client's document. **Every admin screen is unchanged** (`scripts/qa/parity.js --suite admin`: 34/34 identical to `cc2fc52`).
+
+#### Added
+
+- **`src/pages/Studio/`**, lazy-loaded at `/about`, with six bands in one `ia` root:
+  - **Hero** (light): "Design with *purpose.*", the studio's lede and one full-bleed photograph (`studio-band-tall` 4:3 on phones, `studio-band-wide` 21:9 from 768 px) that opens with a shutter and drifts.
+  - **01 About In-Arch** (light): the PDF's "About In-Arch" paragraphs two to five. From 1024 px the heading sticks 120 px from the top while the prose scrolls past.
+  - **02 Design philosophy** (dark): the four principles. Phones and tablets show numbered blocks. From 1024 px a sticky panel holds the current principle's numeral at display-2xl and the `studio-detail` photograph, and the numeral cross-fades as each principle crosses the middle of the screen. Nothing is pinned.
+  - **03 Vision and mission** (sand): the vision as the `h2`, then the five mission points numbered 01–05, in two columns from 1024 px.
+  - **04 Principal architect** (light, `#principal`): name, role, biography, the document's own statement about him (set apart, without quotation marks), five credentials, the experience table (stacked rows below 1280 px, Zenith without dates) and education. The portrait slot shows a typographic plate until `studio.principal.portrait` names a photograph.
+  - **Visit and talk** (dark), how Studio ends: the address, "From 10:00 AM", directions, the phone, WhatsApp and a secondary "Talk to the studio" button (`studio-closing`, context "Studio"). There is no email row.
+- **Kit:** `Frame` takes `ratioMd` (another ratio from 768 px) and the `4/3` ratio.
+- **Tests:** the page and its six sections (300 in all).
+
+#### Changed
+
+- `src/App.jsx`: `/about` lazy-loads `./pages/Studio/StudioPage`.
+- `src/config/seo.js`: `pages.about` is "About In-Arch Architects, Patna | IN-ARCH", with a description from the page's own facts and the breadcrumb "Studio".
+
+#### Removed
+
+- `src/pages/About/` (the old page and its six sections). The `about-cta` source is replaced by `studio-closing`.
+
 ## [2.31.0] — 2026-08-20 — Who We Serve hero: the right edge dissolves too
 
 `[2.30.0]` drew the frame at the section's full width, which put the
