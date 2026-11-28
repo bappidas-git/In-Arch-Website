@@ -158,6 +158,19 @@ export const homeIntro = {
 export const heroLine =
   'Architecture and interior design solutions that bring together creativity, functionality and thoughtful detailing.';
 
+/** §10 A — the three words under the hero's credit line. */
+export const heroDisciplines = ['Architecture', 'Interior Design', '3D Visualisation'];
+
+/**
+ * §2 — the Home opening statement: the second "About In-Arch" sentence with
+ * only its opening words ("The practice believes that") removed, set as two
+ * sentences. `accent` is its last clause, the headline's one italic phrase.
+ */
+export const homeStatement = {
+  lead: 'Architecture is more than the creation of buildings. It is about understanding people, their aspirations and',
+  accent: 'the way they interact with their surroundings.',
+};
+
 /** §9 — the contact invitation. */
 export const contactInvitation = {
   title: "Let's Create Something Meaningful Together.",
@@ -190,6 +203,8 @@ const studioContent = {
   principal,
   homeIntro,
   heroLine,
+  heroDisciplines,
+  homeStatement,
   contactInvitation,
   closingCta,
   ctaLabels,

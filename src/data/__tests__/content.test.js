@@ -125,6 +125,17 @@ describe('studio content', () => {
     expect(studioContent.principal.bio).toHaveLength(5);
   });
 
+  it('sets the Home statement from the second About sentence, only its opening words removed', () => {
+    const { lead, accent } = studioContent.homeStatement;
+    const joined = `${lead} ${accent}`.replace('buildings. It is', 'buildings; it is');
+    expect(studioContent.about[1]).toBe(`The practice believes that ${joined.charAt(0).toLowerCase()}${joined.slice(1)}`);
+  });
+
+  it('keeps the hero credit words and the principal title from the PDF', () => {
+    expect(studioContent.heroDisciplines).toEqual(['Architecture', 'Interior Design', '3D Visualisation']);
+    expect(studioContent.principal.role.startsWith(`${studio.principal.title} |`)).toBe(true);
+  });
+
   it('lists the experience in the PDF order, with no dates for Zenith', () => {
     const rows = studioContent.principal.experience;
     expect(rows.map((r) => r.organisation)).toEqual([

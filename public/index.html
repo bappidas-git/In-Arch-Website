@@ -84,7 +84,7 @@
     />
     <meta
       name="keywords"
-      content="In-Arch Architects &amp; Interior Designer, Architects in Patna, Best architects in Patna, Architecture firms in Patna, Interior designers in Patna, Residential architects in Patna, Commercial architects in Bihar, House design in Patna, Interior design consultancy in Patna, Architectural 3D visualisation, Modular kitchen design in Patna, Building planning and design in Patna"
+      content="In-Arch Architects &amp; Interior Designer, Architects in Patna, Architecture firms in Patna, Interior designers in Patna, Residential architects in Patna, Commercial architects in Bihar, House design in Patna, Modern house elevation design, Interior design consultancy in Patna, Architectural 3D visualisation, Modular kitchen design in Patna, Building planning and design in Patna"
     />
     <meta name="author" content="In-Arch Architects &amp; Interior Designer" />
     <meta name="robots" content="index, follow" />
@@ -206,36 +206,66 @@
     <!-- =========================================
          LCP image preload — home route only
          --------------------------------------------
-         The home hero backdrop is the largest above-the-fold asset and lives
-         inside a React-rendered section, so without a preload it is not
-         discovered until the main bundle has parsed and mounted. That makes
-         this preload load-bearing rather than an optimisation.
+         The Home hero photograph is the largest above-the-fold asset and
+         lives inside a React-rendered section, so without a preload it is
+         not discovered until the main bundle has parsed and mounted. That
+         makes this preload load-bearing rather than an optimisation.
 
          This is a SPA: index.html is served for every route, so a static
-         <link rel="preload"> here would also download the home hero on
-         /about, /expertise, /industries and /contact — where it is never
-         used, costing those routes bandwidth and LCP. The guard keeps the
-         preload for the route that needs it and skips it everywhere else.
-         Runs synchronously in <head>, so discovery still happens long
-         before the bundle executes.
+         <link rel="preload"> here would also download the hero on every
+         other route, where it is never used. The guard keeps the preload for
+         `/` and skips it everywhere else. Runs synchronously in <head>, so
+         discovery still happens long before the bundle executes.
 
-         The hero ships one width, so this preloads the WebP directly. `type`
-         is what keeps that honest: a browser that cannot decode image/webp
-         skips the preload rather than wasting it.
+         The hero is art-directed: the 4:5 crop below 768 px, the 16:9 crop
+         from 768. Each preload carries its crop's AVIF set with `media`,
+         `imagesrcset` and `imagesizes`, so the browser fetches exactly the
+         candidate the <picture> will pick, and only one of the two. `type`
+         keeps it honest: a browser without AVIF skips both and the picture
+         falls back to WebP / JPEG on its own.
 
-         Keep the href in sync with `HERO_BG` in
+         Keep the sets in sync with `home-hero-tall` / `home-hero-wide` in
+         src/data/imageManifest.json and with `ART` and `sizes` in
          src/pages/Home/sections/HeroSection.jsx.
+
+         The italic Fraunces face is preloaded here too, for `/` only: the
+         hero headline's second line is the italic accent, and without it the
+         swap from the fallback face reflows the headline.
          ========================================= -->
     <script>
       (function () {
         if (window.location.pathname !== "/") return;
-        var link = document.createElement("link");
-        link.rel = "preload";
-        link.as = "image";
-        link.type = "image/webp";
-        link.href = "/images/hero-home-v6-2880.webp";
-        link.setAttribute("fetchpriority", "high");
-        document.head.appendChild(link);
+        var head = document.head;
+        var heroes = [
+          {
+            media: "(max-width: 767px)",
+            srcset:
+              "/images/inarch/home-hero-tall-480.avif 480w, /images/inarch/home-hero-tall-768.avif 768w, /images/inarch/home-hero-tall-1080.avif 1080w",
+          },
+          {
+            media: "(min-width: 768px)",
+            srcset:
+              "/images/inarch/home-hero-wide-768.avif 768w, /images/inarch/home-hero-wide-1080.avif 1080w, /images/inarch/home-hero-wide-1440.avif 1440w, /images/inarch/home-hero-wide-1920.avif 1920w",
+          },
+        ];
+        for (var i = 0; i < heroes.length; i += 1) {
+          var link = document.createElement("link");
+          link.rel = "preload";
+          link.as = "image";
+          link.type = "image/avif";
+          link.media = heroes[i].media;
+          link.setAttribute("imagesrcset", heroes[i].srcset);
+          link.setAttribute("imagesizes", "100vw");
+          link.setAttribute("fetchpriority", "high");
+          head.appendChild(link);
+        }
+        var italic = document.createElement("link");
+        italic.rel = "preload";
+        italic.as = "font";
+        italic.type = "font/woff2";
+        italic.crossOrigin = "anonymous";
+        italic.href = "%PUBLIC_URL%/fonts/fraunces-v1-latin-italic.woff2";
+        head.appendChild(italic);
       })();
     </script>
 

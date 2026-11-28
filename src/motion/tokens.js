@@ -24,7 +24,18 @@ export const DUR_NAMED = {
   overlayIn: 0.5, // index overlay (and lead sheet) rising in
   overlayOut: 0.35, // … and leaving
   curtainLift: 0.55, // the page curtain leaving upward (it covers in DUR.ui)
+  heroSettle: 1.6, // the Home hero photograph settling on load
 };
+
+/** `data-m="settle"`: the photograph eases in from this scale to 1. */
+export const SETTLE = { from: 1.08 };
+
+/**
+ * `data-m="words"`: a statement's words go from 25 % to 100 % opacity as the
+ * block's top travels from 80 % to 35 % of the viewport height (scrubbed,
+ * once: when every word is opaque the trigger retires and they stay so).
+ */
+export const WORDS = { from: 0.25, start: 'top 80%', end: 'top 35%', stagger: 0.1 };
 
 export const EASE = {
   out: 'power3.out', // reveals

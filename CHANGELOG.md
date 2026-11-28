@@ -152,6 +152,29 @@ The site's one enquiry form and its sheet are rebuilt in the IN-ARCH design. **T
 
 - The form's use of `swalHelper` / `sweetalert2` (the files stay until prompt 14); no chunk ships sweetalert2 any more.
 
+### Prompt 06 — Home: hero and opening (2026-11-28)
+
+The first two screens of Home are IN-ARCH's. The four remaining old Home sections render unchanged below them until prompt 07 (identical DOM; pixels equal within ±2 levels), and **every admin screen is unchanged** (`scripts/qa/parity.js --suite admin`: 34/34 identical to `cc2fc52`).
+
+#### Added
+
+- **The hero, "Threshold"** (`HeroSection`, rewritten): the client's living-hall photograph full-screen (the 4:5 crop below 768 px, 16:9 from 768), the tagline from `studio.tagline` as a two-line `h1` (Fraunces at its display optical size, so it stays on two lines from 340 px), the PDF's supporting line, "Start a project" (`home-hero`, the in-page primary from 768 px; the dock carries it on phones) and "View selected work" → `/portfolio`, and the principal, place and three disciplines from the data. A forest scrim anchored to the copy keeps every text run at ≥ 4.5:1 (the accent at ≥ 3:1) on the photograph's brightest pixel. On load the photograph settles, the headline lines rise through their masks and the rest follows; on scroll the photograph drifts.
+- **The opening statement, "The practice"** (`ManifestoSection`, new): the PDF's sentence on what architecture is, set large, its words filling in as it rises; the first About paragraph; "Discover the studio" → `/about`; a 4:5 photograph that bleeds off the right edge on phones.
+- **Motion:** `useMotionScope` gains `data-m="settle"` (scale 1.08 → 1 over 1.6 s), `data-m="words"` (scrubbed word fill, once) and `data-m-rise` (a per-element rise distance).
+- **Data:** `heroDisciplines` and `homeStatement` in `studioContent.js`; `studio.principal.title`.
+- **Tests:** the hero, the statement, the tagline split, the Home SEO entry and the service schema (265 in all).
+
+#### Changed
+
+- `HomePage`: the new opening inside `ia`, then the four old sections in a sibling wrapper without it. The page signals the transition once the hero photograph has loaded.
+- `public/index.html`: on `/` only, the hero preload is now the two art-directed AVIF sets (`media`, `imagesrcset`, `imagesizes`, `fetchpriority="high"`) plus the italic Fraunces face; the static keywords match the new Home entry.
+- `src/config/seo.js`: Home's title, description and keywords from PDF §12 (without the superlative "Best architects in Patna"); the service schema lists the seven services with their `/expertise#e0N` links.
+- `scripts/qa/parity.js`: also blocks Iconify's fallback API hosts, which made admin icons load on one side only now and then.
+
+#### Removed
+
+- The old Home hero and its stylesheet, the marquee strip and the "Who we are" section.
+
 ## [2.31.0] — 2026-08-20 — Who We Serve hero: the right edge dissolves too
 
 `[2.30.0]` drew the frame at the section's full width, which put the

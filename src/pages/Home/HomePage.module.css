@@ -1,11 +1,10 @@
 /* ============================================
-   HomePage — page shell only.
+   HomePage — the wrapper of the four old sections only.
    --------------------------------------------
-   The mockup styles nothing at page level, so its sections inherit the
-   browser's defaults from <body>. Our global reset sets a 1.5
-   line-height and a fluid base font-size instead, so the page restores
-   the mockup's inherited values here — every element that sets its own
-   size or line-height is unaffected.
+   The old sections were drawn against the browser's inherited defaults,
+   not the legacy global reset (a 1.5 line-height and a fluid base
+   font-size), so their wrapper restores those values. The IN-ARCH opening
+   above it is outside this wrapper. Prompt 07 removes both.
    ============================================ */
 
 .page {

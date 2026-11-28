@@ -1,209 +1,176 @@
 /* ============================================
-   Home / Hero — ported 1:1 from `mockup/index.html`
+   Home / Hero — "Threshold"
    --------------------------------------------
-   A photographic backdrop, then the badge → headline → lede → CTAs → four
-   pillars, all staggered in on load by `useHeroIntro` (the mockup's
-   `data-hero` elements, marked with the same attribute here).
+   One full-screen photograph of the studio's own work (a living hall's
+   backlit feature wall), the brand line, and one action.
 
-   The backdrop photo is a deliberate departure from `mockup/index.html`, which
-   uses an architectural shot here: it is a handshake framed at forearm level
-   against a blown-out white window.
+   - Phones: the 4:5 crop (`home-hero-tall`) covers the screen; all copy is
+     anchored to the bottom in one column, above the dock. Only the ghost
+     button is in the hero: the dock's "Start a project" sits directly
+     beneath it and is the primary action there.
+   - From 768: the 16:9 crop (`home-hero-wide`); both buttons side by side;
+     the meta becomes a row under a hairline.
+   - From 1024: on the 12-column grid — the h1 across columns 1–9, the lede
+     and the buttons in 1–5, the meta a right-aligned stack in 10–12,
+     bottom-aligned with the buttons. Nothing is centred.
 
-   **The two breakpoints frame it two different ways, and the split is at the
-   920px nav breakpoint.**
+   The photograph is bright (white ceiling, white stone floor), so a veil is
+   anchored to the copy block itself: wherever the copy sits, at any
+   viewport height, the forest scrim behind it is dense enough for ivory
+   text at 4.5:1 on its worst pixel. A second, lighter veil at the top
+   carries the masthead.
 
-   From 920px up the WHOLE photograph is drawn, uncropped, at the largest size
-   that fits inside the section — `width`/`height` `auto` with `max-width` and
-   `max-height` at 100%, which is the replaced-element algorithm and so cannot
-   crop, letterbox or stretch it. The file is 2.63:1 against a hero that runs
-   1.43:1 at 1440px, so on every ordinary desktop the width binds and the frame
-   lands as a band across the TOP of the section: 543px of a 1002px hero at
-   1440px. Because it spans the section, image-x maps straight onto hero-x, so
-   the joined hands (55.4%-85.7% of the file, skin centroid 68.1%) sit at those
-   same fractions of the hero — the clasp at 68%, just right of where the red
-   accent word "impact" ends — with no framing constant left to tune. Its top
-   edge is the top of the page and its sides are the viewport's, so the one
-   edge that exists inside the section is the bottom, and that one is feathered
-   to nothing.
-
-   Below 920px the copy spans the full width, so the frame is drawn WHOLE
-   instead, at a stated width, pinned to the top of the section and bled off
-   both sides: `width: var(--bg-w); height: auto` on a 2.63:1 file is the
-   entire sizing rule. Its bottom edge ends inside the section and is feathered
-   to nothing so it dissolves rather than cuts; the left and right run off the
-   page, and the top sits under the fixed 68px header. That feather is an eased
-   curve — smootherstep cubed — sampled at twentieths, and both of those
-   matter: a CSS gradient is piecewise-linear between its stops, so what reads
-   as a line in a soft ramp is not its steepness but any place its SLOPE
-   changes.
-
-   Over it sits a white overlay, and it too splits at 920px.
-
-   On desktop it is one horizontal layer: a shelf and a plunge. The white holds
-   across the copy column — 0.86 at the left edge, 0.84 at 30%, 0.83 where the
-   glyphs end — then drops to 0.08 inside the next 8% of the hero and to
-   nothing 8% after that, so the copy sits on paper and the clasp on clear
-   photograph. The shelf is where nearly all of the photograph lives, which is
-   why its alpha is the number the section is actually tuned on. The first two
-   stops come down five and four points from the shelf this replaces; the third
-   cannot move, because it is what prices the red accent on "impact" — the one
-   run of copy that is colour-bound rather than ink-black — which measures
-   3.11:1 at its worst width against a 3:1 floor for large text.
-
-   Below the breakpoint the copy spans the frame, so a vertical veil takes over
-   legibility and the fade is left to do nothing but keep the left edge clean.
-   See the annotated `.bg` and `.scrim` blocks in the stylesheet.
+   Motion (src/motion): on load the photograph settles 1.08 → 1 (1.6 s);
+   the h1 lines rise through their masks (1.0 s expo, 0.15 s delay); the
+   eyebrow, lede, buttons and meta rise 24 px, staggered, once the first
+   line has landed. On scroll the photograph drifts (7 %, 4 on phones).
+   Under reduced motion everything is simply there.
    ============================================ */
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useRef } from 'react';
 import { useModal } from '../../../context/ModalContext';
-import { siteConfig } from '../../../data/siteConfig';
-import { useHeroIntro } from '../../../animations';
-import layout from '../../../styles/layout.module.css';
+import { studio } from '../../../data/siteConfig';
+import { heroDisciplines, heroLine } from '../../../data/studioContent';
+import Section from '../../../components/ui/Section/Section';
+import Container from '../../../components/ui/Container/Container';
+import Grid, { Col } from '../../../components/ui/Grid/Grid';
+import Eyebrow from '../../../components/ui/Eyebrow/Eyebrow';
+import Heading from '../../../components/ui/Heading/Heading';
+import Lede from '../../../components/ui/Lede/Lede';
+import Button from '../../../components/ui/Button/Button';
+import Picture from '../../../components/ui/Picture/Picture';
+import { useIsoLayoutEffect } from '../../../components/ui/_shared/refs';
+import { useMotionScope } from '../../../motion';
 import styles from './HeroSection.module.css';
 
-// Self-hosted backdrop — generated by `npm run generate:images`. Preloaded in
-// `public/index.html`, so the two must be kept in sync.
-//
-// `-v6` supersedes the `hero-home-v5` files rather than replacing them in
-// place: `/images/**` answers `immutable` for a year (see `public/.htaccess`),
-// so a same-name swap would leave every returning visitor on the old photo. It
-// is the 5000x1900 (2.63:1) client master that once shipped as `hero-home-v4`,
-// back again — but under a third basename for that same caching reason, not
-// revived under the old one.
-//
-// One width, and no `sizes`: from 920px up the photograph is drawn whole, at
-// the largest box that fits the section, which its own intrinsic width caps at
-// 2880 CSS px; below it the frame is drawn at exactly `--bg-w`, which caps at
-// 1400 CSS px. Neither ever asks the file for more pixels than it has — the
-// desktop cap IS the file — and the shallow depth of field keeps it at 39 KB.
-//
-// **The WebP is the only variant the hero paints.** There is no `<picture>` and
-// no `image-set()` fallback, which costs less than it sounds: an `<img src>` on
-// a WebP is supported back to Safari 14 and Chrome 32, a WIDER floor than
-// `image-set()` with `type()` (Safari 17, Chrome 113) would have given. Older
-// engines than that get no backdrop, which the section survives intact — the
-// image is decorative and `aria-hidden`, the overlay above it is white, and
-// every glyph in the hero is specified against white first.
-//
-// `public/images/hero-home-v6.jpg` is still emitted next to it — every photo in
-// `generate-images` gets a universal JPEG fallback — and is simply not
-// referenced from anywhere; it is the file a `<picture>` here would need.
-//
-// `HERO_BG` is the third place this filename lives, after `generate-images` and
-// the LCP preload in `public/index.html`; keep it in sync with the preload.
-const HERO_BG = '/images/hero-home-v6-2880.webp';
+export const HERO_TITLE_ID = 'home-hero-title';
 
-// The intrinsic size of that file. Passed through as the `width`/`height`
-// attributes so the box has an aspect ratio before the bytes land. Above 920px
-// the stylesheet leaves both CSS dimensions `auto` and constrains them with
-// `max-width`/`max-height`, so this pair is also where the sizing starts;
-// below 920px it overrides them with `var(--bg-w)` and `height: auto`.
-const HERO_BG_SIZE = { width: 2880, height: 1094 };
+/** The art-directed crop below 768 px; keep in sync with public/index.html. */
+const ART = [{ media: '(max-width: 767px)', image: 'home-hero-tall' }];
 
-const PILLARS = [
-  { num: '01', label: 'Business Solutions' },
-  { num: '02', label: 'People & Organization' },
-  { num: '03', label: 'Corporate Services' },
-  { num: '04', label: 'Leadership & Capability' },
-];
+// The h1 lines start at 0.15 s and run 1.0 s on expo.out, which has covered
+// 97 % of its travel 0.5 s in: that is when the first line has landed.
+const LINES_DELAY = '0.15';
+const AFTER_FIRST_LINE = '0.65';
 
-const HeroSection = () => {
+/**
+ * The tagline as display lines, one sentence per line, in sentence case:
+ * "Designing Spaces. Shaping Experiences." → ['Designing spaces.', 'Shaping experiences.']
+ * Only Title-cased words after the first are lowered, so acronyms survive.
+ */
+export const taglineLines = (tagline = '') =>
+  (tagline.match(/[^.!?]+[.!?]*/g) || [])
+    .map((sentence) => sentence.trim())
+    .filter(Boolean)
+    .map((sentence) =>
+      sentence
+        .split(/\s+/)
+        .map((word, i) => (i > 0 && /^[A-Z][a-z]+[.,!?]*$/.test(word) ? word.toLowerCase() : word))
+        .join(' ')
+    );
+
+const HeroSection = ({ onReady }) => {
+  const scope = useMotionScope();
+  const pictureRef = useRef(null);
   const { openLeadModal } = useModal();
-  const heroRef = useHeroIntro();
+
+  const [first, ...rest] = taglineLines(studio.tagline);
+  const accent = rest.join(' ');
+  const place = [studio.address.city, studio.address.region].filter(Boolean).join(', ');
+
+  // A cached (or preloaded) photograph may be complete before React can
+  // hear its load event: report it straight away.
+  useIsoLayoutEffect(() => {
+    const img = pictureRef.current && pictureRef.current.querySelector('img');
+    if (img && img.complete && onReady) onReady();
+  }, [onReady]);
+
+  const rise = { 'data-m': 'rise', 'data-m-now': '', 'data-m-rise': '24', 'data-m-delay': AFTER_FIRST_LINE };
 
   return (
-    <section className={styles.hero}>
-      {/* The backdrop and the overlay: two elements, one treatment — keep them
-          grouped. `.scrim` is `inset: 0` at every width, which is what makes
-          the fade's stops section percentages. The photograph never is: at
-          every width it is a placed element sized to its own aspect — by the
-          `--bg-*` properties below 920px, and by `max-width`/`max-height` on an
-          intrinsically-sized box above it.
-
-          It is a real `<img>` rather than a CSS background, and that stays
-          load-bearing at both breakpoints. The element IS the drawn photograph,
-          with no box fitted around it, which is what lets the stylesheet's edge
-          feather be expressed in percentages of the image and land on its real
-          edges. At every width it earns `fetchpriority="high"`, which a
-          background cannot carry — this is the LCP element on the site's
-          busiest route.
-
-          The `width`/`height` attributes are the file's intrinsic size, so the
-          box has an aspect ratio before the bytes land — and above 920px they
-          are also what the sizing rule starts from, since both CSS dimensions
-          are `auto` there.
-
-          It stays decorative: empty `alt` plus `aria-hidden`, since the hero's
-          meaning is entirely in the copy beside it.
-
-          No `useParallax` here, and as of `[2.29.0]` no hero has it: scrub
-          parallax needs the photo drawn taller than its box so the travel
-          never exposes an edge, which is the one thing drawing a whole frame
-          will not do — the Expertise hero dropped it in `[2.28.0]` and Who We
-          Serve in `[2.29.0]`, both for that reason. This backdrop never had
-          it. The hook is still live on `About/IntersectionSection` and
-          `Home/BeliefSection`, which parallax a band and a glow, not a
-          placed frame. */}
-      <img
-        className={styles.bg}
-        src={HERO_BG}
-        alt=""
-        aria-hidden="true"
-        width={HERO_BG_SIZE.width}
-        height={HERO_BG_SIZE.height}
-        fetchpriority="high"
-        decoding="async"
-      />
-      <div className={styles.scrim} aria-hidden="true" />
-
-      <div ref={heroRef} className={`${layout.container} ${styles.inner}`}>
-        <div className={styles.badge} data-hero>
-          <span className={styles.dot} aria-hidden="true" /> {siteConfig.tagline}
+    <Section ref={scope} tone="dark" rhythm="none" className={styles.hero} aria-labelledby={HERO_TITLE_ID}>
+      <div className={styles.media} data-m-parallax="7">
+        <div className={styles.drift} data-m-media="">
+          <div className={styles.settle} data-m="settle" data-m-now="">
+            <Picture
+              ref={pictureRef}
+              image="home-hero-wide"
+              art={ART}
+              sizes="100vw"
+              priority
+              className={styles.picture}
+              imgClassName={styles.img}
+              onLoad={onReady}
+              onError={onReady}
+            />
+          </div>
         </div>
-
-        {/* Deliberate departure from `mockup/index.html`, which stops both
-            clauses with a full stop. The comma carries the first line into the
-            second, and the headline closes on the word "impact" itself rather
-            than on a mark — at every width, since this is one string wrapped by
-            a single unconditional <br />. */}
-        <h1 className="display" data-hero>
-          We don&rsquo;t just offer services,
-          <br />
-          We deliver <em className={`grad-text ${styles.impact}`}>impact</em>
-        </h1>
-
-        <p className={`lede ${styles.lede}`} data-hero>
-          <b className="brand">{siteConfig.brandName}</b> works with businesses,
-          institutions, entrepreneurs, and professionals to navigate complexity,
-          strengthen organizational capability, and build for sustainable
-          growth.
-        </p>
-
-        <div className={styles.cta} data-hero>
-          <button
-            type="button"
-            className="btn btn--primary"
-            onClick={() => openLeadModal('home-hero')}
-          >
-            Start a Conversation <span aria-hidden="true">&rarr;</span>
-          </button>
-          <Link to="/expertise" className="btn btn--outline">
-            Explore Our Expertise
-          </Link>
-        </div>
-
-        <div className={styles.pillars} data-hero>
-          {PILLARS.map((pillar) => (
-            <div key={pillar.num}>
-              <b>{pillar.num}</b>
-              <span>{pillar.label}</span>
-            </div>
-          ))}
-        </div>
+        <div className={styles.veil} aria-hidden="true" />
       </div>
-    </section>
+
+      <Container className={styles.copy}>
+        <Grid className={styles.grid}>
+          <Col span="full" md={{ span: 6 }} lg={{ span: 9 }}>
+            <Eyebrow className={styles.eyebrow} {...rise}>
+              Architecture &amp; interior design — {studio.address.city}
+            </Eyebrow>
+            <Heading
+              as="h1"
+              size="2xl"
+              lines
+              id={HERO_TITLE_ID}
+              className={styles.title}
+              data-m-now=""
+              data-m-delay={LINES_DELAY}
+            >
+              {first}
+              {accent && (
+                <>
+                  {' '}
+                  <br />
+                  <em>{accent}</em>
+                </>
+              )}
+            </Heading>
+          </Col>
+
+          <Col span="full" md={{ span: 6 }} lg={{ span: 5 }} className={styles.body}>
+            <Lede className={styles.lede} {...rise}>
+              {heroLine}
+            </Lede>
+            <div className={styles.actions} {...rise}>
+              <Button
+                className={styles.primaryAction}
+                data-primary-cta=""
+                onClick={() => openLeadModal('home-hero', { context: { label: 'Home — hero' } })}
+              >
+                Start a project
+              </Button>
+              <Button variant="ghost" to="/portfolio">
+                View selected work
+              </Button>
+            </div>
+          </Col>
+
+          <Col span="full" lg={{ start: 10, span: 3 }} align="end" className={styles.metaCol}>
+            <ul className={styles.meta} {...rise}>
+              <li className={styles.metaItem}>
+                Led by {studio.principal.name}
+                <span className={styles.wide}>, {studio.principal.title}</span>
+              </li>
+              {place && <li className={styles.metaItem}>{place}</li>}
+              <li className={`${styles.metaItem} ${styles.wide}`}>
+                <ul className={styles.disciplines}>
+                  {heroDisciplines.map((word) => (
+                    <li key={word}>{word}</li>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+          </Col>
+        </Grid>
+      </Container>
+    </Section>
   );
 };
 

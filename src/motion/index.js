@@ -19,5 +19,7 @@ export {
   STAGGER,
   START,
   PARALLAX,
+  SETTLE,
+  WORDS,
   MQ,
 } from './tokens';

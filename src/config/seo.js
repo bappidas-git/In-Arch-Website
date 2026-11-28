@@ -10,12 +10,14 @@
    (`details of in-arch.pdf` §12). The entries of the pages that are still
    the old Dulcey pages (home, about, expertise, industries, contact,
    notFound) are left exactly as they were until each page's prompt
-   replaces it, and `pages.admin` is admin-bound (prompt 15 only).
+   replaces it (home: prompt 06), and `pages.admin` is admin-bound
+   (prompt 15 only).
 
    Everything here is generated from the single sources of truth so the
    metadata can never drift from the visible site:
      - company / contact facts   → src/data/siteConfig.js
-     - the ten expertise areas   → src/data/expertiseData.js
+     - the seven services        → src/data/services.js
+     - the ten old expertise areas (old /expertise entry) → src/data/expertiseData.js
      - the seven sectors served  → src/data/industriesData.js
      - the nav labels (used for breadcrumb names) → src/data/navigation.js
 
@@ -34,9 +36,9 @@
    ============================================ */
 
 import { siteConfig, studio, studioUrl } from '../data/siteConfig';
-import { expertiseAreas, expertiseTitles } from '../data/expertiseData';
+import { expertiseTitles } from '../data/expertiseData';
 import { industries } from '../data/industriesData';
-import { serviceTitles } from '../data/services';
+import { services, serviceTitles } from '../data/services';
 import { NAV_LINKS } from '../data/navigation';
 
 // The studio's domain is not known yet (owner decision D-05), so run-time
@@ -119,15 +121,16 @@ export const seoConfig = {
   // =========================================
   // Service list (ItemList of Service)
   // --------------------------------------------
-  // Generated from expertiseData so the schema and the /expertise accordion
-  // can never disagree. Each item deep-links to its accordion panel.
+  // The seven services (src/data/services.js, PDF §4 A–G, owner decision
+  // D-06), so the schema and the visible service list can never disagree.
+  // Each item deep-links to its service on /expertise (#e01 … #e07).
   // =========================================
   services: {
-    name: 'Areas of Experience',
-    items: expertiseAreas.map((area) => ({
-      name: area.title,
-      description: area.description,
-      url: `${SITE_URL}/expertise#${area.id}`,
+    name: 'Services',
+    items: services.map((service) => ({
+      name: service.title,
+      description: service.description,
+      url: `${SITE_URL}/expertise#${service.id}`,
     })),
   },
 
@@ -139,17 +142,25 @@ export const seoConfig = {
   // `path` drives the canonical URL; `breadcrumb` is the nav label.
   // =========================================
   pages: {
+    // IN-ARCH Home (prompt 06): PDF §12's homepage title and description,
+    // verbatim, and its keyword list without "Best architects in Patna" —
+    // a superlative the site does not claim.
     home: {
       path: '/',
-      title: `${siteConfig.brandName} — ${siteConfig.tagline}`,
-      description:
-        'Dulcey Lead Services works with businesses, institutions and entrepreneurs to navigate complexity, strengthen organizational capability and grow sustainably.',
-      keywords: keywords(
-        siteConfig.tagline,
-        'business solutions',
-        'people & organization',
-        'corporate services',
-        'leadership & capability building',
+      title: STUDIO_TITLE,
+      description: STUDIO_DESCRIPTION,
+      keywords: studioKeywords(
+        'Architects in Patna',
+        'Architecture firms in Patna',
+        'Interior designers in Patna',
+        'Residential architects in Patna',
+        'Commercial architects in Bihar',
+        'House design in Patna',
+        'Modern house elevation design',
+        'Interior design consultancy in Patna',
+        'Architectural 3D visualisation',
+        'Modular kitchen design in Patna',
+        'Building planning and design in Patna',
       ),
       robots: 'index, follow',
       // The service list is relevant to the home index and /expertise only.
